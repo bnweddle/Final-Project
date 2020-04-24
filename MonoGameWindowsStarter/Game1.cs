@@ -17,17 +17,26 @@ namespace Elemancy
         /// The wizard's Health
         /// </summary>
         HealthBar wizardHealth;
+        HealthBar wizardGauge;
 
         /// <summary>
         /// The enemy Health when enemy dies -> disappear
         /// When another enemy appears -> appear and start at full health
         /// </summary>
         HealthBar enemyHealth;
+        HealthBar enemyGauge;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            // Creating and Positioning Healthbars
+            wizardHealth = new HealthBar(this, new Vector2(20, 0));  //Top left corner
+            wizardGauge = new HealthBar(this, new Vector2(20, 0));  //Top left corner
+
+            enemyHealth = new HealthBar(this, new Vector2(800, 0));  //Top right corner
+            enemyGauge = new HealthBar(this, new Vector2(800, 0));  
         }
 
         /// <summary>
@@ -39,7 +48,7 @@ namespace Elemancy
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            wizardHealth.Initialize();
             base.Initialize();
         }
 
@@ -53,6 +62,8 @@ namespace Elemancy
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            wizardHealth.LoadContent(Content);
+            wizardGauge.LoadContent(Content);
         }
 
         /// <summary>
@@ -75,6 +86,15 @@ namespace Elemancy
                 Exit();
 
             // TODO: Add your update logic here
+            // If player is hit Update, using Keyboard for now for testing purposes
+            KeyboardState current = Keyboard.GetState();
+
+            if (current.IsKeyDown(Keys.H))
+            {
+                // Minus the Health by the damage done when player was hit
+                wizardGauge.Bounds.Width -= 1;
+            }
+
 
             base.Update(gameTime);
         }
@@ -86,8 +106,13 @@ namespace Elemancy
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            spriteBatch.Begin();
 
             // TODO: Add your drawing code here
+            wizardHealth.Draw(spriteBatch, Color.Gray);
+            wizardGauge.Draw(spriteBatch, Color.Red);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

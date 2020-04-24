@@ -35,34 +35,23 @@ namespace Elemancy
 
         public void Initialize()
         {
-            Bounds.X = Position.X;
-            Bounds.Y = Position.Y;
-            Bounds.Height = healthbar.Height;
         }
 
         public void LoadContent(ContentManager content)
         {
-            healthbar = content.Load<Texture2D>("healthbar");
+            healthbar = content.Load<Texture2D>("healthbar6");
+            Bounds.Width = healthbar.Width;
+            Bounds.Height = healthbar.Height;
         }
 
         public void Update(GameTime gameTime)
         {
-            // If player is hit Update, using Keyboard for now for testing purposes
-            KeyboardState current = Keyboard.GetState();
 
-            if(current.IsKeyDown(Keys.H))
-            {
-                // Minus the Health by the damage done when player was hit
-                Bounds.Width -= Damage;
-            }
-
-            oldstate = current;
         }
 
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public void Draw(SpriteBatch spriteBatch, Color color)
         {
-            spriteBatch.Draw(healthbar, Position, Bounds, Color.White); // The Health bar
-            spriteBatch.Draw(healthbar, Position, Bounds, Color.Red); // The Health gauge
+            spriteBatch.Draw(healthbar, Position, Bounds, color); // The Health bar
         }
         public void RestartHealth()
         {
