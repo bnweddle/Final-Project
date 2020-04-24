@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace Elemancy
 {
@@ -11,6 +12,17 @@ namespace Elemancy
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        /// <summary>
+        /// The wizard's Health
+        /// </summary>
+        HealthBar wizardHealth;
+
+        /// <summary>
+        /// The enemy Health when enemy dies -> disappear
+        /// When another enemy appears -> appear and start at full health
+        /// </summary>
+        HealthBar enemyHealth;
 
         public Game1()
         {
