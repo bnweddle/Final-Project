@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MonoGameWindowsStarter
+namespace Elemancy
 {
 #if WINDOWS || LINUX
     /// <summary>
