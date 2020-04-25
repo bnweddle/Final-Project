@@ -29,9 +29,8 @@ namespace Elemancy.Parallax
         /// Creates a new static sprite
         /// </summary>
         /// <param name="texture">the texture to use</param>
-        public StaticSprite(Texture2D texture, float scale)
+        public StaticSprite(Texture2D texture)
         {
-            this.Scale = scale;
             this.texture = texture;
         }
 
@@ -40,9 +39,8 @@ namespace Elemancy.Parallax
         /// </summary>
         /// <param name="texture">the texture to use</param>
         /// <param name="position">the upper-left hand corner of the sprite</param>
-        public StaticSprite(Texture2D texture, Vector2 Position, float scale)
+        public StaticSprite(Texture2D texture, Vector2 Position)
         {
-            this.Scale = scale;
             this.texture = texture;
             this.position = Position;
         }

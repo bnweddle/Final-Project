@@ -1,36 +1,41 @@
-﻿using Microsoft.Xna.Framework;
+﻿/* Author: Bethany Weddle
+ * Class: HealthBar.cs
+ * */
+using Elemancy.Parallax;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Elemancy
 {
-    public class HealthBar
+    public class HealthBar : ISprite
     {
-        private KeyboardState oldstate;
-
+        // The game 
         private Game1 game;
 
+        // The health bar texture
         private Texture2D healthbar;
 
+        // The position should be const
         private Vector2 Position;
 
+        // The Bounds of the Healh bar
         public BoundingRectangle Bounds;
+
+        // The Color of the Healthbar
+        public Color Color;
 
         /// <summary>
         /// The Damage done for the hit, should be set when an attack is successful
         /// </summary>
         public int Damage { get; set; }
 
-        public HealthBar(Game1 g, Vector2 position)
+        public HealthBar(Game1 g, Vector2 position, Color color)
         {
             this.game = g;
             this.Position = position;
+            this.Color = color;
         }
 
         public void LoadContent(ContentManager content)
@@ -45,9 +50,9 @@ namespace Elemancy
 
         }
 
-        public void Draw(SpriteBatch spriteBatch, Color color)
+        public void Draw(SpriteBatch spriteBatch, GameTime gametime)
         {
-            spriteBatch.Draw(healthbar, Position, Bounds, color); // The Health bar
+            spriteBatch.Draw(healthbar, Position, Bounds, Color); // The Health bar
         }
 
         /// <summary>
