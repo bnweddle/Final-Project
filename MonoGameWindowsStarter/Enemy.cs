@@ -10,6 +10,8 @@ namespace Elemancy
     //And can be updated easily since they are all an "Enemy"
     public interface Enemy
     {
-        
+        void Update();
+
+        bool dead { get; set; }
     }
 }

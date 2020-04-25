@@ -27,6 +27,9 @@ namespace Elemancy
         private Texture2D enemyTexture;
 
         public Vector2 Position;
+        
+        //true is enemy is dead, false if they are still alive
+        public bool dead { get; set; }
 
         /// <summary>
         /// Sets up a new basic enemy
@@ -43,6 +46,7 @@ namespace Elemancy
             weakness = w;
             game = g;
             Position = p;
+            dead = false;
         }
 
         /// <summary>
@@ -64,7 +68,10 @@ namespace Elemancy
 
         public void Update()
         {
-            
+            if(health <= 0)
+            {
+                dead = true;
+            }
         }
 
     }

@@ -29,6 +29,9 @@ namespace Elemancy
 
         public Vector2 Position;
 
+        //true is enemy is dead, false if they are still alive
+        public bool dead { get; set; }
+
         /// <summary>
         /// Sets up a new boss
         /// </summary>
@@ -44,6 +47,7 @@ namespace Elemancy
             weakness = w;
             game = g;
             Position = p;
+            dead = false;
         }
 
         /// <summary>
@@ -65,7 +69,10 @@ namespace Elemancy
 
         public void Update()
         {
-
+            if (health <= 0)
+            {
+                dead = true;
+            }
         }
 
     }
