@@ -6,6 +6,19 @@ using System.Collections.Generic;
 namespace Elemancy
 {
     /// <summary>
+    /// For switching between level more easily, maybe?
+    /// </summary>
+    enum GameState
+    {
+        MainMenu,
+        Forest,
+        Cave,
+        Dungeon,
+        Transition,
+        GameOver
+    }
+
+    /// <summary>
     /// This is the main type for your game.
     /// </summary>
     public class Game1 : Game
@@ -16,15 +29,13 @@ namespace Elemancy
         /// <summary>
         /// The wizard's Health
         /// </summary>
-        HealthBar wizardHealth;
-        HealthBar wizardGauge;
+        HealthBar wizardHealth, wizardGauge;
 
         /// <summary>
         /// The enemy Health when enemy dies -> disappear
         /// When another enemy appears -> appear and start at full health
         /// </summary>
-        HealthBar enemyHealth;
-        HealthBar enemyGauge;
+        HealthBar enemyHealth, enemyGauge;
 
         public Game1()
         {
@@ -33,10 +44,10 @@ namespace Elemancy
 
             // Creating and Positioning Healthbars
             wizardHealth = new HealthBar(this, new Vector2(20, 0));  //Top left corner
-            wizardGauge = new HealthBar(this, new Vector2(20, 0));  //Top left corner
+            wizardGauge = new HealthBar(this, new Vector2(20, 0));  
 
-            enemyHealth = new HealthBar(this, new Vector2(800, 0));  //Top right corner
-            enemyGauge = new HealthBar(this, new Vector2(800, 0));  
+            enemyHealth = new HealthBar(this, new Vector2(822, 0));  //Top right corner
+            enemyGauge = new HealthBar(this, new Vector2(822, 0));  
         }
 
         /// <summary>
@@ -48,8 +59,11 @@ namespace Elemancy
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            wizardHealth.Initialize();
             base.Initialize();
+            graphics.PreferredBackBufferWidth = 1042;
+            graphics.PreferredBackBufferHeight = 768;
+            graphics.ApplyChanges();
+
         }
 
         /// <summary>
@@ -64,6 +78,9 @@ namespace Elemancy
             // TODO: use this.Content to load your game content here
             wizardHealth.LoadContent(Content);
             wizardGauge.LoadContent(Content);
+
+            enemyHealth.LoadContent(Content);
+            enemyGauge.LoadContent(Content);
         }
 
         /// <summary>
@@ -86,12 +103,13 @@ namespace Elemancy
                 Exit();
 
             // TODO: Add your update logic here
+
             // If player is hit Update, using Keyboard for now for testing purposes
             KeyboardState current = Keyboard.GetState();
 
             if (current.IsKeyDown(Keys.H))
             {
-                // Minus the Health by the damage done when player was hit
+                // Minus the Health by the damage done when player was hit, using -1 for now
                 wizardGauge.Bounds.Width -= 1;
             }
 
@@ -109,9 +127,12 @@ namespace Elemancy
             spriteBatch.Begin();
 
             // TODO: Add your drawing code here
-            wizardHealth.Draw(spriteBatch, Color.Gray);
+            wizardHealth.Draw(spriteBatch, Color.DarkSlateGray);
             wizardGauge.Draw(spriteBatch, Color.Red);
 
+            enemyHealth.Draw(spriteBatch, Color.DarkSlateGray);
+            enemyGauge.Draw(spriteBatch, Color.Red);
+           
             spriteBatch.End();
 
             base.Draw(gameTime);

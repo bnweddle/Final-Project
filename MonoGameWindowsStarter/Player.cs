@@ -18,7 +18,7 @@ namespace Elemancy
 
         private Texture2D player;
 
-        private Vector2 Position;
+        public Vector2 Position;
 
         public BoundingRectangle Bounds;
 

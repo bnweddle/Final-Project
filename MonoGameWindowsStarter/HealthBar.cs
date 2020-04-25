@@ -33,10 +33,6 @@ namespace Elemancy
             this.Position = position;
         }
 
-        public void Initialize()
-        {
-        }
-
         public void LoadContent(ContentManager content)
         {
             healthbar = content.Load<Texture2D>("healthbar6");
@@ -53,6 +49,10 @@ namespace Elemancy
         {
             spriteBatch.Draw(healthbar, Position, Bounds, color); // The Health bar
         }
+
+        /// <summary>
+        /// Restart the Health gauge when game is started again/New enemy appears
+        /// </summary>
         public void RestartHealth()
         {
             Bounds.Width = healthbar.Width;
