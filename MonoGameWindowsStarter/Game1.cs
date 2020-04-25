@@ -23,6 +23,14 @@ namespace Elemancy
     /// </summary>
     public class Game1 : Game
     {
+        List<Enemy> forestEnemies;
+        List<Enemy> caveEnemies;
+        List<Enemy> dungeonEnemies;
+        EnemyBoss forestBoss;
+        EnemyBoss caveBoss;
+        EnemyBoss dungeonBoss;
+        Enemy activeEnemy;
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
@@ -48,6 +56,20 @@ namespace Elemancy
 
             enemyHealth = new HealthBar(this, new Vector2(822, 0));  //Top right corner
             enemyGauge = new HealthBar(this, new Vector2(822, 0));  
+            for(int i = 0; i < 10; i++)
+            {
+                //Vector position is subjected to change when we know where the "ground" is
+                //and where the enemies need to be placed
+                forestEnemies.Add(new BasicEnemy(30, 5, "fire", this, new Vector2(300, 700)));
+                caveEnemies.Add(new BasicEnemy(40, 10, "water", this, new Vector2(300, 700)));
+                dungeonEnemies.Add(new BasicEnemy(50, 15, "lightning", this, new Vector2(300, 700)));
+            }
+            forestBoss = new EnemyBoss(60, 10, "fire", this, new Vector2(300, 700));
+            caveBoss = new EnemyBoss(80, 20, "water", this, new Vector2(300, 700));
+            dungeonBoss = new EnemyBoss(100, 30, "lightning", this, new Vector2(300, 700));
+
+            //setting the first active enemy to be the first enemy in the forest level
+            activeEnemy = forestEnemies[0];
         }
 
         /// <summary>
@@ -81,6 +103,8 @@ namespace Elemancy
 
             enemyHealth.LoadContent(Content);
             enemyGauge.LoadContent(Content);
+
+            //add for loop for enemies when we get texture files
         }
 
         /// <summary>
@@ -113,6 +137,12 @@ namespace Elemancy
                 wizardGauge.Bounds.Width -= 1;
             }
 
+            //enemy update
+            activeEnemy.Update();
+            if (activeEnemy.dead)
+            {
+
+            }
 
             base.Update(gameTime);
         }
