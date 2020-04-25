@@ -14,7 +14,7 @@ namespace Elemancy
     {
         private KeyboardState oldstate;
 
-        private Game1 game;
+        private Game game;
 
         private Texture2D healthbar;
 
@@ -27,7 +27,7 @@ namespace Elemancy
         /// </summary>
         public int Damage { get; set; }
 
-        public HealthBar(Game1 g, Vector2 position)
+        public HealthBar(Game g, Vector2 position)
         {
             this.game = g;
             this.Position = position;

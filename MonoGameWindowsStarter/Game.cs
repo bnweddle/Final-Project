@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 namespace Elemancy
@@ -21,7 +22,7 @@ namespace Elemancy
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class Game : Microsoft.Xna.Framework.Game
     {
         List<Enemy> forestEnemies = new List<Enemy>();
         List<Enemy> caveEnemies = new List<Enemy>();
@@ -48,7 +49,12 @@ namespace Elemancy
         /// </summary>
         HealthBar enemyHealth, enemyGauge;
 
-        public Game1()
+        // Basic Particle Stuff
+        Random random = new Random();
+        ParticleSystem particleSystem;
+        Texture2D particleTexture;
+
+        public Game()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -85,7 +91,6 @@ namespace Elemancy
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
             base.Initialize();
             graphics.PreferredBackBufferWidth = 1042;
             graphics.PreferredBackBufferHeight = 768;
@@ -104,7 +109,6 @@ namespace Elemancy
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
             wizardHealth.LoadContent(Content);
             wizardGauge.LoadContent(Content);
 
@@ -115,6 +119,36 @@ namespace Elemancy
             playerText = Content.Load<Texture2D>("player");
             player = new Player(this, playerText);
             //add for loop for enemies when we get texture files
+
+            // Basic Particle Loading
+                particleTexture = Content.Load<Texture2D>("particle");
+                particleSystem = new ParticleSystem(this, 1000, particleTexture);
+                particleSystem.Emitter = new Vector2(100, 100);
+                particleSystem.SpawnPerFrame = 4;
+                // Set the SpawnParticle method
+                particleSystem.SpawnParticle = (ref Particle particle) =>
+                {
+                    MouseState mouse = Mouse.GetState();
+                    particle.Position = new Vector2(mouse.X, mouse.Y);
+                    particle.Velocity = new Vector2(
+                        MathHelper.Lerp(-50, 50, (float)random.NextDouble()), // X between -50 and 50
+                        MathHelper.Lerp(0, 100, (float)random.NextDouble()) // Y between 0 and 100
+                        );
+                    particle.Acceleration = 0.1f * new Vector2(0, (float)-random.NextDouble());
+                    particle.Color = Color.Gold;
+                    particle.Scale = 1f;
+                    particle.Life = 1.0f;
+                };
+
+                // Set the UpdateParticle method
+                particleSystem.UpdateParticle = (float deltaT, ref Particle particle) =>
+                {
+                    particle.Velocity += deltaT * particle.Acceleration;
+                    particle.Position += deltaT * particle.Velocity;
+                    particle.Scale -= deltaT;
+                    particle.Life -= deltaT;
+                };
+                Components.Add(particleSystem);
         }
 
         /// <summary>
@@ -136,7 +170,6 @@ namespace Elemancy
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
 
             // If player is hit Update, using Keyboard for now for testing purposes
             KeyboardState current = Keyboard.GetState();
@@ -170,13 +203,12 @@ namespace Elemancy
 
             player.Draw(spriteBatch, gameTime);
 
-            // TODO: Add your drawing code here
             wizardHealth.Draw(spriteBatch, Color.DarkSlateGray);
             wizardGauge.Draw(spriteBatch, Color.Red);
 
             enemyHealth.Draw(spriteBatch, Color.DarkSlateGray);
             enemyGauge.Draw(spriteBatch, Color.Red);
-           
+
             spriteBatch.End();
 
             base.Draw(gameTime);

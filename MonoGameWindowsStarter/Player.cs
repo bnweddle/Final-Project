@@ -71,7 +71,7 @@ namespace Elemancy
         KeyboardState oldState;
 
         // The Game 
-        Game1 game;
+        Game game;
         
         // The player texture
         Texture2D player;
@@ -98,7 +98,7 @@ namespace Elemancy
         /// <param name="player">The Texture</param>
         /// <param name="position">The Position</param>
         /// <param name="health">The Player's starting health</param>
-        public Player(Game1 game, Texture2D player)
+        public Player(Game game, Texture2D player)
         {
             this.game = game;
             this.player = player;

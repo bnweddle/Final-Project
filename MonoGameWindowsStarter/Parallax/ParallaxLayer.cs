@@ -34,7 +34,7 @@ namespace Elemancy.Parallax
         /// Constructs the ParallaxLayer instance 
         /// </summary>
         /// <param name="game">The game this layer belongs to</param>
-        public ParallaxLayer(Game game) : base(game)
+        public ParallaxLayer(Microsoft.Xna.Framework.Game game) : base(game)
         {
             spriteBatch = new SpriteBatch(game.GraphicsDevice);
         }
