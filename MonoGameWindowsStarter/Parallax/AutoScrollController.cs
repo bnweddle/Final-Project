@@ -40,4 +40,4 @@ namespace Elemancy.Parallax
         }
     }
 }
-© 2020 GitHub, Inc.
+

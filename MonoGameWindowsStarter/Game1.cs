@@ -23,13 +23,16 @@ namespace Elemancy
     /// </summary>
     public class Game1 : Game
     {
-        List<Enemy> forestEnemies;
-        List<Enemy> caveEnemies;
-        List<Enemy> dungeonEnemies;
+        List<Enemy> forestEnemies = new List<Enemy>();
+        List<Enemy> caveEnemies = new List<Enemy>();
+        List<Enemy> dungeonEnemies = new List<Enemy>();
         EnemyBoss forestBoss;
         EnemyBoss caveBoss;
         EnemyBoss dungeonBoss;
         Enemy activeEnemy;
+
+        Player player;
+        Texture2D playerText;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -55,7 +58,8 @@ namespace Elemancy
             wizardGauge = new HealthBar(this, new Vector2(20, 0));  
 
             enemyHealth = new HealthBar(this, new Vector2(822, 0));  //Top right corner
-            enemyGauge = new HealthBar(this, new Vector2(822, 0));  
+            enemyGauge = new HealthBar(this, new Vector2(822, 0));
+            
             for(int i = 0; i < 10; i++)
             {
                 //Vector position is subjected to change when we know where the "ground" is
@@ -64,6 +68,7 @@ namespace Elemancy
                 caveEnemies.Add(new BasicEnemy(40, 10, "water", this, new Vector2(300, 700)));
                 dungeonEnemies.Add(new BasicEnemy(50, 15, "lightning", this, new Vector2(300, 700)));
             }
+
             forestBoss = new EnemyBoss(60, 10, "fire", this, new Vector2(300, 700));
             caveBoss = new EnemyBoss(80, 20, "water", this, new Vector2(300, 700));
             dungeonBoss = new EnemyBoss(100, 30, "lightning", this, new Vector2(300, 700));
@@ -86,6 +91,8 @@ namespace Elemancy
             graphics.PreferredBackBufferHeight = 768;
             graphics.ApplyChanges();
 
+            player.Initialize();
+
         }
 
         /// <summary>
@@ -104,6 +111,9 @@ namespace Elemancy
             enemyHealth.LoadContent(Content);
             enemyGauge.LoadContent(Content);
 
+            // The Player
+            playerText = Content.Load<Texture2D>("player");
+            player = new Player(this, playerText);
             //add for loop for enemies when we get texture files
         }
 
@@ -144,6 +154,8 @@ namespace Elemancy
 
             }
 
+            player.Update(gameTime);
+
             base.Update(gameTime);
         }
 
@@ -155,6 +167,8 @@ namespace Elemancy
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
+
+            player.Draw(spriteBatch, gameTime);
 
             // TODO: Add your drawing code here
             wizardHealth.Draw(spriteBatch, Color.DarkSlateGray);
