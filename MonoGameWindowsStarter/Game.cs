@@ -28,10 +28,7 @@ namespace Elemancy
         /// <summary>
         /// Enemies
         /// </summary>
-        List<Enemy> forestEnemies = new List<Enemy>();
-        List<Enemy> caveEnemies = new List<Enemy>();
-        List<Enemy> dungeonEnemies = new List<Enemy>();
-        EnemyBoss forestBoss, caveBoss, dungeonBoss;
+        List<Enemy> enemyList;
         Enemy activeEnemy;
 
         Player player;
@@ -79,17 +76,24 @@ namespace Elemancy
             {
                 //Vector position is subjected to change when we know where the "ground" is
                 //and where the enemies need to be placed
-                forestEnemies.Add(new BasicEnemy(30, 5, "fire", this, new Vector2(300, 700)));
-                caveEnemies.Add(new BasicEnemy(40, 10, "water", this, new Vector2(300, 700)));
-                dungeonEnemies.Add(new BasicEnemy(50, 15, "lightning", this, new Vector2(300, 700)));
+                enemyList.Add(new BasicEnemy(30, 5, "fire", this, new Vector2(300, 700)));
+                
+                
             }
-
-            forestBoss = new EnemyBoss(60, 10, "fire", this, new Vector2(300, 700));
-            caveBoss = new EnemyBoss(80, 20, "water", this, new Vector2(300, 700));
-            dungeonBoss = new EnemyBoss(100, 30, "lightning", this, new Vector2(300, 700));
+            enemyList.Add(new EnemyBoss(60, 10, "fire", this, new Vector2(300, 700)));
+            for (int i = 0; i < 10; i++)
+            {
+                enemyList.Add(new BasicEnemy(40, 10, "water", this, new Vector2(300, 700)));
+            }
+            enemyList.Add(new EnemyBoss(80, 20, "water", this, new Vector2(300, 700)));
+            for (int i = 0; i < 10; i++)
+            {
+                enemyList.Add(new BasicEnemy(50, 15, "lightning", this, new Vector2(300, 700)));
+            }
+            enemyList.Add(new EnemyBoss(100, 30, "lightning", this, new Vector2(300, 700)));
 
             //setting the first active enemy to be the first enemy in the forest level
-            activeEnemy = forestEnemies[0];
+            activeEnemy = enemyList[0];
         }
 
         /// <summary>
@@ -236,7 +240,11 @@ namespace Elemancy
             activeEnemy.Update();
             if (activeEnemy.dead)
             {
-
+                enemyList.Remove(activeEnemy);
+                if(enemyList.Count > 0)
+                {
+                    activeEnemy = enemyList[0];
+                }
             }
 
             player.Update(gameTime);
