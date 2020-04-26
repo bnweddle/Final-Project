@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Elemancy
 {
@@ -10,7 +14,7 @@ namespace Elemancy
     //And can be updated easily since they are all an "Enemy"
     public interface Enemy
     {
-        void Update();
+        void Update(Player player, GameTime gametime);
 
         bool dead { get; set; }
     }

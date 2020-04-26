@@ -237,7 +237,7 @@ namespace Elemancy
             }
 
             //enemy update
-            activeEnemy.Update();
+            activeEnemy.Update(player, gameTime);
             if (activeEnemy.dead)
             {
                 enemyList.Remove(activeEnemy);

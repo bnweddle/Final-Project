@@ -66,12 +66,26 @@ namespace Elemancy
             spriteBatch.Draw(enemyTexture, Position, Bounds, color);
         }
 
-        public void Update()
+        /// <summary>
+        /// Takes in player to check bounds and update players health. Maybe also update if 
+        /// enemy is hit with an attack as well?
+        /// </summary>
+        /// <param name="player"></param>
+        public void Update(Player player, GameTime gameTime)
         {
             if(health <= 0)
             {
                 dead = true;
             }
+
+            //update movement, perhaps move a little randomly?
+            //sprite animation?
+            if (Bounds.CollidesWith(player.Bounds))
+            {
+                //player takes damage, either affecting the hit bar or the actual player
+            }
+
+            //check if enemy was hit
         }
 
     }
