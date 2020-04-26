@@ -25,12 +25,13 @@ namespace Elemancy
     /// </summary>
     public class Game : Microsoft.Xna.Framework.Game
     {
+        /// <summary>
+        /// Enemies
+        /// </summary>
         List<Enemy> forestEnemies = new List<Enemy>();
         List<Enemy> caveEnemies = new List<Enemy>();
         List<Enemy> dungeonEnemies = new List<Enemy>();
-        EnemyBoss forestBoss;
-        EnemyBoss caveBoss;
-        EnemyBoss dungeonBoss;
+        EnemyBoss forestBoss, caveBoss, dungeonBoss;
         Enemy activeEnemy;
 
         Player player;
@@ -40,7 +41,14 @@ namespace Elemancy
         SpriteBatch spriteBatch;
 
         /// <summary>
-        /// The wizard's Health
+        /// The wizard's Health, need to flicker player when hit
+        /// Need to be sure to be careful with collision detection with hits
+        /// Should probably have bool for collision if collided return Hit bool,
+        /// and in which case call method to reduce health.
+        /// 
+        /// OR as soon as it collides, set the life of the particle to zero,
+        /// so it doesn't continue to detect collision and decrease health multiple 
+        /// times when it should just be once per hit.
         /// </summary>
         HealthBar wizardHealth, wizardGauge;
 
@@ -98,7 +106,6 @@ namespace Elemancy
             graphics.ApplyChanges();
 
             player.Initialize();
-
         }
 
         /// <summary>
@@ -131,7 +138,7 @@ namespace Elemancy
 
             var levelsLayer = new ParallaxLayer(this);
 
-            // Levels Layer - Can just add to to them for other levels, not displaying?
+            // Levels Layer - Can just add to to them for other levels
             var levelTextures = new Texture2D[]
             {
                 Content.Load<Texture2D>("forest1"),
@@ -142,7 +149,7 @@ namespace Elemancy
 
             var levelSprites = new StaticSprite[]
             {
-                new StaticSprite(levelTextures[0], new Vector2(-200,0)),
+                new StaticSprite(levelTextures[0], new Vector2(-200,0)), 
                 new StaticSprite(levelTextures[1], new Vector2(1189, 0))
             };
 
@@ -161,37 +168,39 @@ namespace Elemancy
             levelsLayer.ScrollController = new TrackingPlayer(player, 1.0f);
 
             //add for loop for enemies when we get texture files
+            //Add Enemies to Components with DrawOrder so they appear on top of layers
 
             // Basic Particle Loading
             particleTexture = Content.Load<Texture2D>("particle");
-                particleSystem = new ParticleSystem(this, 1000, particleTexture);
-                particleSystem.Emitter = new Vector2(100, 100);
-                particleSystem.SpawnPerFrame = 4;
-                // Set the SpawnParticle method
-                particleSystem.SpawnParticle = (ref Particle particle) =>
-                {
-                    MouseState mouse = Mouse.GetState();
-                    particle.Position = new Vector2(mouse.X, mouse.Y);
-                    particle.Velocity = new Vector2(
-                        MathHelper.Lerp(-50, 50, (float)random.NextDouble()), // X between -50 and 50
-                        MathHelper.Lerp(0, 100, (float)random.NextDouble()) // Y between 0 and 100
-                        );
-                    particle.Acceleration = 0.1f * new Vector2(0, (float)-random.NextDouble());
-                    particle.Color = Color.Gold;
-                    particle.Scale = 1f;
-                    particle.Life = 1.0f;
-                };
+            particleSystem = new ParticleSystem(this, 1000, particleTexture);
+            particleSystem.Emitter = new Vector2(100, 100);
+            particleSystem.SpawnPerFrame = 4;
+            // Set the SpawnParticle method
+            particleSystem.SpawnParticle = (ref Particle particle) =>
+            {
+                MouseState mouse = Mouse.GetState();
+                particle.Position = new Vector2(mouse.X, mouse.Y);
+                particle.Velocity = new Vector2(
+                    MathHelper.Lerp(-50, 50, (float)random.NextDouble()), // X between -50 and 50
+                    MathHelper.Lerp(0, 100, (float)random.NextDouble()) // Y between 0 and 100
+                    );
+                particle.Acceleration = 0.1f * new Vector2(0, (float)-random.NextDouble());
+                particle.Color = Color.Gold;
+                particle.Scale = 1f;
+                particle.Life = 1.0f;
+            };
 
-                // Set the UpdateParticle method
-                particleSystem.UpdateParticle = (float deltaT, ref Particle particle) =>
-                {
-                    particle.Velocity += deltaT * particle.Acceleration;
-                    particle.Position += deltaT * particle.Velocity;
-                    particle.Scale -= deltaT;
-                    particle.Life -= deltaT;
-                };
-                Components.Add(particleSystem);
+            // Set the UpdateParticle method
+            particleSystem.UpdateParticle = (float deltaT, ref Particle particle) =>
+            {
+                particle.Velocity += deltaT * particle.Acceleration;
+                particle.Position += deltaT * particle.Velocity;
+                particle.Scale -= deltaT;
+                particle.Life -= deltaT;
+            };
+            Components.Add(particleSystem);
             particleSystem.DrawOrder = 2;
+
         }
 
         /// <summary>
