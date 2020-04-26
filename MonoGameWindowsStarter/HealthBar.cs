@@ -12,7 +12,7 @@ namespace Elemancy
     public class HealthBar : ISprite
     {
         // The game 
-        private Game1 game;
+        private Game game;
 
         // The health bar texture
         private Texture2D healthbar;
@@ -31,7 +31,7 @@ namespace Elemancy
         /// </summary>
         public int Damage { get; set; }
 
-        public HealthBar(Game1 g, Vector2 position, Color color)
+        public HealthBar(Game g, Vector2 position, Color color)
         {
             this.game = g;
             this.Position = position;

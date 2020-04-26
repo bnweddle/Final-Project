@@ -23,7 +23,7 @@ namespace Elemancy
 
         public BoundingRectangle Bounds;
 
-        private Game1 game;
+        private Game game;
 
         private Texture2D enemyTexture;
 
@@ -40,7 +40,7 @@ namespace Elemancy
         /// <param name="w">weakness</param>
         /// <param name="g">game</param>
         /// <param name="p">position</param>
-        public EnemyBoss(int h, int d, string w, Game1 g, Vector2 p)
+        public EnemyBoss(int h, int d, string w, Game g, Vector2 p)
         {
             health = h;
             damage = d;

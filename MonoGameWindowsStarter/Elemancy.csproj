@@ -47,7 +47,7 @@
     <Compile Include="Enemy.cs" />
     <Compile Include="EnemyBoss.cs" />
     <Compile Include="BasicEnemy.cs" />
-    <Compile Include="Game1.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="HealthBar.cs" />
     <Compile Include="Parallax\AutoScrollController.cs" />
     <Compile Include="Parallax\IScrollController.cs" />
