@@ -55,6 +55,8 @@
     <Compile Include="Parallax\ParallaxLayer.cs" />
     <Compile Include="Parallax\StaticSprite.cs" />
     <Compile Include="Parallax\TrackingPlayer.cs" />
+    <Compile Include="Particle.cs" />
+    <Compile Include="ParticleSystem.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
