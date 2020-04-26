@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Elemancy.Parallax;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -60,11 +61,11 @@ namespace Elemancy
             Content.RootDirectory = "Content";
 
             // Creating and Positioning Healthbars
-            wizardHealth = new HealthBar(this, new Vector2(20, 0));  //Top left corner
-            wizardGauge = new HealthBar(this, new Vector2(20, 0));  
+            wizardHealth = new HealthBar(this, new Vector2(20, 0), Color.Gray);  //Top left corner
+            wizardGauge = new HealthBar(this, new Vector2(20, 0), Color.Red);  
 
-            enemyHealth = new HealthBar(this, new Vector2(822, 0));  //Top right corner
-            enemyGauge = new HealthBar(this, new Vector2(822, 0));
+            enemyHealth = new HealthBar(this, new Vector2(822, 0), Color.Gray);  //Top right corner
+            enemyGauge = new HealthBar(this, new Vector2(822, 0), Color.Red);
             
             for(int i = 0; i < 10; i++)
             {
@@ -115,13 +116,54 @@ namespace Elemancy
             enemyHealth.LoadContent(Content);
             enemyGauge.LoadContent(Content);
 
-            // The Player
             playerText = Content.Load<Texture2D>("player");
-            player = new Player(this, playerText);
+            player = new Player(this, playerText, Color.White);
+
+            // Player Layer
+            var playerLayer = new ParallaxLayer(this);
+            playerLayer.Sprites.Add(player);
+            playerLayer.Sprites.Add(wizardHealth);
+            playerLayer.Sprites.Add(wizardGauge);
+            playerLayer.Sprites.Add(enemyHealth);
+            playerLayer.Sprites.Add(enemyGauge);
+            playerLayer.DrawOrder = 2;
+            Components.Add(playerLayer);
+
+            var levelsLayer = new ParallaxLayer(this);
+
+            // Levels Layer - Can just add to to them for other levels, not displaying?
+            var levelTextures = new Texture2D[]
+            {
+                Content.Load<Texture2D>("forest1"),
+                Content.Load<Texture2D>("forest2")
+                // Cave
+                // Dungeon
+            };
+
+            var levelSprites = new StaticSprite[]
+            {
+                new StaticSprite(levelTextures[0], new Vector2(-200,0)),
+                new StaticSprite(levelTextures[1], new Vector2(1189, 0))
+            };
+
+            levelsLayer.Sprites.AddRange(levelSprites);
+            levelsLayer.DrawOrder = 1;
+            Components.Add(levelsLayer);
+
+            /* var playerScroll = playerLayer.ScrollController as AutoScrollController;
+            playerScroll.Speed = 0f;
+
+            var levelScroll = levelsLayer.ScrollController as AutoScrollController;
+            levelScroll.Speed = 40f; */
+
+            // The health bar may need it's own layer to stay put
+            playerLayer.ScrollController = new TrackingPlayer(player, 0.5f);
+            levelsLayer.ScrollController = new TrackingPlayer(player, 1.0f);
+
             //add for loop for enemies when we get texture files
 
             // Basic Particle Loading
-                particleTexture = Content.Load<Texture2D>("particle");
+            particleTexture = Content.Load<Texture2D>("particle");
                 particleSystem = new ParticleSystem(this, 1000, particleTexture);
                 particleSystem.Emitter = new Vector2(100, 100);
                 particleSystem.SpawnPerFrame = 4;
@@ -149,6 +191,7 @@ namespace Elemancy
                     particle.Life -= deltaT;
                 };
                 Components.Add(particleSystem);
+            particleSystem.DrawOrder = 2;
         }
 
         /// <summary>
@@ -200,14 +243,6 @@ namespace Elemancy
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-
-            player.Draw(spriteBatch, gameTime);
-
-            wizardHealth.Draw(spriteBatch, Color.DarkSlateGray);
-            wizardGauge.Draw(spriteBatch, Color.Red);
-
-            enemyHealth.Draw(spriteBatch, Color.DarkSlateGray);
-            enemyGauge.Draw(spriteBatch, Color.Red);
 
             spriteBatch.End();
 

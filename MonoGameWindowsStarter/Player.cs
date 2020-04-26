@@ -1,5 +1,8 @@
-﻿
+﻿/* Author: Bethany Weddle
+ * Class: Player.cs
+ * */
 using System;
+using Elemancy.Parallax;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -24,14 +27,12 @@ namespace Elemancy
     /// </summary>
     public enum State
     {
-        South = 0,
-        North,
-        West,
+        West = 2,
         East,
-        Idle,
+        Idle
     }
 
-    public class Player
+    public class Player : ISprite
     {
 
         // How much the animation moves per frames 
@@ -41,7 +42,7 @@ namespace Elemancy
         const int JUMP_TIME = 500;
 
         // The speed of the player
-        public const float PLAYER_SPEED = 200;
+        public const float PLAYER_SPEED = 75;
 
         // Width of animation frames
         public const int FRAME_WIDTH = 67;
@@ -87,6 +88,11 @@ namespace Elemancy
         public BoundingRectangle Bounds;
 
         /// <summary>
+        /// The color of the player: white for lightning, red for fire, blue for water
+        /// </summary>
+        public Color Color;
+
+        /// <summary>
         /// Could change depending on spell cast/type of attack
         /// </summary>
         public int HitDamage { get; set; }
@@ -98,16 +104,17 @@ namespace Elemancy
         /// <param name="player">The Texture</param>
         /// <param name="position">The Position</param>
         /// <param name="health">The Player's starting health</param>
-        public Player(Game game, Texture2D player)
+        public Player(Game game, Texture2D player, Color color)
         {
             this.game = game;
             this.player = player;
+            this.Color = color;
         }
 
         public void Initialize()
         {
-            Position = new Vector2(240, 500);  // Start position could change with prefere
-            health = 500;
+            Position = new Vector2(40,600);  // Start position could change with preference
+            health = 500; // Could also change with preference
             state = State.Idle;
             verticalState = VerticalMovementState.OnGround;
             Bounds.Width = FRAME_WIDTH;
@@ -128,9 +135,9 @@ namespace Elemancy
 
             // So the player can't go backwards, would need to change as they 
             // progress through the levels
-            if (Position.X < 250)
+            if (Position.X < 40)
             {
-                Position.X = 250;
+                Position.X = 40;
             }
 
             // Vertical movement
@@ -153,9 +160,9 @@ namespace Elemancy
                 case VerticalMovementState.Falling:
                     Position.Y += delta * PLAYER_SPEED;
                     // Come back to the ground
-                    if (Position.Y > 500)
+                    if (Position.Y > 700)
                     {
-                        Position.Y = 500;
+                        Position.Y = 700;
                         verticalState = VerticalMovementState.OnGround;
                     }
                     break;
@@ -178,25 +185,17 @@ namespace Elemancy
             else if (keyboard.IsKeyDown(Keys.Left))
             {
                 if (verticalState == VerticalMovementState.Jumping || verticalState == VerticalMovementState.Falling)
-                {
-                    state = State.West;
-                }                           
+                    state = State.West;                       
                 else
-                {
                     state = State.West;
-                }
                 Position.X -= delta * PLAYER_SPEED;
             }
             else if (keyboard.IsKeyDown(Keys.Right))
             {
                 if (verticalState == VerticalMovementState.Jumping || verticalState == VerticalMovementState.Falling)
-                {
-                    state = State.East;
-                }              
+                    state = State.East;            
                 else
-                {
                     state = State.East;
-                }
                 Position.X += delta * PLAYER_SPEED;
             }
             else
@@ -231,7 +230,7 @@ namespace Elemancy
                 FRAME_HEIGHT
                 );
 
-            spriteBatch.Draw(player, Position, rectSource, Color.White);
+            spriteBatch.Draw(player, Position, rectSource, Color);
 
         }
     }

@@ -54,7 +54,7 @@ namespace Elemancy.Parallax
         /// <param name="gameTime"></param>
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, position, Color.White);
         }
     }
 }
