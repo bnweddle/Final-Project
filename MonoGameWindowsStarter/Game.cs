@@ -50,6 +50,7 @@ namespace Elemancy
 
         GraphicsDeviceManager graphics;
         public SpriteBatch spriteBatch;
+        KeyboardState oldState;
 
         /// <summary>
         /// The wizard's Health, need to flicker player when hit
@@ -260,13 +261,14 @@ namespace Elemancy
 
             if (current.IsKeyDown(Keys.H))
             {
-                // Minus the Health by the damage done when player was hit, using -1 for now
+                player.IsHit = true;
+                // Minus the Health by the damage done when player was hit/Is collided with, using -1 for now
                 wizardGauge.Bounds.Width -= 1;
                 player.UpdateHealth(1);
             }
 
             base.Update(gameTime);
-
+            oldState = current;
         }
 
         /// <summary>

@@ -33,10 +33,11 @@ namespace Elemancy
 
     public class Player : ISprite
     {
-        // VARIABLE
-        // define the timer
-        InterpolationTimer myTimer;
+        // Timers for fading and flickering when dying and being hit
+        InterpolationTimer fade;
+        InterpolationTimer flicker;
         float multiple = 1;
+        float flick = 1;
 
         // How much the animation moves per frames 
         const int FRAME_RATE = 124;
@@ -123,22 +124,15 @@ namespace Elemancy
         public void Initialize()
         {
             Position = new Vector2(40,600);  // Start position could change with preference
-            health = 5; // Could also change with preference
+            health = 25; // Could also change with preference
             direction = Direction.Idle;
             verticalState = VerticalMovementState.OnGround;
             Bounds.Width = FRAME_WIDTH;
             Bounds.Height = FRAME_HEIGHT;
 
-            myTimer = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
-            myTimer.OnTimerFinished += new TimerFinished(myTimer_OnTimerFinished);
+            flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 1.0f, 0.0f);
+            fade = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
 
-
-        }
-
-        void myTimer_OnTimerFinished()
-        {
-            myTimer.Stop();
-            multiple = 0;
         }
 
         public void LoadContent(ContentManager content)
@@ -191,40 +185,55 @@ namespace Elemancy
 
             if(IsHit)
             {
-                jumpTimer += gameTime.ElapsedGameTime;
-                // When they hit a trap, should bounce away from it
-                // Add flickering 
-                Position.Y -= (350 / (float)jumpTimer.TotalMilliseconds);
-                if (jumpTimer.TotalMilliseconds >= JUMP_TIME)
-                    verticalState = VerticalMovementState.Falling;
+                /* jumpTimer += gameTime.ElapsedGameTime;
+                 // When they hit a trap, should bounce away from it
+                 // So they don't continue being hit
+                 Position.Y -= (350 / (float)jumpTimer.TotalMilliseconds);
+                 if (jumpTimer.TotalMilliseconds >= JUMP_TIME)
+                     verticalState = VerticalMovementState.Falling; */
+
+                if (flicker.TimeElapsed.TotalSeconds >= 0.20)
+                {
+                    flicker.Stop();
+                }
+                else
+                {
+                    if (!flicker.IsRunning)
+                        flicker.Start();
+
+                    if (flicker.IsRunning)
+                        flicker.Update(gameTime.ElapsedGameTime);
+
+                    flick = flicker.CurrentValue;
+                }           
             }
 
-            if(IsDead)
+            if (IsDead)
             {
-                if (myTimer.TimeElapsed.TotalSeconds >= 1.75)
+                if (fade.TimeElapsed.TotalSeconds >= 1.75)
                 {
-                    myTimer.Stop();
+                    fade.Stop();
                     multiple = 0;
                 }
 
-                if (!myTimer.IsRunning && multiple != 0)
+                if (!fade.IsRunning && multiple != 0)
                 {
-                    myTimer.Start();
+                    fade.Start();
                 }
                 else if(multiple != 0)
                 {
-                    if (myTimer.IsRunning)
-                        myTimer.Update(gameTime.ElapsedGameTime);
+                    if (fade.IsRunning)
+                        fade.Update(gameTime.ElapsedGameTime);
 
-                    multiple = myTimer.CurrentValue;
+                    multiple = fade.CurrentValue;
                 }        
             }
 
-
             if (IsHit)
             {
-                Position.X -= 100 * delta;
-                direction = Direction.West;
+               // for hitting traps
+               /* Position.X -= 100 * delta;
+                direction = Direction.West; */
             }
             else if (keyboard.IsKeyDown(Keys.Left))
             {
