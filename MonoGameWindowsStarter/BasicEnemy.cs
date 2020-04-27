@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Elemancy
 {
-    public class BasicEnemy : Enemy
+    public class BasicEnemy : IEnemy
     {
         //the amount of health the enemy has
         public int health { get; }
@@ -83,6 +83,11 @@ namespace Elemancy
             if (Bounds.CollidesWith(player.Bounds))
             {
                 //player takes damage, either affecting the hit bar or the actual player
+
+                if(!dead)
+                {
+                    player.UpdateHealth(damage);
+                }
             }
 
             //check if enemy was hit

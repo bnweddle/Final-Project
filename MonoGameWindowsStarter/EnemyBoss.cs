@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Content;
 namespace Elemancy
 {
     //has same traits as a normal enemy but a more complicated update method
-    public class EnemyBoss: Enemy
+    public class EnemyBoss: IEnemy
     {
         //the amount of health the enemy has
         public int health { get; }
@@ -79,6 +79,10 @@ namespace Elemancy
             if (Bounds.CollidesWith(player.Bounds))
             {
                 //player takes damage, either affecting the hit bar or the actual player
+                if (!dead)
+                {
+                    player.UpdateHealth(damage);
+                }
             }
 
             //checks if enemy was hit

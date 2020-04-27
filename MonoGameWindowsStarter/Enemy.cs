@@ -12,7 +12,7 @@ namespace Elemancy
 {
     //created interface so we could easily lump all enemies together
     //And can be updated easily since they are all an "Enemy"
-    public interface Enemy
+    public interface IEnemy
     {
         void Update(Player player, GameTime gametime);
 
