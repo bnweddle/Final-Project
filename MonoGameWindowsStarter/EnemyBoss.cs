@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Content;
 namespace Elemancy
 {
     //has same traits as a normal enemy but a more complicated update method
-    public class EnemyBoss: Enemy
+    public class EnemyBoss: IEnemy
     {
         //the amount of health the enemy has
         public int health { get; }
@@ -67,12 +67,25 @@ namespace Elemancy
             spriteBatch.Draw(enemyTexture, Position, Bounds, color);
         }
 
-        public void Update()
+        public void Update(Player player, GameTime gameTime)
         {
             if (health <= 0)
             {
                 dead = true;
             }
+
+            //update movement, perhaps move a little randomly?
+            //sprite animation?
+            if (Bounds.CollidesWith(player.Bounds))
+            {
+                //player takes damage, either affecting the hit bar or the actual player
+                if (!dead)
+                {
+                    player.UpdateHealth(damage);
+                }
+            }
+
+            //checks if enemy was hit
         }
 
     }

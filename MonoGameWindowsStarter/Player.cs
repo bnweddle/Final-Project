@@ -236,5 +236,14 @@ namespace Elemancy
             spriteBatch.Draw(player, Position, rectSource, Color);
 
         }
+
+        /// <summary>
+        /// Update the player's health. Currently only for damaging the player.
+        /// </summary>
+        /// <param name="damage">The damage done to the player's health.</param>
+        public void UpdateHealth(int damage)
+        {
+            health -= damage;
+        }
     }
 }
