@@ -18,6 +18,7 @@ namespace Elemancy
     {
         OnGround,
         Jumping,
+        DoubleJump,
         Falling,
     }
 
@@ -37,7 +38,6 @@ namespace Elemancy
         InterpolationTimer fade;
         InterpolationTimer flicker;
         float multiple = 1;
-        float flick = 1;
 
         // How much the animation moves per frames 
         const int FRAME_RATE = 124;
@@ -132,7 +132,6 @@ namespace Elemancy
 
             flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 1.0f, 0.0f);
             fade = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
-
         }
 
         public void LoadContent(ContentManager content)
@@ -164,11 +163,23 @@ namespace Elemancy
                         verticalState = VerticalMovementState.Jumping;
                         jumpTimer = new TimeSpan(0);
                     }
+                    if (keyboard.IsKeyDown(Keys.Up) && oldState.IsKeyUp(Keys.Up))
+                    {
+                        verticalState = VerticalMovementState.DoubleJump;
+                        jumpTimer = new TimeSpan(0);
+                    }
                     break;
                 case VerticalMovementState.Jumping:
                     jumpTimer += gameTime.ElapsedGameTime;
                     // Simple jumping and start fallings right after
                     Position.Y -= (600 / (float)jumpTimer.TotalMilliseconds);
+                    if (jumpTimer.TotalMilliseconds >= JUMP_TIME)
+                        verticalState = VerticalMovementState.Falling;
+                    break;
+               case VerticalMovementState.DoubleJump:
+                    jumpTimer += gameTime.ElapsedGameTime;
+                    // Simple jumping and start fallings right after
+                    Position.Y -= (900 / (float)jumpTimer.TotalMilliseconds);
                     if (jumpTimer.TotalMilliseconds >= JUMP_TIME)
                         verticalState = VerticalMovementState.Falling;
                     break;
@@ -195,6 +206,7 @@ namespace Elemancy
                 if (flicker.TimeElapsed.TotalSeconds >= 0.20)
                 {
                     flicker.Stop();
+                    IsHit = false;
                 }
                 else
                 {
@@ -204,8 +216,8 @@ namespace Elemancy
                     if (flicker.IsRunning)
                         flicker.Update(gameTime.ElapsedGameTime);
 
-                    flick = flicker.CurrentValue;
-                }           
+                    multiple = flicker.CurrentValue;
+                }    
             }
 
             if (IsDead)
@@ -292,11 +304,12 @@ namespace Elemancy
         /// </summary>
         /// <param name="damage">The damage done to the player's health.</param>
         public void UpdateHealth(int damage)
-        {
+        {           
             health -= damage;
             if(health <= 0)
             {
                 IsDead = true;
+                IsHit = false;
             }
         }
     }

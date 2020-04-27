@@ -11,10 +11,6 @@ namespace Elemancy
     /// <summary>
     /// My TO DO:
     ///  1. Work on Transition screen, stop scrolling when reach end of level
-    ///  2. Implementation flicker/fading away when hit/dead
-    ///  3. Probably will need Double Jump capability in Player
-    ///  4. Add Health bar to its own layer called GameComponents, for traps as well
-    ///     > They should not move be, in static positions
     ///  5. Look at implementing SpriteFont for displaying messages on transition screen
     ///  6. Think about Menu construction: IMenu for transitioning easier maybe
     ///     > Maybe an Enum for the SpriteFont Messages: 
@@ -25,15 +21,6 @@ namespace Elemancy
     ///     > Menu song, Success wav, Fail wav
     ///     > Dungeon song    
     /// </summary>
-    enum GameState
-    {
-        MainMenu,
-        Forest,
-        Cave,
-        Dungeon,
-        Transition,
-        GameOver
-    }
 
     /// <summary>
     /// This is the main type for your game.
@@ -51,6 +38,8 @@ namespace Elemancy
         GraphicsDeviceManager graphics;
         public SpriteBatch spriteBatch;
         KeyboardState oldState;
+
+        ParallaxLayer componentsLayer, playerLayer, levelsLayer;
 
         /// <summary>
         /// The wizard's Health, need to flicker player when hit
@@ -145,45 +134,43 @@ namespace Elemancy
             player = new Player(this, Color.White);
             player.LoadContent(Content);
 
+            componentsLayer = new ParallaxLayer(this);
+            componentsLayer.Sprites.Add(wizardHealth);
+            componentsLayer.Sprites.Add(wizardGauge);
+            componentsLayer.Sprites.Add(enemyHealth);
+            componentsLayer.Sprites.Add(enemyGauge);
+            componentsLayer.DrawOrder = 2;
+            Components.Add(componentsLayer);
+
             // Player Layer
-            var playerLayer = new ParallaxLayer(this);
+            playerLayer = new ParallaxLayer(this);
             playerLayer.Sprites.Add(player);
-            playerLayer.Sprites.Add(wizardHealth);
-            playerLayer.Sprites.Add(wizardGauge);
-            playerLayer.Sprites.Add(enemyHealth);
-            playerLayer.Sprites.Add(enemyGauge);
             playerLayer.DrawOrder = 2;
             Components.Add(playerLayer);
 
-            var levelsLayer = new ParallaxLayer(this);
-
+            levelsLayer = new ParallaxLayer(this);
             // Levels Layer - Can just add to to them for other levels
             var levelTextures = new Texture2D[]
             {
                 Content.Load<Texture2D>("forest1"),
-                Content.Load<Texture2D>("forest2")
+                Content.Load<Texture2D>("forest2"),
                 // Cave
-                // Dungeon
+                Content.Load<Texture2D>("dungeon")
             };
-
             var levelSprites = new StaticSprite[]
             {
                 new StaticSprite(levelTextures[0], new Vector2(-200,0)), 
-                new StaticSprite(levelTextures[1], new Vector2(1189, 0))
+                new StaticSprite(levelTextures[1], new Vector2(1189, 0)),
+                new StaticSprite(levelTextures[2], new Vector2(2578, 0))
             };
 
             levelsLayer.Sprites.AddRange(levelSprites);
             levelsLayer.DrawOrder = 1;
             Components.Add(levelsLayer);
 
-            /* var playerScroll = playerLayer.ScrollController as AutoScrollController;
-            playerScroll.Speed = 0f;
-
-            var levelScroll = levelsLayer.ScrollController as AutoScrollController;
-            levelScroll.Speed = 40f; */
-
             // The health bar may need it's own layer to stay put
-            playerLayer.ScrollController = new TrackingPlayer(player, 0.5f);
+            componentsLayer.ScrollController = new TrackingPlayer(player, 0.0f);
+            playerLayer.ScrollController = new TrackingPlayer(player, 1.0f);
             levelsLayer.ScrollController = new TrackingPlayer(player, 1.0f);
 
             //add for loop for enemies when we get texture files
@@ -257,8 +244,6 @@ namespace Elemancy
                 }
             }
 
-            player.Update(gameTime);
-
             if (current.IsKeyDown(Keys.H))
             {
                 player.IsHit = true;
@@ -267,8 +252,12 @@ namespace Elemancy
                 player.UpdateHealth(1);
             }
 
+            player.Update(gameTime);
+
+
             base.Update(gameTime);
             oldState = current;
+
         }
 
         /// <summary>
