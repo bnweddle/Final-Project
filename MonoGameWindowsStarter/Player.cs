@@ -44,6 +44,9 @@ namespace Elemancy
         // The speed of the player
         public const float PLAYER_SPEED = 75;
 
+        // The speed that the player falls
+        public const float FALL_SPEED = 125;
+
         // Width of animation frames
         public const int FRAME_WIDTH = 67;
 
@@ -158,11 +161,11 @@ namespace Elemancy
                         verticalState = VerticalMovementState.Falling;
                     break;
                 case VerticalMovementState.Falling:
-                    Position.Y += delta * PLAYER_SPEED;
+                    Position.Y += delta * FALL_SPEED;
                     // Come back to the ground
-                    if (Position.Y > 700)
+                    if (Position.Y > 600)
                     {
-                        Position.Y = 700;
+                        Position.Y = 600;
                         verticalState = VerticalMovementState.OnGround;
                     }
                     break;

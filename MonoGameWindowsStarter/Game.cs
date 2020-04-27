@@ -8,7 +8,21 @@ using System.Collections.Generic;
 namespace Elemancy
 {
     /// <summary>
-    /// For switching between level more easily, maybe?
+    /// My TO DO:
+    ///  1. Work on Transition screen, stop scrolling when reach end of level
+    ///  2. Implementation flicker/fading away when hit/dead
+    ///  3. Probably will need Double Jump capability in Player
+    ///  4. Add Health bar to its own layer called GameComponents, for traps as well
+    ///     > They should not move be in static positions
+    ///  5. Look at implementing SpriteFont for displaying messages on transition screen
+    ///  6. Think about Menu construction: IMenu for transitioning easier maybe
+    ///     > Maybe an Enum for the SpriteFont Messages: 
+    ///       * Round1, Round2, Win -> Go to Menu or Exit, Lose -> Go to Menu or Exit
+    ///  7. EXTRA: Think about Sound effects:
+    ///     > Like forest song
+    ///     > Cave song
+    ///     > Menu song, Success wav, Fail wav
+    ///     > Dungeon song    
     /// </summary>
     enum GameState
     {
@@ -170,6 +184,7 @@ namespace Elemancy
             //add for loop for enemies when we get texture files
             //Add Enemies to Components with DrawOrder so they appear on top of layers
 
+            // Probably use SpaceBar for triggering spell casting for Player
             // Basic Particle Loading
             particleTexture = Content.Load<Texture2D>("particle");
             particleSystem = new ParticleSystem(this, 1000, particleTexture);
