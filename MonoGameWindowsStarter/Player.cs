@@ -3,6 +3,7 @@
  * */
 using System;
 using Elemancy.Parallax;
+using Elemancy.Transitions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,14 +19,12 @@ namespace Elemancy
         OnGround,
         Jumping,
         Falling,
-        Hit, //flicker
-        Dead //fade away
     }
 
     /// <summary>
     /// For which direction the player is facing
     /// </summary>
-    public enum State
+    public enum Direction
     {
         West = 2,
         East,
@@ -34,6 +33,10 @@ namespace Elemancy
 
     public class Player : ISprite
     {
+        // VARIABLE
+        // define the timer
+        InterpolationTimer myTimer;
+        float multiple = 1;
 
         // How much the animation moves per frames 
         const int FRAME_RATE = 124;
@@ -62,8 +65,8 @@ namespace Elemancy
         // The player's vertical movement state
         VerticalMovementState verticalState;
 
-        // The player's state
-        State state;
+        // The player's facing direction
+        Direction direction;
 
         // A timer for jumping
         TimeSpan jumpTimer;
@@ -100,6 +103,10 @@ namespace Elemancy
         /// </summary>
         public int HitDamage { get; set; }
 
+        public bool IsDead { get; set; } = false;
+
+        public bool IsHit { get; set; } = false;
+
         /// <summary>
         /// Constructing the Player
         /// </summary>
@@ -107,25 +114,36 @@ namespace Elemancy
         /// <param name="player">The Texture</param>
         /// <param name="position">The Position</param>
         /// <param name="health">The Player's starting health</param>
-        public Player(Game game, Texture2D player, Color color)
+        public Player(Game game, Color color)
         {
             this.game = game;
-            this.player = player;
             this.Color = color;
         }
 
         public void Initialize()
         {
             Position = new Vector2(40,600);  // Start position could change with preference
-            health = 500; // Could also change with preference
-            state = State.Idle;
+            health = 5; // Could also change with preference
+            direction = Direction.Idle;
             verticalState = VerticalMovementState.OnGround;
             Bounds.Width = FRAME_WIDTH;
             Bounds.Height = FRAME_HEIGHT;
+
+            myTimer = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
+            myTimer.OnTimerFinished += new TimerFinished(myTimer_OnTimerFinished);
+
+
+        }
+
+        void myTimer_OnTimerFinished()
+        {
+            myTimer.Stop();
+            multiple = 0;
         }
 
         public void LoadContent(ContentManager content)
-        {
+        { 
+            player = content.Load<Texture2D>("player");
         }
 
         public void Update(GameTime gameTime)
@@ -168,46 +186,65 @@ namespace Elemancy
                         Position.Y = 600;
                         verticalState = VerticalMovementState.OnGround;
                     }
-                    break;
-                case VerticalMovementState.Hit:
-                    jumpTimer += gameTime.ElapsedGameTime;
-                    // When they hit a trap, should bounce away from it
-                    // Add flickering 
-                    Position.Y -= (350 / (float)jumpTimer.TotalMilliseconds);
-                    if (jumpTimer.TotalMilliseconds >= JUMP_TIME)
-                        verticalState = VerticalMovementState.Falling;
-                    break;
-                    // Add case for Dying
+                    break;                 
             }
 
-            if (verticalState == VerticalMovementState.Hit)
+            if(IsHit)
+            {
+                jumpTimer += gameTime.ElapsedGameTime;
+                // When they hit a trap, should bounce away from it
+                // Add flickering 
+                Position.Y -= (350 / (float)jumpTimer.TotalMilliseconds);
+                if (jumpTimer.TotalMilliseconds >= JUMP_TIME)
+                    verticalState = VerticalMovementState.Falling;
+            }
+
+            if(IsDead)
+            {
+                if(!myTimer.IsRunning)
+                {
+                    myTimer.Start();
+                }      
+                  
+                if (myTimer.IsRunning)
+                    myTimer.Update(gameTime.ElapsedGameTime);
+
+                multiple = myTimer.CurrentValue;
+
+                System.Diagnostics.Debug.WriteLine($"{myTimer.CurrentValue } timer");
+
+
+            }
+
+
+            if (IsHit)
             {
                 Position.X -= 100 * delta;
-                state = State.West;
+                direction = Direction.West;
             }
             else if (keyboard.IsKeyDown(Keys.Left))
             {
                 if (verticalState == VerticalMovementState.Jumping || verticalState == VerticalMovementState.Falling)
-                    state = State.West;                       
+                    direction = Direction.West;                       
                 else
-                    state = State.West;
+                    direction = Direction.West;
                 Position.X -= delta * PLAYER_SPEED;
             }
             else if (keyboard.IsKeyDown(Keys.Right))
             {
                 if (verticalState == VerticalMovementState.Jumping || verticalState == VerticalMovementState.Falling)
-                    state = State.East;            
+                    direction = Direction.East;            
                 else
-                    state = State.East;
+                    direction = Direction.East;
                 Position.X += delta * PLAYER_SPEED;
             }
             else
             {
-                state = State.Idle;
+                direction = Direction.Idle;
             }
 
             // update animation timer when the player is moving
-            if (state != State.Idle)
+            if (direction != Direction.Idle)
                 animationTimer += gameTime.ElapsedGameTime;
 
             // Check if animation should increase by more than one frame
@@ -228,12 +265,12 @@ namespace Elemancy
 
             Rectangle rectSource = new Rectangle(
                 frame * FRAME_WIDTH,  // X value
-                (int)state % 4 * FRAME_HEIGHT, // Y value
+                (int)direction % 4 * FRAME_HEIGHT, // Y value
                 FRAME_WIDTH,
                 FRAME_HEIGHT
                 );
 
-            spriteBatch.Draw(player, Position, rectSource, Color);
+            spriteBatch.Draw(player, Position, rectSource, Color * multiple);
 
         }
 
@@ -244,6 +281,10 @@ namespace Elemancy
         public void UpdateHealth(int damage)
         {
             health -= damage;
+            if(health <= 0)
+            {
+                IsDead = true;
+            }
         }
     }
 }

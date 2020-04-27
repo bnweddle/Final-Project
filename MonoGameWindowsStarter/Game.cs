@@ -1,4 +1,5 @@
 ﻿using Elemancy.Parallax;
+using Elemancy.Transitions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -13,7 +14,7 @@ namespace Elemancy
     ///  2. Implementation flicker/fading away when hit/dead
     ///  3. Probably will need Double Jump capability in Player
     ///  4. Add Health bar to its own layer called GameComponents, for traps as well
-    ///     > They should not move be in static positions
+    ///     > They should not move be, in static positions
     ///  5. Look at implementing SpriteFont for displaying messages on transition screen
     ///  6. Think about Menu construction: IMenu for transitioning easier maybe
     ///     > Maybe an Enum for the SpriteFont Messages: 
@@ -42,14 +43,13 @@ namespace Elemancy
         /// <summary>
         /// Enemies
         /// </summary>
-        List<Enemy> enemyList;
-        Enemy activeEnemy;
+        List<IEnemy> enemyList = new List<IEnemy>();
+        IEnemy activeEnemy;
 
         Player player;
-        Texture2D playerText;
 
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        public SpriteBatch spriteBatch;
 
         /// <summary>
         /// The wizard's Health, need to flicker player when hit
@@ -90,8 +90,7 @@ namespace Elemancy
             {
                 //Vector position is subjected to change when we know where the "ground" is
                 //and where the enemies need to be placed
-                enemyList.Add(new BasicEnemy(30, 5, "fire", this, new Vector2(300, 700)));
-                
+                enemyList.Add(new BasicEnemy(30, 5, "fire", this, new Vector2(300, 700)));               
                 
             }
             enemyList.Add(new EnemyBoss(60, 10, "fire", this, new Vector2(300, 700)));
@@ -141,8 +140,9 @@ namespace Elemancy
             enemyHealth.LoadContent(Content);
             enemyGauge.LoadContent(Content);
 
-            playerText = Content.Load<Texture2D>("player");
-            player = new Player(this, playerText, Color.White);
+            
+            player = new Player(this, Color.White);
+            player.LoadContent(Content);
 
             // Player Layer
             var playerLayer = new ParallaxLayer(this);
@@ -245,12 +245,6 @@ namespace Elemancy
             // If player is hit Update, using Keyboard for now for testing purposes
             KeyboardState current = Keyboard.GetState();
 
-            if (current.IsKeyDown(Keys.H))
-            {
-                // Minus the Health by the damage done when player was hit, using -1 for now
-                wizardGauge.Bounds.Width -= 1;
-            }
-
             //enemy update
             activeEnemy.Update(player, gameTime);
             if (activeEnemy.dead)
@@ -264,7 +258,15 @@ namespace Elemancy
 
             player.Update(gameTime);
 
+            if (current.IsKeyDown(Keys.H))
+            {
+                // Minus the Health by the damage done when player was hit, using -1 for now
+                wizardGauge.Bounds.Width -= 1;
+                player.UpdateHealth(1);
+            }
+
             base.Update(gameTime);
+
         }
 
         /// <summary>

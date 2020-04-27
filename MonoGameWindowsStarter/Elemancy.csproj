@@ -49,6 +49,7 @@
     <Compile Include="BasicEnemy.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="HealthBar.cs" />
+    <Compile Include="Transitions\InterpolationTimer.cs" />
     <Compile Include="Parallax\AutoScrollController.cs" />
     <Compile Include="Parallax\IScrollController.cs" />
     <Compile Include="Parallax\ISprite.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transitions\FadingTextures.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

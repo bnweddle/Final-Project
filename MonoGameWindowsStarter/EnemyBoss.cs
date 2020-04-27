@@ -81,7 +81,8 @@ namespace Elemancy
                 //player takes damage, either affecting the hit bar or the actual player
                 if (!dead)
                 {
-                    player.UpdateHealth(damage);
+                    // commenting out for testing purposes
+                    // player.UpdateHealth(damage);
                 }
             }
 

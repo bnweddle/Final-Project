@@ -21,11 +21,6 @@ namespace Elemancy.Parallax
         Texture2D texture;
 
         /// <summary>
-        /// Scaling the Sprite
-        /// </summary>
-        float Scale;
-
-        /// <summary>
         /// Creates a new static sprite
         /// </summary>
         /// <param name="texture">the texture to use</param>

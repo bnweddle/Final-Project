@@ -11,9 +11,6 @@ namespace Elemancy
 {
     public class HealthBar : ISprite
     {
-
-        private KeyboardState oldstate;
-
         private Game game;
 
         // The health bar texture

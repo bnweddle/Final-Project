@@ -86,7 +86,8 @@ namespace Elemancy
 
                 if(!dead)
                 {
-                    player.UpdateHealth(damage);
+                    // Commenting out for testing fading purposes
+                    //player.UpdateHealth(damage);
                 }
             }
 
