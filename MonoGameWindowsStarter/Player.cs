@@ -201,19 +201,23 @@ namespace Elemancy
 
             if(IsDead)
             {
-                if(!myTimer.IsRunning)
+                if (myTimer.TimeElapsed.TotalSeconds >= 1.75)
+                {
+                    myTimer.Stop();
+                    multiple = 0;
+                }
+
+                if (!myTimer.IsRunning && multiple != 0)
                 {
                     myTimer.Start();
-                }      
-                  
-                if (myTimer.IsRunning)
-                    myTimer.Update(gameTime.ElapsedGameTime);
+                }
+                else if(multiple != 0)
+                {
+                    if (myTimer.IsRunning)
+                        myTimer.Update(gameTime.ElapsedGameTime);
 
-                multiple = myTimer.CurrentValue;
-
-                System.Diagnostics.Debug.WriteLine($"{myTimer.CurrentValue } timer");
-
-
+                    multiple = myTimer.CurrentValue;
+                }        
             }
 
 
