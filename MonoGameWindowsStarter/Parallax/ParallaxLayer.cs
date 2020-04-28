@@ -21,11 +21,6 @@ namespace Elemancy.Parallax
         public List<ISprite> Sprites = new List<ISprite>();
 
         /// <summary>
-        /// The list of ISpriteFonts that compose this parallax layer
-        /// </summary>
-        public List<ISpriteFont> SpritesFonts = new List<ISpriteFont>();
-
-        /// <summary>
         /// The transformation to apply to this parallax layer
         /// </summary>
         Matrix transform = Matrix.Identity;
@@ -65,12 +60,6 @@ namespace Elemancy.Parallax
             {
                 sprite.Draw(spriteBatch, gameTime);
             }
-
-            /*foreach (var spriteFont in SpritesFonts)
-            {
-                spriteFont.Draw(spriteBatch, gameTime);
-            }*/
-
 
             spriteBatch.End();
         }

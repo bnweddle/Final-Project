@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Elemancy
 {
-    public class HealthBar : ISprite
+    public class HealthBar
     {
         private Game game;
 
@@ -48,7 +48,7 @@ namespace Elemancy
 
         }
 
-        public void Draw(SpriteBatch spriteBatch, GameTime gametime)
+        public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(healthbar, Position, Bounds, Color); // The Health bar
         }

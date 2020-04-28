@@ -30,24 +30,33 @@ namespace Elemancy
         List<IEnemy> enemyList = new List<IEnemy>();
         IEnemy activeEnemy;
 
-
-        Messages messages = new Messages();
-
         Player player;
 
         GraphicsDeviceManager graphics;
+
+        /// <summary>
+        /// SpriteBatch is for Parallax Layers
+        /// Player, Levels, etc.
+        /// </summary>
         public SpriteBatch spriteBatch;
+
+        /// <summary>
+        /// Is for Game Components that don't move
+        /// HealthBar, Messages, Transitions Screens, etc.
+        /// </summary>
+        SpriteBatch componentsBatch;
+        Messages messages = new Messages();
+
         KeyboardState oldState;
 
-        ParallaxLayer componentsLayer, playerLayer, levelsLayer, transitionsLayer;
-        TrackingPlayer componentT, playerT, levelsT, transitionT;
-
-        HealthBar wizardHealth, wizardGauge;
+        ParallaxLayer playerLayer, levelsLayer;
+        TrackingPlayer playerT, levelsT;
 
         /// <summary>
         /// The enemy Health when enemy dies -> disappear
         /// When another enemy appears -> appear and start at full health
         /// </summary>
+        HealthBar wizardHealth, wizardGauge;
         HealthBar enemyHealth, enemyGauge;
 
         // Basic Particle Stuff
@@ -114,6 +123,7 @@ namespace Elemancy
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            componentsBatch = new SpriteBatch(GraphicsDevice);
 
             wizardHealth.LoadContent(Content);
             wizardGauge.LoadContent(Content);
@@ -121,19 +131,7 @@ namespace Elemancy
             enemyHealth.LoadContent(Content);
             enemyGauge.LoadContent(Content);
 
-            transitionsLayer = new ParallaxLayer(this);
             messages.LoadContent(Content);
-            transitionsLayer.SpritesFonts.Add(messages);
-            transitionsLayer.DrawOrder = 3;
-            Components.Add(transitionsLayer); 
-
-            componentsLayer = new ParallaxLayer(this);
-            componentsLayer.Sprites.Add(wizardHealth);
-            componentsLayer.Sprites.Add(wizardGauge);
-            componentsLayer.Sprites.Add(enemyHealth);
-            componentsLayer.Sprites.Add(enemyGauge);
-            componentsLayer.DrawOrder = 3;
-            Components.Add(componentsLayer);
 
             // Player Layer
             player = new Player(this, Color.White);
@@ -163,16 +161,14 @@ namespace Elemancy
             levelsLayer.DrawOrder = 1;
             Components.Add(levelsLayer);
 
-            transitionT = new TrackingPlayer(player, 0.0000001f);
-            componentT = new TrackingPlayer(player, 0.00000001f);
             playerT = new TrackingPlayer(player, 1.0f);
             levelsT = new TrackingPlayer(player, 1.0f);
 
             // The health bar may need it's own layer to stay put
-            componentsLayer.ScrollController = componentT;
+            // componentsLayer.ScrollController = componentT;
             playerLayer.ScrollController = playerT;
             levelsLayer.ScrollController = levelsT;
-            transitionsLayer.ScrollController = transitionT;
+            //transitionsLayer.ScrollController = transitionT;
 
 
             //add for loop for enemies when we get texture files
@@ -281,6 +277,18 @@ namespace Elemancy
             spriteBatch.End();
 
             base.Draw(gameTime);
+
+            componentsBatch.Begin();
+
+            wizardHealth.Draw(componentsBatch);
+            wizardGauge.Draw(componentsBatch);
+
+            enemyHealth.Draw(componentsBatch);
+            enemyGauge.Draw(componentsBatch);
+
+            messages.Draw(componentsBatch);
+
+            componentsBatch.End();
         }
     }
 }

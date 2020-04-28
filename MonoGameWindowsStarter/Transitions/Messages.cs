@@ -13,7 +13,7 @@ namespace Elemancy.Transitions
         Lose
     }
 
-    public class Messages : ISpriteFont
+    public class Messages 
     {
         /// <summary>
         /// The Sprite Message for the SpriteFont to be displayed
@@ -24,7 +24,7 @@ namespace Elemancy.Transitions
 
         private Vector2 MessagePostion = new Vector2(368, 396);
 
-        private Color Color = Color.FromNonPremultiplied(45, 47, 132, 1);
+        private Color Color = Color.FromNonPremultiplied(45, 47, 132, 0);
 
         public void LoadContent(ContentManager content)
         {
@@ -51,7 +51,7 @@ namespace Elemancy.Transitions
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(font, "Hello World", MessagePostion, Color);
         }

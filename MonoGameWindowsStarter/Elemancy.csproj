@@ -49,7 +49,6 @@
     <Compile Include="BasicEnemy.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="HealthBar.cs" />
-    <Compile Include="Parallax\ISpriteFont.cs" />
     <Compile Include="Transitions\InterpolationTimer.cs" />
     <Compile Include="Parallax\AutoScrollController.cs" />
     <Compile Include="Parallax\IScrollController.cs" />
