@@ -39,7 +39,10 @@ namespace Elemancy.Parallax
             this.ScrollRatio = ratio;
         }
 
-        Matrix transform = Matrix.Identity;
+        /// <summary>
+        /// Used if the scrolling should stop
+        /// </summary>
+        private Matrix transform = Matrix.Identity;
 
         /// <summary>
         /// Gets the transformation matrix to use with the layer

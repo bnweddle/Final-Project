@@ -43,13 +43,13 @@
   <ItemGroup>
     <Compile Include="BoundingCircle.cs" />
     <Compile Include="BoundingRectangle.cs" />
-    <Compile Include="Camera.cs" />
     <Compile Include="Collisions.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="EnemyBoss.cs" />
     <Compile Include="BasicEnemy.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="HealthBar.cs" />
+    <Compile Include="Parallax\ISpriteFont.cs" />
     <Compile Include="Transitions\InterpolationTimer.cs" />
     <Compile Include="Parallax\AutoScrollController.cs" />
     <Compile Include="Parallax\IScrollController.cs" />
@@ -62,6 +62,7 @@
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transitions\Messages.cs" />
     <Compile Include="Transitions\Scenes.cs" />
   </ItemGroup>
   <ItemGroup>

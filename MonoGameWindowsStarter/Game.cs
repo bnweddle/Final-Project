@@ -10,7 +10,6 @@ namespace Elemancy
 {
     /// <summary>
     /// My TO DO:
-    ///  1. Work on Transition screen, stop scrolling when reach end of level
     ///  5. Look at implementing SpriteFont for displaying messages on transition screen
     ///  6. Think about Menu construction: IMenu for transitioning easier maybe
     ///     > Maybe an Enum for the SpriteFont Messages: 
@@ -33,15 +32,16 @@ namespace Elemancy
         List<IEnemy> enemyList = new List<IEnemy>();
         IEnemy activeEnemy;
 
+
+        Messages messages = new Messages();
+
         Player player;
-        Camera camera = new Camera();
-        Viewport view;
 
         GraphicsDeviceManager graphics;
         public SpriteBatch spriteBatch;
         KeyboardState oldState;
 
-        ParallaxLayer componentsLayer, playerLayer, levelsLayer;
+        ParallaxLayer componentsLayer, playerLayer, levelsLayer, transitionsLayer;
         TrackingPlayer componentT, playerT, levelsT;
 
         HealthBar wizardHealth, wizardGauge;
@@ -105,9 +105,6 @@ namespace Elemancy
             graphics.PreferredBackBufferHeight = 768;
             graphics.ApplyChanges();
 
-            view.Width = 1042;
-            view.Height = 768;
-
             player.Initialize();
         }
 
@@ -126,9 +123,11 @@ namespace Elemancy
             enemyHealth.LoadContent(Content);
             enemyGauge.LoadContent(Content);
 
-            
-            player = new Player(this, Color.White);
-            player.LoadContent(Content);
+            transitionsLayer = new ParallaxLayer(this);
+            messages.LoadContent(Content);
+            transitionsLayer.SpritesFonts.Add(messages);
+            transitionsLayer.DrawOrder = 3;
+            Components.Add(transitionsLayer);
 
             componentsLayer = new ParallaxLayer(this);
             componentsLayer.Sprites.Add(wizardHealth);
@@ -139,6 +138,8 @@ namespace Elemancy
             Components.Add(componentsLayer);
 
             // Player Layer
+            player = new Player(this, Color.White);
+            player.LoadContent(Content);
             playerLayer = new ParallaxLayer(this);
             playerLayer.Sprites.Add(player);
             playerLayer.DrawOrder = 2;
@@ -254,7 +255,6 @@ namespace Elemancy
             }
 
             player.Update(gameTime);
-            camera.Update(player, view);
 
             if(player.Position.X >= 1735)
             {
@@ -276,8 +276,7 @@ namespace Elemancy
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default,
-                             RasterizerState.CullCounterClockwise, null, camera.Matrix);
+            spriteBatch.Begin();
 
             spriteBatch.End();
 

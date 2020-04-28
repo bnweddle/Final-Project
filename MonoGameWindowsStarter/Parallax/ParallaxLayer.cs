@@ -15,12 +15,15 @@ namespace Elemancy.Parallax
         /// </summary>
         public IScrollController ScrollController { get; set; } = new AutoScrollController();
 
-        public ISprite Current { get; set; }
-
         /// <summary>
         /// The list of ISprites that compose this parallax layer
         /// </summary>
         public List<ISprite> Sprites = new List<ISprite>();
+
+        /// <summary>
+        /// The list of ISpriteFonts that compose this parallax layer
+        /// </summary>
+        public List<ISpriteFont> SpritesFonts = new List<ISpriteFont>();
 
         /// <summary>
         /// The transformation to apply to this parallax layer
@@ -48,7 +51,6 @@ namespace Elemancy.Parallax
         public override void Update(GameTime gameTime)
         {
             ScrollController.Update(gameTime);
-
         }
 
         /// <summary>
@@ -58,10 +60,18 @@ namespace Elemancy.Parallax
         public override void Draw(GameTime gameTime)
         {
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, ScrollController.Transform);
+
             foreach (var sprite in Sprites)
             {
                 sprite.Draw(spriteBatch, gameTime);
             }
+
+            foreach (var spriteFont in SpritesFonts)
+            {
+                spriteFont.Draw(spriteBatch, gameTime);
+            }
+
+
             spriteBatch.End();
         }
     }
