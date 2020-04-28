@@ -66,10 +66,10 @@ namespace Elemancy.Parallax
                 sprite.Draw(spriteBatch, gameTime);
             }
 
-            foreach (var spriteFont in SpritesFonts)
+            /*foreach (var spriteFont in SpritesFonts)
             {
                 spriteFont.Draw(spriteBatch, gameTime);
-            }
+            }*/
 
 
             spriteBatch.End();

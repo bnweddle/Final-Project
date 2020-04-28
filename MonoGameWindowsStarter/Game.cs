@@ -11,10 +11,8 @@ namespace Elemancy
     /// <summary>
     /// My TO DO:
     ///  5. Look at implementing SpriteFont for displaying messages on transition screen
-    ///  6. Think about Menu construction: IMenu for transitioning easier maybe
-    ///     > Maybe an Enum for the SpriteFont Messages: 
-    ///       * Round1, Round2, Win -> Go to Menu or Exit, Lose -> Go to Menu or Exit
-    ///  7. EXTRA: Think about Sound effects:
+    ///
+    ///  EXTRA: Think about Sound effects:
     ///     > Like forest song
     ///     > Cave song
     ///     > Menu song, Success wav, Fail wav
@@ -42,7 +40,7 @@ namespace Elemancy
         KeyboardState oldState;
 
         ParallaxLayer componentsLayer, playerLayer, levelsLayer, transitionsLayer;
-        TrackingPlayer componentT, playerT, levelsT;
+        TrackingPlayer componentT, playerT, levelsT, transitionT;
 
         HealthBar wizardHealth, wizardGauge;
 
@@ -127,14 +125,14 @@ namespace Elemancy
             messages.LoadContent(Content);
             transitionsLayer.SpritesFonts.Add(messages);
             transitionsLayer.DrawOrder = 3;
-            Components.Add(transitionsLayer);
+            Components.Add(transitionsLayer); 
 
             componentsLayer = new ParallaxLayer(this);
             componentsLayer.Sprites.Add(wizardHealth);
             componentsLayer.Sprites.Add(wizardGauge);
             componentsLayer.Sprites.Add(enemyHealth);
             componentsLayer.Sprites.Add(enemyGauge);
-            componentsLayer.DrawOrder = 2;
+            componentsLayer.DrawOrder = 3;
             Components.Add(componentsLayer);
 
             // Player Layer
@@ -165,7 +163,8 @@ namespace Elemancy
             levelsLayer.DrawOrder = 1;
             Components.Add(levelsLayer);
 
-            componentT = new TrackingPlayer(player, 0.0f);
+            transitionT = new TrackingPlayer(player, 0.0000001f);
+            componentT = new TrackingPlayer(player, 0.00000001f);
             playerT = new TrackingPlayer(player, 1.0f);
             levelsT = new TrackingPlayer(player, 1.0f);
 
@@ -173,6 +172,7 @@ namespace Elemancy
             componentsLayer.ScrollController = componentT;
             playerLayer.ScrollController = playerT;
             levelsLayer.ScrollController = levelsT;
+            transitionsLayer.ScrollController = transitionT;
 
 
             //add for loop for enemies when we get texture files

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Elemancy.Transitions;
 
 namespace Elemancy.Parallax
 {
@@ -54,7 +55,8 @@ namespace Elemancy.Parallax
                 float x = ScrollRatio * (Offset - player.Position.X);
 
                 // Will need to tailor according to the levels.
-                if (ScrollRatio == 0f)
+
+               if (ScrollRatio == 0f)
                 {
                     transform.M41 = -1735 + Offset;
                     return transform;

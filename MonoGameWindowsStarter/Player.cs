@@ -130,7 +130,7 @@ namespace Elemancy
             Bounds.Width = FRAME_WIDTH;
             Bounds.Height = FRAME_HEIGHT;
 
-            flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 1.0f, 0.0f);
+            flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 0.0f, 1.0f);
             fade = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
         }
 
@@ -206,6 +206,7 @@ namespace Elemancy
                 if (flicker.TimeElapsed.TotalSeconds >= 0.20)
                 {
                     flicker.Stop();
+                    flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 0.0f, 1.0f);
                     IsHit = false;
                 }
                 else
