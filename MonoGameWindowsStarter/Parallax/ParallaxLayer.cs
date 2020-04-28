@@ -15,6 +15,8 @@ namespace Elemancy.Parallax
         /// </summary>
         public IScrollController ScrollController { get; set; } = new AutoScrollController();
 
+        public ISprite Current { get; set; }
+
         /// <summary>
         /// The list of ISprites that compose this parallax layer
         /// </summary>

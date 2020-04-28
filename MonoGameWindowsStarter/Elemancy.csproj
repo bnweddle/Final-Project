@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="BoundingCircle.cs" />
     <Compile Include="BoundingRectangle.cs" />
+    <Compile Include="Camera.cs" />
     <Compile Include="Collisions.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="EnemyBoss.cs" />

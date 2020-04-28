@@ -34,23 +34,16 @@ namespace Elemancy
         IEnemy activeEnemy;
 
         Player player;
+        Camera camera = new Camera();
+        Viewport view;
 
         GraphicsDeviceManager graphics;
         public SpriteBatch spriteBatch;
         KeyboardState oldState;
 
         ParallaxLayer componentsLayer, playerLayer, levelsLayer;
+        TrackingPlayer componentT, playerT, levelsT;
 
-        /// <summary>
-        /// The wizard's Health, need to flicker player when hit
-        /// Need to be sure to be careful with collision detection with hits
-        /// Should probably have bool for collision if collided return Hit bool,
-        /// and in which case call method to reduce health.
-        /// 
-        /// OR as soon as it collides, set the life of the particle to zero,
-        /// so it doesn't continue to detect collision and decrease health multiple 
-        /// times when it should just be once per hit.
-        /// </summary>
         HealthBar wizardHealth, wizardGauge;
 
         /// <summary>
@@ -112,6 +105,9 @@ namespace Elemancy
             graphics.PreferredBackBufferHeight = 768;
             graphics.ApplyChanges();
 
+            view.Width = 1042;
+            view.Height = 768;
+
             player.Initialize();
         }
 
@@ -153,25 +149,30 @@ namespace Elemancy
             var levelTextures = new Texture2D[]
             {
                 Content.Load<Texture2D>("forest1"),
-                Content.Load<Texture2D>("forest2"),
+                Content.Load<Texture2D>("forest2"), // about 2700 width
                 // Cave
-                Content.Load<Texture2D>("dungeon")
+                Content.Load<Texture2D>("dungeon") // about 2800 width
             };
             var levelSprites = new StaticSprite[]
             {
-                new StaticSprite(levelTextures[0], new Vector2(-200,0)), 
-                new StaticSprite(levelTextures[1], new Vector2(1189, 0)),
-                new StaticSprite(levelTextures[2], new Vector2(2578, 0))
+                new StaticSprite(levelTextures[0], new Vector2(-50,0)), 
+                new StaticSprite(levelTextures[1], new Vector2(1339, 0)),
+                new StaticSprite(levelTextures[2], new Vector2(2728, 0))
             };
 
             levelsLayer.Sprites.AddRange(levelSprites);
             levelsLayer.DrawOrder = 1;
             Components.Add(levelsLayer);
 
+            componentT = new TrackingPlayer(player, 0.0f);
+            playerT = new TrackingPlayer(player, 1.0f);
+            levelsT = new TrackingPlayer(player, 1.0f);
+
             // The health bar may need it's own layer to stay put
-            componentsLayer.ScrollController = new TrackingPlayer(player, 0.0f);
-            playerLayer.ScrollController = new TrackingPlayer(player, 1.0f);
-            levelsLayer.ScrollController = new TrackingPlayer(player, 1.0f);
+            componentsLayer.ScrollController = componentT;
+            playerLayer.ScrollController = playerT;
+            levelsLayer.ScrollController = levelsT;
+
 
             //add for loop for enemies when we get texture files
             //Add Enemies to Components with DrawOrder so they appear on top of layers
@@ -229,7 +230,7 @@ namespace Elemancy
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-
+            System.Diagnostics.Debug.WriteLine($"{player.Position.X } player's X Position");
             // If player is hit Update, using Keyboard for now for testing purposes
             KeyboardState current = Keyboard.GetState();
 
@@ -253,7 +254,14 @@ namespace Elemancy
             }
 
             player.Update(gameTime);
+            camera.Update(player, view);
 
+            if(player.Position.X >= 1735)
+            {
+                levelsT.ScrollRatio = 0.0f;
+                playerT.ScrollRatio = 0.0f;
+
+            }
 
             base.Update(gameTime);
             oldState = current;
@@ -267,7 +275,9 @@ namespace Elemancy
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            spriteBatch.Begin();
+
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default,
+                             RasterizerState.CullCounterClockwise, null, camera.Matrix);
 
             spriteBatch.End();
 
