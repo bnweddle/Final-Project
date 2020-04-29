@@ -117,7 +117,6 @@ namespace Elemancy
             curElement = element;
             State = ActiveState.ToActivate;
             timer = new TimeSpan(0);
-            //System.Diagnostics.Debug.WriteLine("Elemental Orb Activated.");
         }
 
         public ParticleSystem newElementalOrbParticleSystem(GraphicsDevice graphicsDevice, int size, Element curElement, Texture2D elementParticle)
