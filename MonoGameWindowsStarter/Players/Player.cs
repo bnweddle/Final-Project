@@ -60,6 +60,9 @@ namespace Elemancy
         // current frame
         int frame;
 
+        // run animation
+        Texture2D[] animation_run;
+
         // the health of the player, need to bind with healthbar
         int health;
 
@@ -137,6 +140,12 @@ namespace Elemancy
         public void LoadContent(ContentManager content)
         { 
             player = content.Load<Texture2D>("player");
+            animation_run = new Texture2D[24];
+            String prefix = "Sprites/Player/Player-Run/Player-Run-000";
+            for (int i = 0; i < animation_run.Length; i++) {
+                if (i == 10) prefix = "Sprites/Player/Player-Run/Player-Run-00";
+                animation_run[i] = content.Load<Texture2D>(prefix + i);
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -289,15 +298,19 @@ namespace Elemancy
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
 
-            Rectangle rectSource = new Rectangle(
+            if (verticalState == VerticalMovementState.OnGround)
+                spriteBatch.Draw(animation_run[frame], Position, Color.White);
+            else {
+
+                Rectangle rectSource = new Rectangle(
                 frame * FRAME_WIDTH,  // X value
                 (int)direction % 4 * FRAME_HEIGHT, // Y value
                 FRAME_WIDTH,
                 FRAME_HEIGHT
                 );
 
-            spriteBatch.Draw(player, Position, rectSource, Color * multiple);
-
+                spriteBatch.Draw(player, Position, rectSource, Color * multiple);
+            }
         }
 
         /// <summary>
