@@ -32,6 +32,18 @@ namespace Elemancy
         Idle
     }
 
+    /// <summary>
+    /// For the current 'Elemental Power' of the player
+    /// </summary>
+    public enum Element
+    {
+        None = 0,
+        Electric = 1,
+        Fire = 2,
+        Ice = 3,
+    }
+
+
     public class Player : ISprite
     {
         // Timers for fading and flickering when dying and being hit
@@ -78,6 +90,12 @@ namespace Elemancy
         // Old keyboard state for in Update
         KeyboardState oldState;
 
+        // 'Elemental Power' state of the player
+        public Element element;
+
+        // 'Elemental Power' Orb
+        public ElementalOrb elementalOrb;
+
         // The Game 
         Game game;
         
@@ -119,6 +137,7 @@ namespace Elemancy
         {
             this.game = game;
             this.Color = color;
+            elementalOrb = new ElementalOrb(game);
         }
 
         public void Initialize()
@@ -132,11 +151,16 @@ namespace Elemancy
 
             flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 0.0f, 1.0f);
             fade = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
+
+            element = Element.None;
+            elementalOrb.Initialize();
         }
 
         public void LoadContent(ContentManager content)
         { 
             player = content.Load<Texture2D>("player");
+
+            elementalOrb.LoadContent(content);
         }
 
         public void Update(GameTime gameTime)
@@ -282,6 +306,30 @@ namespace Elemancy
                 animationTimer -= new TimeSpan(0, 0, 0, 0, FRAME_RATE);
             }
 
+            // Elemental Orb Activate and Update
+            if(keyboard.IsKeyDown(Keys.Space) && !oldState.IsKeyDown(Keys.Space))
+            {
+                Vector2 orbVelocity;
+                switch (direction)
+                {
+                    case Direction.East:
+                        orbVelocity = new Vector2(1, 0);
+                        break;
+                    case Direction.West:
+                        orbVelocity = new Vector2(-1, 0);
+                        break;
+                    case Direction.Idle:
+                        orbVelocity = Vector2.Zero;
+                        break;
+                    default:
+                        orbVelocity = Vector2.Zero;
+                        break;
+                }
+
+                elementalOrb.Attack(Position, orbVelocity, element);
+            }
+            elementalOrb.Update(gameTime, element);
+
             frame %= 4;
             oldState = keyboard;
         }
@@ -298,6 +346,7 @@ namespace Elemancy
 
             spriteBatch.Draw(player, Position, rectSource, Color * multiple);
 
+            elementalOrb.Draw(gameTime);
         }
 
         /// <summary>
