@@ -293,21 +293,8 @@ namespace Elemancy
                 direction = Direction.Idle;
             }
 
-            // update animation timer when the player is moving
-            if (direction != Direction.Idle)
-                animationTimer += gameTime.ElapsedGameTime;
-
-            // Check if animation should increase by more than one frame
-            while (animationTimer.TotalMilliseconds > FRAME_RATE)
-            {
-                // increase frame
-                frame++;
-                // Decrease the timer by one frame duration
-                animationTimer -= new TimeSpan(0, 0, 0, 0, FRAME_RATE);
-            }
-
             // Elemental Orb Activate and Update
-            if(keyboard.IsKeyDown(Keys.Space) && !oldState.IsKeyDown(Keys.Space))
+            if (keyboard.IsKeyDown(Keys.Space) && !oldState.IsKeyDown(Keys.Space))
             {
                 Vector2 orbVelocity;
                 switch (direction)
@@ -326,9 +313,28 @@ namespace Elemancy
                         break;
                 }
 
-                elementalOrb.Attack(Position, orbVelocity, element);
+                elementalOrb.Attack(Position, orbVelocity, element);            
             }
-            elementalOrb.Update(gameTime, element);
+            elementalOrb.Update(gameTime);
+            if (keyboard.IsKeyDown(Keys.LeftAlt) && !oldState.IsKeyDown(Keys.LeftAlt) && elementalOrb.State == ElementalOrb.ActiveState.Idle)
+            {
+                CycleElement();
+            }
+            System.Diagnostics.Debug.WriteLine($"Player Element Type: {element}");
+            
+
+            // update animation timer when the player is moving
+            if (direction != Direction.Idle)
+                animationTimer += gameTime.ElapsedGameTime;
+
+            // Check if animation should increase by more than one frame
+            while (animationTimer.TotalMilliseconds > FRAME_RATE)
+            {
+                // increase frame
+                frame++;
+                // Decrease the timer by one frame duration
+                animationTimer -= new TimeSpan(0, 0, 0, 0, FRAME_RATE);
+            }
 
             frame %= 4;
             oldState = keyboard;
@@ -361,6 +367,17 @@ namespace Elemancy
                 IsDead = true;
                 IsHit = false;
             }
+        }
+
+        /// <summary>
+        /// Method for switching element type - Probably using just for testing
+        /// </summary>
+        public void CycleElement()
+        {
+            if (element == Element.None) element = Element.Electric;
+            else if (element == Element.Electric) element = Element.Fire;
+            else if (element == Element.Fire) element = Element.Ice;
+            else if (element == Element.Ice) element = Element.None;
         }
     }
 }

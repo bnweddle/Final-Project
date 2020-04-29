@@ -41,19 +41,22 @@ namespace Elemancy
 
         const double DURATION = 2000;
 
+        // Speed Variable for the Elemental Orb
+        float speedVar = .05f;
+
         Random random = new Random();
 
         // Elemental Particle System
         public ParticleSystem elementalOrbParticleSystem;
 
-        public enum State
+        public enum ActiveState
         { 
             Idle = 0,
             ToActivate = 1,
             Active = 2,
         }
 
-        public State state;
+        public ActiveState State;
 
         public ElementalOrb(Game game)
         {
@@ -69,35 +72,38 @@ namespace Elemancy
 
         public void Initialize()
         {
-            state = State.Idle;
+            State = ActiveState.Idle;
         }
 
-        public void Update(GameTime gameTime, Element element)
+        public void Update(GameTime gameTime)
         {
             timer += gameTime.ElapsedGameTime;
-            if(state == State.ToActivate)
+            if(State == ActiveState.ToActivate)
             {
                 // Play SFX here
 
-                state = State.Active;
+                State = ActiveState.Active;
                 activeTimer = new TimeSpan(0);
                 elementalOrbParticleSystem = newElementalOrbParticleSystem(game.GraphicsDevice, 5000, curElement, particle);
             }
-            else if(state == State.Active)
+            else if(State == ActiveState.Active)
             {
-                Position += (float)gameTime.ElapsedGameTime.TotalMilliseconds * Velocity;
+                Position += (float)gameTime.ElapsedGameTime.TotalMilliseconds * Velocity * speedVar;
                 elementalOrbParticleSystem.Update(gameTime);
                 if (timer.TotalMilliseconds - activeTimer.TotalMilliseconds > DURATION)
                 {
-                    state = State.Idle;
+                    State = ActiveState.Idle;
                     elementalOrbParticleSystem = newElementalOrbParticleSystem(game.GraphicsDevice, 0, Element.None, particle);
                 }
             }
+
+            if(State == ActiveState.Active)
+                System.Diagnostics.Debug.WriteLine($"Elemental Orb Active - X Position: {Position.X}");
         }
 
         public void Draw(GameTime gameTime)
         {
-            if (state == State.Active)
+            if (State == ActiveState.Active)
                 elementalOrbParticleSystem.Draw(gameTime);
         }
 
@@ -109,9 +115,9 @@ namespace Elemancy
             Position = new Vector2(Bounds.X, Bounds.Y);
             Velocity = velocity;
             curElement = element;
-            state = State.ToActivate;
+            State = ActiveState.ToActivate;
             timer = new TimeSpan(0);
-            System.Diagnostics.Debug.WriteLine("Elemental Orb Activated.");
+            //System.Diagnostics.Debug.WriteLine("Elemental Orb Activated.");
         }
 
         public ParticleSystem newElementalOrbParticleSystem(GraphicsDevice graphicsDevice, int size, Element curElement, Texture2D elementParticle)
@@ -163,6 +169,8 @@ namespace Elemancy
                     particle.Life -= 2 * deltaT;
                 };
             }
+            game.Components.Add(elementalOrbParticleSystem);
+            elementalOrbParticleSystem.DrawOrder = 2;
 
             return elementalOrbParticleSystem;
         }
