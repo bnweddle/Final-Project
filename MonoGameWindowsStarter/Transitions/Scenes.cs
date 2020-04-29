@@ -7,15 +7,14 @@ namespace Elemancy.Transitions
 {
     public enum GameState
     {
-        MainMenu,
+        MainMenu, 
         Forest,
         Cave,
         Dungeon,
-        Transition,
-        GameOver
+        Transition // Will be the same for Win, Lose, Complete Rounds
     }
 
-    public class Scenes : ISprite
+    public class Scenes 
     {
         /// <summary>
         /// When the scrolling continues, where to reposition player at start of next level
@@ -25,16 +24,14 @@ namespace Elemancy.Transitions
         /// <summary>
         /// Where to freeze scrolling according to each level
         /// </summary>
-        public float ScrollStop { get; set; }
-
-       
+        public float ScrollStop { get; protected set; }
 
         public void GetGameState()
         {
 
         }
 
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public void Draw(SpriteBatch spriteBatch)
         {
             
         }
