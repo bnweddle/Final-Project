@@ -42,7 +42,7 @@ namespace Elemancy
         const double DURATION = 2000;
 
         // Speed Variable for the Elemental Orb
-        float speedVar = .05f;
+        float speedVar = .2f;
 
         Random random = new Random();
 
