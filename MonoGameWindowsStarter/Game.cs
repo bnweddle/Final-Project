@@ -10,7 +10,10 @@ namespace Elemancy
 {
     /// <summary>
     /// My TO DO:
-    ///  5. Look at implementing SpriteFont for displaying messages on transition screen
+    ///  1. Need to synch damage and player heaith with Healthbar width
+    ///  2. Create starting Menu and Transitions
+    ///  3. Adjust Scenes Class accordingly
+    ///  4. Adjust SpriteFonts Display (Messages Class)
     ///
     ///  EXTRA: Think about Sound effects:
     ///     > Like forest song
@@ -46,6 +49,7 @@ namespace Elemancy
         /// </summary>
         SpriteBatch componentsBatch;
         Messages messages = new Messages();
+        Menu menu = new Menu();
 
         KeyboardState oldState;
 
@@ -131,6 +135,7 @@ namespace Elemancy
             enemyHealth.LoadContent(Content);
             enemyGauge.LoadContent(Content);
 
+            menu.LoadContent(Content);
             messages.LoadContent(Content);
 
             // Player Layer
@@ -198,6 +203,8 @@ namespace Elemancy
             // If player is hit Update, using Keyboard for now for testing purposes
             KeyboardState current = Keyboard.GetState();
 
+            menu.Update(gameTime);
+
             //enemy update
             activeEnemy.Update(player, gameTime);
             if (activeEnemy.dead)
@@ -213,6 +220,7 @@ namespace Elemancy
             {
                 player.IsHit = true;
                 // Minus the Health by the damage done when player was hit/Is collided with, using -1 for now
+                // Need to synch damage and player heaith with Healthbar width
                 wizardGauge.Bounds.Width -= 1;
                 player.UpdateHealth(1);
             }
@@ -253,7 +261,15 @@ namespace Elemancy
             enemyHealth.Draw(componentsBatch);
             enemyGauge.Draw(componentsBatch);
 
-            messages.Draw(componentsBatch);
+
+            
+
+            if (!menu.Start)
+            {
+                menu.Draw(componentsBatch, graphics);
+            }
+
+            //messages.Draw(componentsBatch, graphics);
 
             componentsBatch.End();
         }

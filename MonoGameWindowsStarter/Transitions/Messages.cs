@@ -22,13 +22,22 @@ namespace Elemancy.Transitions
 
         private SpriteFont font;
 
-        private Vector2 MessagePostion = new Vector2(368, 396);
+        private Texture2D transition;
 
-        private Color Color = Color.FromNonPremultiplied(45, 47, 132, 0);
+        private Vector2 messagePostion = new Vector2(515, 335);
+
+        private Color color;
 
         public void LoadContent(ContentManager content)
         {
+            // Why can't make font bold??
             font = content.Load<SpriteFont>("font");
+            transition = content.Load<Texture2D>("magicalForest");
+            
+            color.R = 45;
+            color.G = 47;
+            color.B = 132;
+            color.A = 255;
         }
 
         public void GetMessage(Message transition)
@@ -37,23 +46,26 @@ namespace Elemancy.Transitions
             switch (transition)
             {
                 case Message.Round1:
-                    SpriteMessage = "Round 1 \nCompleted";
+                    SpriteMessage = "Round 1 \n   Completed"; //Time before continue or something
                     break;
                 case Message.Round2:
-                    SpriteMessage = "Round 2 \nCompleted";
+                    SpriteMessage = "Round 2 \n   Completed";  //Time before continue or something
                     break;
                 case Message.Win:
-                    SpriteMessage = "You Win! \nESC to Exit or SPACE for Menu";
+                    SpriteMessage = "You Win! \n   E for Exit \n   M for Menu"; // If finished final level
                     break;
                 case Message Lose:
-                    SpriteMessage = "Maybe Next Time. \nESC to Exit or SPACE for Menu";
+                    SpriteMessage = "Better Luck Next Time. \n   E for Exit \n   M for Menu"; // If they die
                     break;
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, GraphicsDeviceManager graphics)
         {
-            spriteBatch.DrawString(font, "Hello World", MessagePostion, Color);
+            spriteBatch.Draw(transition,
+                new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
+                Color.White);
+            spriteBatch.DrawString(font, "Better Luck Next Time. \n         E for Exit \n        M for Menu", messagePostion, color);
         }
     }
 }

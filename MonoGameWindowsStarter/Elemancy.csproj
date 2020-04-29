@@ -45,11 +45,11 @@
     <Compile Include="BoundingRectangle.cs" />
     <Compile Include="Collisions.cs" />
     <Compile Include="ElementalOrb.cs" />
-    <Compile Include="Enemy.cs" />
-    <Compile Include="EnemyBoss.cs" />
-    <Compile Include="BasicEnemy.cs" />
+    <Compile Include="Players\Enemy.cs" />
+    <Compile Include="Players\EnemyBoss.cs" />
+    <Compile Include="Players\BasicEnemy.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="HealthBar.cs" />
+    <Compile Include="Players\HealthBar.cs" />
     <Compile Include="Transitions\InterpolationTimer.cs" />
     <Compile Include="Parallax\AutoScrollController.cs" />
     <Compile Include="Parallax\IScrollController.cs" />
@@ -57,11 +57,12 @@
     <Compile Include="Parallax\ParallaxLayer.cs" />
     <Compile Include="Parallax\StaticSprite.cs" />
     <Compile Include="Parallax\TrackingPlayer.cs" />
-    <Compile Include="Particle.cs" />
-    <Compile Include="ParticleSystem.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="Particles\Particle.cs" />
+    <Compile Include="Particles\ParticleSystem.cs" />
+    <Compile Include="Players\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transitions\Menu.cs" />
     <Compile Include="Transitions\Messages.cs" />
     <Compile Include="Transitions\Scenes.cs" />
   </ItemGroup>
