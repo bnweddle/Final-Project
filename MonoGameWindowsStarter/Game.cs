@@ -49,6 +49,7 @@ namespace Elemancy
         /// </summary>
         SpriteBatch componentsBatch;
         Messages messages = new Messages();
+        Menu menu = new Menu();
 
         KeyboardState oldState;
 
@@ -134,6 +135,7 @@ namespace Elemancy
             enemyHealth.LoadContent(Content);
             enemyGauge.LoadContent(Content);
 
+            menu.LoadContent(Content);
             messages.LoadContent(Content);
 
             // Player Layer
@@ -234,6 +236,8 @@ namespace Elemancy
             // If player is hit Update, using Keyboard for now for testing purposes
             KeyboardState current = Keyboard.GetState();
 
+            menu.Update(gameTime);
+
             //enemy update
             activeEnemy.Update(player, gameTime);
             if (activeEnemy.dead)
@@ -290,7 +294,15 @@ namespace Elemancy
             enemyHealth.Draw(componentsBatch);
             enemyGauge.Draw(componentsBatch);
 
-            messages.Draw(componentsBatch, graphics);
+
+            
+
+            if (!menu.Start)
+            {
+                menu.Draw(componentsBatch, graphics);
+            }
+
+            //messages.Draw(componentsBatch, graphics);
 
             componentsBatch.End();
         }

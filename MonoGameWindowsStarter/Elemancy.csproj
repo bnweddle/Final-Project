@@ -61,6 +61,7 @@
     <Compile Include="Players\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transitions\Menu.cs" />
     <Compile Include="Transitions\Messages.cs" />
     <Compile Include="Transitions\Scenes.cs" />
   </ItemGroup>
