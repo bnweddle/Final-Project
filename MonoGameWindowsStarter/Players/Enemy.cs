@@ -16,6 +16,10 @@ namespace Elemancy
     {
         void Update(Player player, GameTime gametime);
 
+        void LoadContent(ContentManager cm, string name);
+
         bool dead { get; set; }
+
+        Vector2 Position { get; set; }
     }
 }

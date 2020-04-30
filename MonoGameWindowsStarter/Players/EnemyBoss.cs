@@ -27,7 +27,7 @@ namespace Elemancy
 
         private Texture2D enemyTexture;
 
-        public Vector2 Position;
+        public Vector2 Position { get; set; }
 
         //true is enemy is dead, false if they are still alive
         public bool dead { get; set; }
