@@ -16,6 +16,8 @@ namespace Elemancy.Transitions
 
         private KeyboardState old;
 
+        private Game game;
+
         /// <summary>
         /// Type can change with preference
         /// </summary>
@@ -23,6 +25,11 @@ namespace Elemancy.Transitions
 
         public bool Start { get; protected set; } = false;
 
+
+        public Menu(Game game)
+        {
+            this.game = game;
+        }
         public void LoadContent(ContentManager content)
         {
             menu = content.Load<Texture2D>("menu");
@@ -35,17 +42,17 @@ namespace Elemancy.Transitions
             if(current.IsKeyDown(Keys.D1) || current.IsKeyDown(Keys.NumPad1))
             {
                 Spell = "Fire";
-                Start = true;
+                game.GameState = GameState.Forest;
             }
             else if (current.IsKeyDown(Keys.D2) || current.IsKeyDown(Keys.NumPad2))
             {
                 Spell = "Water";
-                Start = true;
+                game.GameState = GameState.Forest;
             }
             else if (current.IsKeyDown(Keys.D3) || current.IsKeyDown(Keys.NumPad3))
             {
                 Spell = "Lightning";
-                Start = true;
+                game.GameState = GameState.Forest;
             }
 
             old = current;

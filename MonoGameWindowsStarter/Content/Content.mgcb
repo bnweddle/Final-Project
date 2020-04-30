@@ -115,6 +115,12 @@
 /processorParam:TextureFormat=Color
 /build:lose.png
 
+#begin MagicTheme.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:MagicTheme.mp3
+
 #begin menu.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -132,6 +138,12 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:Nature_Forest.mp3
+
+#begin NatureTheme.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:NatureTheme.mp3
 
 #begin particle.png
 /importer:TextureImporter
@@ -198,4 +210,10 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:win.png
+
+#begin WizardTheme.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:WizardTheme.mp3
 

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 namespace Elemancy.Transitions
 {
@@ -9,12 +10,26 @@ namespace Elemancy.Transitions
     {
         Forest,
         Cave,
-        Dungeon
+        Dungeon,
+        MainMenu
     }
 
-    public class Level 
+    public class Level // abstract 
     {
-        private GameState level;
+        // DungeonLevel inherits level, constructor specific, list of enemies and boss, and song
+        Song forest, cave, dungeon, menu;
+        private GameState level = GameState.MainMenu;
+
+        public void LoadContent(ContentManager content)
+        {
+            forest = content.Load<Song>("Nature_Forest");
+            cave = content.Load<Song>("Cave_Bats");
+            dungeon = content.Load<Song>("Thunder");
+            menu = content.Load<Song>("NatureTheme");
+
+            MediaPlayer.IsMuted = true;
+            MediaPlayer.IsRepeating = true;
+        }
 
         public int GetScrollStop(GameState scenes)
         {
@@ -35,22 +50,32 @@ namespace Elemancy.Transitions
             return scrollStop;
         }
 
-        public GameState SetGameState(Player player)
+        public GameState SetGameState(Player player, bool start)
         {
+            if(start)
+            {
+                if (player.Position.X >= 0 && player.Position.X <= 4167)
+                {
+                    level = GameState.Forest;
+                    MediaPlayer.Play(forest);
+                }
+                if (player.Position.X >= 4168 && player.Position.X <= 8134)
+                {
+                    level = GameState.Cave;
+                    MediaPlayer.Play(cave);
+                }
+                if (player.Position.X >= 8134 && player.Position.X <= 12451)
+                {
+                    level = GameState.Dungeon;
+                    MediaPlayer.Play(dungeon);
+                }
+            }
+            else
+            {
+                MediaPlayer.Play(menu);
+            }
 
-            if(player.Position.X >= 0 && player.Position.X <= 4167)
-            {
-                level = GameState.Forest;
-            }
-            if (player.Position.X >= 4168 && player.Position.X <= 8134)
-            {
-                level = GameState.Cave;
-            }
-            if(player.Position.X >= 8134 && player.Position.X <= 12451)
-            {
-                level = GameState.Dungeon;
-            }
-
+            MediaPlayer.IsMuted = false;
             return level;
         }
     }
