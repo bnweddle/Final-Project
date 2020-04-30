@@ -20,6 +20,8 @@ namespace Elemancy.Transitions
 
         private float multiple = 1;
 
+        public Element selectedElement = Element.None;
+
         /// <summary>
         /// Type can change with preference
         /// </summary>
@@ -40,16 +42,19 @@ namespace Elemancy.Transitions
             if(current.IsKeyDown(Keys.D1) || current.IsKeyDown(Keys.NumPad1))
             {
                 Spell = "Fire";
+                selectedElement = Element.Fire;
                 Start = true;
             }
             else if (current.IsKeyDown(Keys.D2) || current.IsKeyDown(Keys.NumPad2))
             {
                 Spell = "Water";
+                selectedElement = Element.Ice;
                 Start = true;
             }
             else if (current.IsKeyDown(Keys.D3) || current.IsKeyDown(Keys.NumPad3))
             {
                 Spell = "Lightning";
+                selectedElement = Element.Electric;
                 Start = true;
             }
 

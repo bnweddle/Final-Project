@@ -204,6 +204,10 @@ namespace Elemancy
             KeyboardState current = Keyboard.GetState();
 
             menu.Update(gameTime);
+            if(player.Element == Element.None)
+            {
+                player.Element = menu.selectedElement;
+            }
 
             //enemy update
             activeEnemy.Update(player, gameTime);

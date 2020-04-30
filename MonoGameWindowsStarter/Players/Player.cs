@@ -91,7 +91,7 @@ namespace Elemancy
         KeyboardState oldState;
 
         // 'Elemental Power' state of the player
-        public Element element;
+        public Element Element = Element.None;
 
         // 'Elemental Power' Orb
         public ElementalOrb elementalOrb;
@@ -152,7 +152,7 @@ namespace Elemancy
             flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 0.0f, 1.0f);
             fade = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
 
-            element = Element.None;
+            Element = Element.None;
             elementalOrb.Initialize();
         }
 
@@ -313,14 +313,14 @@ namespace Elemancy
                         break;
                 }
 
-                elementalOrb.Attack(Position, orbVelocity, element);            
+                elementalOrb.Attack(Position, orbVelocity, Element);            
             }
             elementalOrb.Update(gameTime);
             if (keyboard.IsKeyDown(Keys.LeftAlt) && !oldState.IsKeyDown(Keys.LeftAlt) && elementalOrb.State == ElementalOrb.ActiveState.Idle)
             {
                 CycleElement();
             }
-            System.Diagnostics.Debug.WriteLine($"Player Element Type: {element}");
+            System.Diagnostics.Debug.WriteLine($"Player Element Type: {Element}");
             
 
             // update animation timer when the player is moving
@@ -374,10 +374,10 @@ namespace Elemancy
         /// </summary>
         public void CycleElement()
         {
-            if (element == Element.None) element = Element.Electric;
-            else if (element == Element.Electric) element = Element.Fire;
-            else if (element == Element.Fire) element = Element.Ice;
-            else if (element == Element.Ice) element = Element.None;
+            if (Element == Element.None) Element = Element.Electric;
+            else if (Element == Element.Electric) Element = Element.Fire;
+            else if (Element == Element.Fire) Element = Element.Ice;
+            else if (Element == Element.Ice) Element = Element.None;
         }
     }
 }
