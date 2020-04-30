@@ -16,10 +16,6 @@ namespace Elemancy.Transitions
 
         private KeyboardState old;
 
-        private InterpolationTimer fade;
-
-        private float multiple = 1;
-
         /// <summary>
         /// Type can change with preference
         /// </summary>
@@ -30,7 +26,6 @@ namespace Elemancy.Transitions
         public void LoadContent(ContentManager content)
         {
             menu = content.Load<Texture2D>("menu");
-            fade = new InterpolationTimer(TimeSpan.FromSeconds(1), 1.0f, 0.0f);
         }
 
         public void Update(GameTime gameTime)
@@ -53,37 +48,19 @@ namespace Elemancy.Transitions
                 Start = true;
             }
 
-            // Can do with or without preference.
-            if (Start)
-            {
-                if (fade.TimeElapsed.TotalSeconds >= 0.75)
-                {
-                    fade.Stop();
-                    multiple = 0;
-                }
-
-                if (!fade.IsRunning && multiple != 0)
-                {
-                    fade.Start();
-                }
-                else if (multiple != 0)
-                {
-                    if (fade.IsRunning)
-                        fade.Update(gameTime.ElapsedGameTime);
-
-                    multiple = fade.CurrentValue;
-                }
-            }
-
             old = current;
         }
-
 
         public void Draw(SpriteBatch spriteBatch, GraphicsDeviceManager graphics)
         {
             spriteBatch.Draw(menu,
                 new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
-                Color.White * multiple);
+                Color.White);
+        }
+
+        public void Restart()
+        {
+            Start = false;
         }
 
 

@@ -29,6 +29,8 @@ namespace Elemancy.Parallax
         /// </summary>
         public float Offset = 50;
 
+        public float ScrollStop { get; set; } = 3114;
+
         /// <summary>
         /// Constructs a new PlayerTrackingScrollController
         /// </summary>
@@ -58,7 +60,7 @@ namespace Elemancy.Parallax
 
                if (ScrollRatio == 0f)
                 {
-                    transform.M41 = -1735 + Offset;
+                    transform.M41 = -ScrollStop + Offset;
                     return transform;
                 }
 

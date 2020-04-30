@@ -11,9 +11,6 @@ namespace Elemancy
     /// <summary>
     /// My TO DO:
     ///  1. Need to synch damage and player heaith with Healthbar width
-    ///  2. Create starting Menu and Transitions
-    ///  3. Adjust Scenes Class accordingly
-    ///  4. Adjust SpriteFonts Display (Messages Class)
     ///
     ///  EXTRA: Think about Sound effects:
     ///     > Like forest song
@@ -50,6 +47,7 @@ namespace Elemancy
         SpriteBatch componentsBatch;
         Messages messages = new Messages();
         Menu menu = new Menu();
+        Level scene = new Level();
 
         KeyboardState oldState;
 
@@ -67,6 +65,9 @@ namespace Elemancy
         Random random = new Random();
         ParticleSystem particleSystem;
         Texture2D particleTexture;
+
+        GameState level;
+        int scroll = 0;
 
         public Game()
         {
@@ -148,21 +149,35 @@ namespace Elemancy
 
             levelsLayer = new ParallaxLayer(this);
             // Levels Layer - Can just add to to them for other levels
-            var levelTextures = new Texture2D[]
+
+            var levelTextures = new List<Texture2D>()
             {
-                Content.Load<Texture2D>("forest1"),
-                Content.Load<Texture2D>("forest2"), // about 2700 width
-                // Cave
-                Content.Load<Texture2D>("dungeon") // about 2800 width
-            };
-            var levelSprites = new StaticSprite[]
-            {
-                new StaticSprite(levelTextures[0], new Vector2(-50,0)), 
-                new StaticSprite(levelTextures[1], new Vector2(1339, 0)),
-                new StaticSprite(levelTextures[2], new Vector2(2728, 0))
+               Content.Load<Texture2D>("forest1"),
+               Content.Load<Texture2D>("forest2"),
+               Content.Load<Texture2D>("forest1"),
+               Content.Load<Texture2D>("cave1"),
+               Content.Load<Texture2D>("cave2"),
+               Content.Load<Texture2D>("cave1"),
+               Content.Load<Texture2D>("dungeon1"),
+               Content.Load<Texture2D>("dungeon2")
             };
 
-            levelsLayer.Sprites.AddRange(levelSprites);
+            var levelSprites = new List<StaticSprite>();
+            for (int i = 0; i < levelSprites.Count; i++)
+            {
+                var position = Vector2.Zero;
+                if(i == 7) position = new Vector2((9 * 1389) - 50, 0);
+                else  position = new Vector2((i * 1389) - 50, 0);
+
+                var sprite = new StaticSprite(levelTextures[i], position);
+                levelSprites.Add(sprite);
+            }
+
+            foreach (var sprite in levelSprites)
+            {
+                levelsLayer.Sprites.Add(sprite);
+            }
+           
             levelsLayer.DrawOrder = 1;
             Components.Add(levelsLayer);
 
@@ -208,6 +223,7 @@ namespace Elemancy
                 particle.Scale -= deltaT;
                 particle.Life -= deltaT;
             };
+
             Components.Add(particleSystem);
             particleSystem.DrawOrder = 2;
 
@@ -259,13 +275,19 @@ namespace Elemancy
             }
 
             player.Update(gameTime);
+            level = scene.SetGameState(player);
+            scroll = scene.GetScrollStop(level);
 
-            if(player.Position.X >= 1735)
+            if(player.Position.X >= scroll)
             {
+                levelsT.ScrollStop = scroll;
                 levelsT.ScrollRatio = 0.0f;
                 playerT.ScrollRatio = 0.0f;
-
             }
+
+            // Transition screen will be shown when the boss for that level is 
+            // dead, and then If they hit C for Continue will change Player position 
+            // and  scroll will change.
 
             base.Update(gameTime);
             oldState = current;
@@ -294,13 +316,21 @@ namespace Elemancy
             enemyHealth.Draw(componentsBatch);
             enemyGauge.Draw(componentsBatch);
 
-
-            
-
             if (!menu.Start)
             {
                 menu.Draw(componentsBatch, graphics);
+                //restart the game / re-initialize player at the beginning
             }
+
+            // if current level Boss is dead 
+               // if !Messages.Continue
+                   // draw Message for Round1 / round 2 / or you Win depending on GameLevel
+            // else if player is dead
+              // if !BackMenu || !Exit
+                   // draw Lose
+                 // else if BackMenu
+                    // Menu.Restart
+                  // else terminate game
 
             //messages.Draw(componentsBatch, graphics);
 
