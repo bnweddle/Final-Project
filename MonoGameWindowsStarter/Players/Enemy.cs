@@ -20,6 +20,5 @@ namespace Elemancy
 
         bool dead { get; set; }
 
-        Vector2 Position { get; set; }
     }
 }

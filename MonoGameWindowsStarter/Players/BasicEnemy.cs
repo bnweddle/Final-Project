@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Elemancy.Transitions;
 
 namespace Elemancy
 {
@@ -26,8 +27,22 @@ namespace Elemancy
 
         private Texture2D enemyTexture;
 
-        public Vector2 Position { get; set; }
-        
+        public Vector2 Position;
+
+        private bool wasSpawned;
+
+        private BoundingCircle attack;
+
+        private Vector2 attackPosition;
+
+        public bool canAttack;
+
+        public float direction;
+
+        //sets up the initial direction for the attack
+        public Vector2 attackDirection;
+
+
         //true is enemy is dead, false if they are still alive
         public bool dead { get; set; }
 
@@ -47,6 +62,8 @@ namespace Elemancy
             game = g;
             Position = p;
             dead = false;
+            canAttack = true;
+            attackPosition = p;
         }
 
         /// <summary>
@@ -61,9 +78,18 @@ namespace Elemancy
             Bounds.Height = enemyTexture.Height;
         }
 
+       
+
         public void Draw(SpriteBatch spriteBatch, Color color)
         {
             spriteBatch.Draw(enemyTexture, Position, Bounds, color);
+        }
+
+        //spawn the enemy with animation or just a time delay to make 
+        //transition between enemies a little more seemless
+        private void Spawn()
+        {
+            wasSpawned = true;
         }
 
         /// <summary>
@@ -73,14 +99,40 @@ namespace Elemancy
         /// <param name="player"></param>
         public void Update(Player player, GameTime gameTime)
         {
+            if (!wasSpawned)
+            {
+                Spawn();
+            }
+
             if(health <= 0)
             {
                 dead = true;
             }
 
-            //update movement, perhaps move a little randomly?
+            //keeping away from player but not too far away from the player
+            if(Position.X + 100 < player.Position.X)
+            {
+                direction = 1;
+            }
+            else if(Position.X + 350 > player.Position.X)
+            {
+                direction = -1;
+            }
+            Position.X += direction;
+
+
+            //updates position to throw attack
+            if (canAttack)
+            {
+                
+            }
+            else
+            {
+
+            }
+
             //sprite animation?
-            if (Bounds.CollidesWith(player.Bounds))
+            if (attack.CollidesWith(player.Bounds))
             {
                 //player takes damage, either affecting the hit bar or the actual player
 
