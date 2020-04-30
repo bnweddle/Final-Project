@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Elemancy.Parallax;
 
 namespace Elemancy
 {
@@ -19,6 +20,8 @@ namespace Elemancy
         void LoadContent(ContentManager cm, string name);
 
         bool dead { get; set; }
+
+        void Draw(SpriteBatch spriteBatch, Color color);
 
     }
 }

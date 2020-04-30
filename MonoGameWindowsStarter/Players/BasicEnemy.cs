@@ -119,23 +119,24 @@ namespace Elemancy
                 direction = -1;
             }
             Position.X += direction;
-
-
             //updates position to throw attack
             if (canAttack)
             {
-                
+                //attack is active so it should be drawn
+                //set a direction for attack to go
+                canAttack = false;
             }
             else
             {
-
+                //move attack and check if attack goes off screen
+                //if goes off screen, dont draw attack and 'canAttack' is set to true
             }
 
             //sprite animation?
             if (attack.CollidesWith(player.Bounds))
             {
                 //player takes damage, either affecting the hit bar or the actual player
-
+                canAttack = true;
                 if(!dead)
                 {
                     // Commenting out for testing fading purposes

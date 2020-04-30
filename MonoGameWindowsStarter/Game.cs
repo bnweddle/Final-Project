@@ -98,8 +98,7 @@ namespace Elemancy
             caveBoss = new EnemyBoss(80, 20, "water", this, new Vector2(300, 700));
             dungeonBoss = new EnemyBoss(100, 30, "lightning", this, new Vector2(300, 700));
 
-            //setting the first active enemy to be the first enemy in the forest level
-            activeEnemy = forestEnemies[0];
+            
         }
 
         /// <summary>
@@ -237,6 +236,10 @@ namespace Elemancy
             forestBoss.LoadContent(Content, "tempEnemy");
             caveBoss.LoadContent(Content, "tempEnemy");
             dungeonBoss.LoadContent(Content, "tempEnemy");
+
+            //setting the first active enemy to be the first enemy in the forest level
+            activeEnemy = forestEnemies[0];
+
             
         }
 
@@ -348,6 +351,8 @@ namespace Elemancy
 
             enemyHealth.Draw(componentsBatch);
             enemyGauge.Draw(componentsBatch);
+
+            activeEnemy.Draw(spriteBatch, Color.White);
 
             if (!menu.Start)
             {
