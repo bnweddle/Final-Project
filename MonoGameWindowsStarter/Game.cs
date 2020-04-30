@@ -23,7 +23,12 @@ namespace Elemancy
         /// <summary>
         /// Enemies
         /// </summary>
-        List<IEnemy> enemyList = new List<IEnemy>();
+        List<IEnemy> forestEnemies = new List<IEnemy>();
+        List<IEnemy> caveEnemies = new List<IEnemy>();
+        List<IEnemy> dungeonEnemies = new List<IEnemy>();
+        EnemyBoss forestBoss;
+        EnemyBoss caveBoss;
+        EnemyBoss dungeonBoss;
         IEnemy activeEnemy;
 
         Player player;
@@ -91,25 +96,17 @@ namespace Elemancy
             
             for(int i = 0; i < 10; i++)
             {
-                //Vector position is subjected to change when we know where the "ground" is
-                //and where the enemies need to be placed
-                enemyList.Add(new BasicEnemy(30, 5, "fire", this, new Vector2(300, 700)));               
-                
+                //positions may be updated later when the enemies "spawn"
+                forestEnemies.Add(new BasicEnemy(30, 5, "fire", this, new Vector2(player.Position.X + 100, player.Position.Y)));
+                caveEnemies.Add(new BasicEnemy(40, 10, "water", this, new Vector2(player.Position.X + 100, player.Position.Y)));
+                dungeonEnemies.Add(new BasicEnemy(50, 15, "lightning", this, new Vector2(player.Position.X + 100, player.Position.Y)));
             }
-            enemyList.Add(new EnemyBoss(60, 10, "fire", this, new Vector2(300, 700)));
-            for (int i = 0; i < 10; i++)
-            {
-                enemyList.Add(new BasicEnemy(40, 10, "water", this, new Vector2(300, 700)));
-            }
-            enemyList.Add(new EnemyBoss(80, 20, "water", this, new Vector2(300, 700)));
-            for (int i = 0; i < 10; i++)
-            {
-                enemyList.Add(new BasicEnemy(50, 15, "lightning", this, new Vector2(300, 700)));
-            }
-            enemyList.Add(new EnemyBoss(100, 30, "lightning", this, new Vector2(300, 700)));
+            //determine where bosses are going to be placed in the level
+            forestBoss = new EnemyBoss(60, 10, "fire", this, new Vector2(300, 700));
+            caveBoss = new EnemyBoss(80, 20, "water", this, new Vector2(300, 700));
+            dungeonBoss = new EnemyBoss(100, 30, "lightning", this, new Vector2(300, 700));
 
-            //setting the first active enemy to be the first enemy in the forest level
-            activeEnemy = enemyList[0];
+            
         }
 
         /// <summary>
@@ -238,6 +235,21 @@ namespace Elemancy
 
             GameState = GameState.MainMenu;
 
+            //load enemy content
+            //enemies need to be added to the draw order
+            for(int i = 0; i < forestEnemies.Count; i++)
+            {
+                //name of file will change, added a temp png for testing
+                forestEnemies[i].LoadContent(Content, "tempEnemy");
+                caveEnemies[i].LoadContent(Content, "tempEnemy");
+                dungeonEnemies[i].LoadContent(Content, "tempEnemy");
+            }
+            forestBoss.LoadContent(Content, "tempEnemy");
+            caveBoss.LoadContent(Content, "tempEnemy");
+            dungeonBoss.LoadContent(Content, "tempEnemy");
+
+            //setting the first active enemy to be the first enemy in the forest level
+            activeEnemy = forestEnemies[0];
         }
 
         /// <summary>
@@ -263,22 +275,12 @@ namespace Elemancy
             // If player is hit Update, using Keyboard for now for testing purposes
             KeyboardState current = Keyboard.GetState();
 
-            switch(gameState)
+            switch (gameState)
             {
                 case GameState.MainMenu:
                     menu.Update(gameTime);
                     break;
                 default:
-                    //enemy update
-                    activeEnemy.Update(player, gameTime);
-                    if (activeEnemy.dead)
-                    {
-                        enemyList.Remove(activeEnemy);
-                        if (enemyList.Count > 0)
-                        {
-                            activeEnemy = enemyList[0];
-                        }
-                    }
 
                     if (current.IsKeyDown(Keys.H))
                     {
@@ -291,15 +293,45 @@ namespace Elemancy
 
                     player.Update(gameTime);
 
-                   
+
 
                     scroll = level.GetScrollStop(gameState);
                     break; // END OF DEFAULT
             }
 
+            //enemy update
+            activeEnemy.Update(player, gameTime);
+            if(activeEnemy.dead)
+            {
+                if (forestEnemies.Count > 0)
+                {
+                    forestEnemies.RemoveAt(0);
+                    if (forestEnemies.Count == 0)
+                    {
+                        activeEnemy = forestBoss;
+                    }
+                    else activeEnemy = forestEnemies[0];
+                }
+                else if (caveEnemies.Count > 0)
+                {
+                    caveEnemies.RemoveAt(0);
+                    if (caveEnemies.Count == 0)
+                    {
+                        activeEnemy = caveBoss;
+                    }
+                    else activeEnemy = caveEnemies[0];
+                }
+                else if (dungeonEnemies.Count > 0)
+                {
+                    dungeonEnemies.RemoveAt(0);
+                    if (dungeonEnemies.Count == 0)
+                    {
+                        activeEnemy = dungeonBoss;
+                    }
+                    else activeEnemy = caveEnemies[0];
+                }
 
-
-
+            }
 
             /*if(player.Position.X >= scroll)
             {
@@ -335,6 +367,7 @@ namespace Elemancy
 
             componentsBatch.Begin();
 
+
             switch(gameState)
             {
                 case GameState.MainMenu:
@@ -350,6 +383,8 @@ namespace Elemancy
 
                     enemyHealth.Draw(componentsBatch);
                     enemyGauge.Draw(componentsBatch);
+
+                    activeEnemy.Draw(spriteBatch, Color.White);
                     break;
             }
             
