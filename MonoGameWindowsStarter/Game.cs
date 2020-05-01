@@ -93,20 +93,7 @@ namespace Elemancy
 
             enemyHealth = new HealthBar(this, new Vector2(822, 0), Color.Gray);  //Top right corner
             enemyGauge = new HealthBar(this, new Vector2(822, 0), Color.Red);
-            
-            for(int i = 0; i < 10; i++)
-            {
-                //positions may be updated later when the enemies "spawn"
-                forestEnemies.Add(new BasicEnemy(30, 5, "fire", this, new Vector2(player.Position.X + 100, player.Position.Y)));
-                caveEnemies.Add(new BasicEnemy(40, 10, "water", this, new Vector2(player.Position.X + 100, player.Position.Y)));
-                dungeonEnemies.Add(new BasicEnemy(50, 15, "lightning", this, new Vector2(player.Position.X + 100, player.Position.Y)));
-            }
-            //determine where bosses are going to be placed in the level
-            forestBoss = new EnemyBoss(60, 10, "fire", this, new Vector2(300, 700));
-            caveBoss = new EnemyBoss(80, 20, "water", this, new Vector2(300, 700));
-            dungeonBoss = new EnemyBoss(100, 30, "lightning", this, new Vector2(300, 700));
-
-            
+        
         }
 
         /// <summary>
@@ -145,6 +132,7 @@ namespace Elemancy
             messages.LoadContent(Content);
             level.LoadContent(Content);
 
+
             // Player Layer
             player = new Player(this, Color.White);
             player.LoadContent(Content);
@@ -152,6 +140,18 @@ namespace Elemancy
             playerLayer.Sprites.Add(player);
             playerLayer.DrawOrder = 2;
             Components.Add(playerLayer);
+
+            for (int i = 0; i < 10; i++)
+            {
+                //positions may be updated later when the enemies "spawn"
+                forestEnemies.Add(new BasicEnemy(30, 5, "fire", this, new Vector2(player.Position.X + 100, player.Position.Y)));
+                caveEnemies.Add(new BasicEnemy(40, 10, "water", this, new Vector2(player.Position.X + 100, player.Position.Y)));
+                dungeonEnemies.Add(new BasicEnemy(50, 15, "lightning", this, new Vector2(player.Position.X + 100, player.Position.Y)));
+            }
+            //determine where bosses are going to be placed in the level
+            forestBoss = new EnemyBoss(60, 10, "fire", this, new Vector2(300, 700)); 
+            caveBoss = new EnemyBoss(80, 20, "water", this, new Vector2(300, 700));   
+            dungeonBoss = new EnemyBoss(100, 30, "lightning", this, new Vector2(300, 700));
 
             levelsLayer = new ParallaxLayer(this);
             // Levels Layer - Can just add to to them for other levels
@@ -244,6 +244,7 @@ namespace Elemancy
                 caveEnemies[i].LoadContent(Content, "tempEnemy");
                 dungeonEnemies[i].LoadContent(Content, "tempEnemy");
             }
+
             forestBoss.LoadContent(Content, "tempEnemy");
             caveBoss.LoadContent(Content, "tempEnemy");
             dungeonBoss.LoadContent(Content, "tempEnemy");
@@ -293,45 +294,50 @@ namespace Elemancy
 
                     player.Update(gameTime);
 
+                    if(player.Position.X == 4120)
+                    {
+                        GameState = GameState.Cave;
+                    }
 
+                    //enemy update
+                    activeEnemy.Update(player, gameTime);
+                    if (activeEnemy.dead)
+                    {
+                        if (forestEnemies.Count > 0)
+                        {
+                            forestEnemies.RemoveAt(0);
+                            if (forestEnemies.Count == 0)
+                            {
+                                activeEnemy = forestBoss;
+                            }
+                            else activeEnemy = forestEnemies[0];
+                        }
+                        else if (caveEnemies.Count > 0)
+                        {
+                            caveEnemies.RemoveAt(0);
+                            if (caveEnemies.Count == 0)
+                            {
+                                activeEnemy = caveBoss;
+                            }
+                            else activeEnemy = caveEnemies[0];
+                        }
+                        else if (dungeonEnemies.Count > 0)
+                        {
+                            dungeonEnemies.RemoveAt(0);
+                            if (dungeonEnemies.Count == 0)
+                            {
+                                activeEnemy = dungeonBoss;
+                            }
+                            else activeEnemy = caveEnemies[0];
+                        }
+
+                    }
 
                     scroll = level.GetScrollStop(gameState);
                     break; // END OF DEFAULT
             }
 
-            //enemy update
-            activeEnemy.Update(player, gameTime);
-            if(activeEnemy.dead)
-            {
-                if (forestEnemies.Count > 0)
-                {
-                    forestEnemies.RemoveAt(0);
-                    if (forestEnemies.Count == 0)
-                    {
-                        activeEnemy = forestBoss;
-                    }
-                    else activeEnemy = forestEnemies[0];
-                }
-                else if (caveEnemies.Count > 0)
-                {
-                    caveEnemies.RemoveAt(0);
-                    if (caveEnemies.Count == 0)
-                    {
-                        activeEnemy = caveBoss;
-                    }
-                    else activeEnemy = caveEnemies[0];
-                }
-                else if (dungeonEnemies.Count > 0)
-                {
-                    dungeonEnemies.RemoveAt(0);
-                    if (dungeonEnemies.Count == 0)
-                    {
-                        activeEnemy = dungeonBoss;
-                    }
-                    else activeEnemy = caveEnemies[0];
-                }
-
-            }
+           
 
             /*if(player.Position.X >= scroll)
             {
@@ -378,13 +384,16 @@ namespace Elemancy
                     }
                     break;
                 default:
+
                     wizardHealth.Draw(componentsBatch);
                     wizardGauge.Draw(componentsBatch);
 
                     enemyHealth.Draw(componentsBatch);
                     enemyGauge.Draw(componentsBatch);
 
-                    activeEnemy.Draw(spriteBatch, Color.White);
+                    activeEnemy.Draw(componentsBatch, Color.White);
+
+
                     break;
             }
             

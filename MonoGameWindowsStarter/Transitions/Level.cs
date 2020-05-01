@@ -14,10 +14,11 @@ namespace Elemancy.Transitions
         MainMenu
     }
 
-    public class Level // abstract 
+    public class Level // need to make abstract 
     {
-        // DungeonLevel inherits level, constructor specific, list of enemies and boss, and song
+        // DungeonLevel inherits level, constructor specific, list of enemies and boss, 
         Song forest, cave, dungeon, menu;
+
         private GameState level = GameState.MainMenu;
 
         public void LoadContent(ContentManager content)
@@ -54,12 +55,12 @@ namespace Elemancy.Transitions
         {
             if(start)
             {
-                if (player.Position.X >= 0 && player.Position.X <= 4167)
+                if (player.Position.X >= 0 && player.Position.X <= 4100)
                 {
                     level = GameState.Forest;
                     MediaPlayer.Play(forest);
                 }
-                if (player.Position.X >= 4168 && player.Position.X <= 8134)
+                if (player.Position.X >= 4101 && player.Position.X <= 8134)
                 {
                     level = GameState.Cave;
                     MediaPlayer.Play(cave);

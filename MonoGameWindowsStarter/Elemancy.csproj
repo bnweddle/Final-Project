@@ -49,6 +49,9 @@
     <Compile Include="Players\BasicEnemy.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Players\HealthBar.cs" />
+    <Compile Include="Transitions\CaveLevel.cs" />
+    <Compile Include="Transitions\DungeonLevel.cs" />
+    <Compile Include="Transitions\ForestLevel.cs" />
     <Compile Include="Transitions\InterpolationTimer.cs" />
     <Compile Include="Parallax\AutoScrollController.cs" />
     <Compile Include="Parallax\IScrollController.cs" />
