@@ -113,7 +113,7 @@ namespace Elemancy
                 //System.Diagnostics.Debug.WriteLine($"Elemental Orb Active - Color: {curColor}");
                 //System.Diagnostics.Debug.WriteLine($"Elemental Orb Active - Particle Color: {elementalOrbParticleSystem.particles[0].Color}");
                 //System.Diagnostics.Debug.WriteLine($"Elemental Orb Active - Particle Life: {elementalOrbParticleSystem.particles[0].Life}");
-                for(int i = 0; i < 50; i++)
+                for (int i = 0; i < 20; i++)
                     System.Diagnostics.Debug.WriteLine($"Elemental Orb Active - Particle's X Position: {elementalOrbParticleSystem.particles[i].Position.X}");
             }
         }
@@ -159,7 +159,7 @@ namespace Elemancy
             elementalOrbParticleSystem = new ParticleSystem(game, size, elementParticle);
             //if (size != 0)
             //{
-                elementalOrbParticleSystem.Emitter = Vector2.Zero - Position;
+                elementalOrbParticleSystem.Emitter = Position;
                 elementalOrbParticleSystem.SpawnPerFrame = 50;
                 // Set the SpawnParticle method
                 elementalOrbParticleSystem.SpawnParticle = (ref Particle particle) =>
