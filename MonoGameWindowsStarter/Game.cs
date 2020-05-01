@@ -199,7 +199,6 @@ namespace Elemancy
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            System.Diagnostics.Debug.WriteLine($"{player.Position.X } player's X Position");
             // If player is hit Update, using Keyboard for now for testing purposes
             KeyboardState current = Keyboard.GetState();
 

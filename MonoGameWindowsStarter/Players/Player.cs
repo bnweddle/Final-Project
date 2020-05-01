@@ -171,6 +171,8 @@ namespace Elemancy
             Bounds.X = Position.X;
             Bounds.Y = Position.Y;
 
+            System.Diagnostics.Debug.WriteLine($"Player's X Position: {Position.X}");
+
             // So the player can't go backwards, would need to change as they 
             // progress through the levels
             if (Position.X < 40)
@@ -294,9 +296,9 @@ namespace Elemancy
             }
 
             // Elemental Orb Activate and Update
-            if (keyboard.IsKeyDown(Keys.Space) && !oldState.IsKeyDown(Keys.Space))
+            if (keyboard.IsKeyDown(Keys.Space) && !oldState.IsKeyDown(Keys.Space) && elementalOrb.State == ElementalOrb.ActiveState.Idle)
             {
-                Vector2 orbVelocity;
+                Vector2 orbVelocity = new Vector2(1, 0);
                 switch (direction)
                 {
                     case Direction.East:
@@ -306,9 +308,6 @@ namespace Elemancy
                         orbVelocity = new Vector2(-1, 0);
                         break;
                     case Direction.Idle:
-                        orbVelocity = new Vector2(1, 0);
-                        break;
-                    default:
                         orbVelocity = new Vector2(1, 0);
                         break;
                 }
@@ -352,7 +351,7 @@ namespace Elemancy
 
             spriteBatch.Draw(player, Position, rectSource, Color * multiple);
 
-            elementalOrb.Draw(gameTime);
+            elementalOrb.Draw(spriteBatch, gameTime);
         }
 
         /// <summary>
@@ -377,7 +376,7 @@ namespace Elemancy
             if (Element == Element.None) Element = Element.Fire;
             else if (Element == Element.Fire) Element = Element.Water;
             else if (Element == Element.Water) Element = Element.Lightning;
-            else if (Element == Element.Lightning) Element = Element.None;
+            else if (Element == Element.Lightning) Element = Element.Fire;
         }
     }
 }
