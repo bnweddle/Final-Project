@@ -192,7 +192,7 @@ namespace Elemancy
         {
             Vector2 result = new Vector2();
             result.X = MathHelper.Lerp(Bounds.X - radius, Bounds.X + radius, (float)random.NextDouble());
-            result.Y = MathHelper.Lerp(Bounds.Y - 1.2f * radius, Bounds.Y + radius, (float)random.NextDouble());
+            result.Y = MathHelper.Lerp(Bounds.Y - 1.1f * radius, Bounds.Y + 0.7f * radius, (float)random.NextDouble());
             return result;
         }
     }
