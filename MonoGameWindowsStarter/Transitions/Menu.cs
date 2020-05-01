@@ -18,8 +18,6 @@ namespace Elemancy.Transitions
 
         private Game game;
 
-        public Element selectedElement = Element.None;
-
         /// <summary>
         /// Type can change with preference
         /// </summary>
@@ -44,44 +42,16 @@ namespace Elemancy.Transitions
             if(current.IsKeyDown(Keys.D1) || current.IsKeyDown(Keys.NumPad1))
             {
                 Spell = "Fire";
-                selectedElement = Element.Fire;
-                Start = true;
                 game.GameState = GameState.Forest;
             }
             else if (current.IsKeyDown(Keys.D2) || current.IsKeyDown(Keys.NumPad2))
             {
                 Spell = "Water";
-                selectedElement = Element.Water;
-                Start = true;
                 game.GameState = GameState.Forest;
             }
             else if (current.IsKeyDown(Keys.D3) || current.IsKeyDown(Keys.NumPad3))
             {
                 Spell = "Lightning";
-                selectedElement = Element.Lightning;
-                Start = true;
-            }
-
-            // Can do with or without preference.
-            if (Start)
-            {
-                if (fade.TimeElapsed.TotalSeconds >= 0.75)
-                {
-                    fade.Stop();
-                    multiple = 0;
-                }
-
-                if (!fade.IsRunning && multiple != 0)
-                {
-                    fade.Start();
-                }
-                else if (multiple != 0)
-                {
-                    if (fade.IsRunning)
-                        fade.Update(gameTime.ElapsedGameTime);
-
-                    multiple = fade.CurrentValue;
-                }
                 game.GameState = GameState.Forest;
             }
 
