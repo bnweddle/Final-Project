@@ -16,9 +16,7 @@ namespace Elemancy.Transitions
 
         private KeyboardState old;
 
-        private InterpolationTimer fade;
-
-        private float multiple = 1;
+        private Game game;
 
         public Element selectedElement = Element.None;
 
@@ -29,10 +27,14 @@ namespace Elemancy.Transitions
 
         public bool Start { get; protected set; } = false;
 
+
+        public Menu(Game game)
+        {
+            this.game = game;
+        }
         public void LoadContent(ContentManager content)
         {
             menu = content.Load<Texture2D>("menu");
-            fade = new InterpolationTimer(TimeSpan.FromSeconds(1), 1.0f, 0.0f);
         }
 
         public void Update(GameTime gameTime)
@@ -44,12 +46,14 @@ namespace Elemancy.Transitions
                 Spell = "Fire";
                 selectedElement = Element.Fire;
                 Start = true;
+                game.GameState = GameState.Forest;
             }
             else if (current.IsKeyDown(Keys.D2) || current.IsKeyDown(Keys.NumPad2))
             {
                 Spell = "Water";
                 selectedElement = Element.Water;
                 Start = true;
+                game.GameState = GameState.Forest;
             }
             else if (current.IsKeyDown(Keys.D3) || current.IsKeyDown(Keys.NumPad3))
             {
@@ -78,17 +82,22 @@ namespace Elemancy.Transitions
 
                     multiple = fade.CurrentValue;
                 }
+                game.GameState = GameState.Forest;
             }
 
             old = current;
         }
 
-
         public void Draw(SpriteBatch spriteBatch, GraphicsDeviceManager graphics)
         {
             spriteBatch.Draw(menu,
                 new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
-                Color.White * multiple);
+                Color.White);
+        }
+
+        public void Restart()
+        {
+            Start = false;
         }
 
 

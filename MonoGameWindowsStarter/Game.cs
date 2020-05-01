@@ -11,15 +11,8 @@ namespace Elemancy
     /// <summary>
     /// My TO DO:
     ///  1. Need to synch damage and player heaith with Healthbar width
-    ///  2. Create starting Menu and Transitions
-    ///  3. Adjust Scenes Class accordingly
-    ///  4. Adjust SpriteFonts Display (Messages Class)
     ///
-    ///  EXTRA: Think about Sound effects:
-    ///     > Like forest song
-    ///     > Cave song
-    ///     > Menu song, Success wav, Fail wav
-    ///     > Dungeon song    
+    /// EXTRA: Think about Success wav, Fail wav, PlayerHit Wav, EnemyHit Wav, Magic wav
     /// </summary>
 
     /// <summary>
@@ -30,7 +23,12 @@ namespace Elemancy
         /// <summary>
         /// Enemies
         /// </summary>
-        List<IEnemy> enemyList = new List<IEnemy>();
+        List<IEnemy> forestEnemies = new List<IEnemy>();
+        List<IEnemy> caveEnemies = new List<IEnemy>();
+        List<IEnemy> dungeonEnemies = new List<IEnemy>();
+        EnemyBoss forestBoss;
+        EnemyBoss caveBoss;
+        EnemyBoss dungeonBoss;
         IEnemy activeEnemy;
 
         Player player;
@@ -49,7 +47,8 @@ namespace Elemancy
         /// </summary>
         SpriteBatch componentsBatch;
         Messages messages = new Messages();
-        Menu menu = new Menu();
+        Menu menu;
+        Level level = new Level();
 
         KeyboardState oldState;
 
@@ -68,10 +67,25 @@ namespace Elemancy
         //ParticleSystem particleSystem;
         //Texture2D particleTexture;
 
+        private GameState gameState;
+        int scroll = 0;
+
+        public GameState GameState 
+        { 
+            get { return gameState; } 
+            set 
+            {
+                gameState = value;
+                gameState = level.SetGameState(player, gameState != GameState.MainMenu);              
+            } 
+        }
+
         public Game()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            menu = new Menu(this);
 
             // Creating and Positioning Healthbars
             wizardHealth = new HealthBar(this, new Vector2(20, 0), Color.Gray);  //Top left corner
@@ -79,28 +93,7 @@ namespace Elemancy
 
             enemyHealth = new HealthBar(this, new Vector2(822, 0), Color.Gray);  //Top right corner
             enemyGauge = new HealthBar(this, new Vector2(822, 0), Color.Red);
-            
-            for(int i = 0; i < 10; i++)
-            {
-                //Vector position is subjected to change when we know where the "ground" is
-                //and where the enemies need to be placed
-                enemyList.Add(new BasicEnemy(30, 5, "fire", this, new Vector2(300, 700)));               
-                
-            }
-            enemyList.Add(new EnemyBoss(60, 10, "fire", this, new Vector2(300, 700)));
-            for (int i = 0; i < 10; i++)
-            {
-                enemyList.Add(new BasicEnemy(40, 10, "water", this, new Vector2(300, 700)));
-            }
-            enemyList.Add(new EnemyBoss(80, 20, "water", this, new Vector2(300, 700)));
-            for (int i = 0; i < 10; i++)
-            {
-                enemyList.Add(new BasicEnemy(50, 15, "lightning", this, new Vector2(300, 700)));
-            }
-            enemyList.Add(new EnemyBoss(100, 30, "lightning", this, new Vector2(300, 700)));
-
-            //setting the first active enemy to be the first enemy in the forest level
-            activeEnemy = enemyList[0];
+        
         }
 
         /// <summary>
@@ -137,6 +130,8 @@ namespace Elemancy
 
             menu.LoadContent(Content);
             messages.LoadContent(Content);
+            level.LoadContent(Content);
+
 
             // Player Layer
             player = new Player(this, Color.White);
@@ -146,23 +141,49 @@ namespace Elemancy
             playerLayer.DrawOrder = 2;
             Components.Add(playerLayer);
 
+            for (int i = 0; i < 10; i++)
+            {
+                //positions may be updated later when the enemies "spawn"
+                forestEnemies.Add(new BasicEnemy(30, 5, "fire", this, new Vector2(player.Position.X + 100, player.Position.Y)));
+                caveEnemies.Add(new BasicEnemy(40, 10, "water", this, new Vector2(player.Position.X + 100, player.Position.Y)));
+                dungeonEnemies.Add(new BasicEnemy(50, 15, "lightning", this, new Vector2(player.Position.X + 100, player.Position.Y)));
+            }
+            //determine where bosses are going to be placed in the level
+            forestBoss = new EnemyBoss(60, 10, "fire", this, new Vector2(300, 700)); 
+            caveBoss = new EnemyBoss(80, 20, "water", this, new Vector2(300, 700));   
+            dungeonBoss = new EnemyBoss(100, 30, "lightning", this, new Vector2(300, 700));
+
             levelsLayer = new ParallaxLayer(this);
             // Levels Layer - Can just add to to them for other levels
-            var levelTextures = new Texture2D[]
+
+            var levelTextures = new List<Texture2D>()
             {
-                Content.Load<Texture2D>("forest1"),
-                Content.Load<Texture2D>("forest2"), // about 2700 width
-                // Cave
-                Content.Load<Texture2D>("dungeon") // about 2800 width
-            };
-            var levelSprites = new StaticSprite[]
-            {
-                new StaticSprite(levelTextures[0], new Vector2(-50,0)), 
-                new StaticSprite(levelTextures[1], new Vector2(1339, 0)),
-                new StaticSprite(levelTextures[2], new Vector2(2728, 0))
+               Content.Load<Texture2D>("forest1"),
+               Content.Load<Texture2D>("forest2"),
+               Content.Load<Texture2D>("forest1"), // 4167
+               Content.Load<Texture2D>("cave1"),
+               Content.Load<Texture2D>("cave2"),
+               Content.Load<Texture2D>("cave1"),
+               Content.Load<Texture2D>("dungeon1"),
+               Content.Load<Texture2D>("dungeon2")
             };
 
-            levelsLayer.Sprites.AddRange(levelSprites);
+            var position = Vector2.Zero;
+            var levelSprites = new List<StaticSprite>();
+            for (int i = 0; i < levelTextures.Count; i++)
+            {
+                if(i == 7) position = new Vector2((9 * 1389) - 50, 0);
+                else  position = new Vector2((i * 1389) - 50, 0);
+
+                var sprite = new StaticSprite(levelTextures[i], position);
+                levelSprites.Add(sprite);
+            }
+
+            foreach (var sprite in levelSprites)
+            {
+                levelsLayer.Sprites.Add(sprite);
+            }
+           
             levelsLayer.DrawOrder = 1;
             Components.Add(levelsLayer);
 
@@ -178,6 +199,24 @@ namespace Elemancy
 
             //add for loop for enemies when we get texture files
             //Add Enemies to Components with DrawOrder so they appear on top of layers
+            GameState = GameState.MainMenu;
+
+            //load enemy content
+            //enemies need to be added to the draw order
+            for(int i = 0; i < forestEnemies.Count; i++)
+            {
+                //name of file will change, added a temp png for testing
+                forestEnemies[i].LoadContent(Content, "tempEnemy");
+                caveEnemies[i].LoadContent(Content, "tempEnemy");
+                dungeonEnemies[i].LoadContent(Content, "tempEnemy");
+            }
+
+            forestBoss.LoadContent(Content, "tempEnemy");
+            caveBoss.LoadContent(Content, "tempEnemy");
+            dungeonBoss.LoadContent(Content, "tempEnemy");
+
+            //setting the first active enemy to be the first enemy in the forest level
+            activeEnemy = forestEnemies[0];
         }
 
         /// <summary>
@@ -202,6 +241,7 @@ namespace Elemancy
             // If player is hit Update, using Keyboard for now for testing purposes
             KeyboardState current = Keyboard.GetState();
 
+
             menu.Update(gameTime);
             if(player.Element == Element.None)
             {
@@ -211,31 +251,81 @@ namespace Elemancy
             //enemy update
             activeEnemy.Update(player, gameTime);
             if (activeEnemy.dead)
+            switch (gameState)
             {
-                enemyList.Remove(activeEnemy);
-                if(enemyList.Count > 0)
-                {
-                    activeEnemy = enemyList[0];
-                }
+                case GameState.MainMenu:
+                    menu.Update(gameTime);
+                    break;
+                default:
+
+                    if (current.IsKeyDown(Keys.H))
+                    {
+                        player.IsHit = true;
+                        // Minus the Health by the damage done when player was hit/Is collided with, using -1 for now
+                        // Need to synch damage and player heaith with Healthbar width
+                        wizardGauge.Bounds.Width -= 1;
+                        player.UpdateHealth(1);
+                    }
+
+                    player.Update(gameTime);
+
+                    if(player.Position.X == 4120)
+                    {
+                        GameState = GameState.Cave;
+                    }
+
+                    //enemy update
+                    activeEnemy.Update(player, gameTime);
+                    if (activeEnemy.dead)
+                    {
+                        if (forestEnemies.Count > 0)
+                        {
+                            forestEnemies.RemoveAt(0);
+                            if (forestEnemies.Count == 0)
+                            {
+                                activeEnemy = forestBoss;
+                            }
+                            else activeEnemy = forestEnemies[0];
+                        }
+                        else if (caveEnemies.Count > 0)
+                        {
+                            caveEnemies.RemoveAt(0);
+                            if (caveEnemies.Count == 0)
+                            {
+                                activeEnemy = caveBoss;
+                            }
+                            else activeEnemy = caveEnemies[0];
+                        }
+                        else if (dungeonEnemies.Count > 0)
+                        {
+                            dungeonEnemies.RemoveAt(0);
+                            if (dungeonEnemies.Count == 0)
+                            {
+                                activeEnemy = dungeonBoss;
+                            }
+                            else activeEnemy = caveEnemies[0];
+                        }
+
+                    }
+
+                    scroll = level.GetScrollStop(gameState);
+                    break; // END OF DEFAULT
             }
 
-            if (current.IsKeyDown(Keys.H))
-            {
-                player.IsHit = true;
-                // Minus the Health by the damage done when player was hit/Is collided with, using -1 for now
-                // Need to synch damage and player heaith with Healthbar width
-                wizardGauge.Bounds.Width -= 1;
-                player.UpdateHealth(1);
-            }
+           
 
-            player.Update(gameTime);
-
-            if(player.Position.X >= 1735)
+            /*if(player.Position.X >= scroll)
             {
+                levelsT.ScrollStop = scroll;
                 levelsT.ScrollRatio = 0.0f;
                 playerT.ScrollRatio = 0.0f;
+                // probably need to restrict the player's movement 
+                // So they have to battle the boss; 
+            }*/
 
-            }
+            // Transition screen will be shown when the boss for that level is 
+            // dead, and then If they hit C for Continue will change Player position 
+            // and  scroll will change.
 
             base.Update(gameTime);
             oldState = current;
@@ -258,19 +348,40 @@ namespace Elemancy
 
             componentsBatch.Begin();
 
-            wizardHealth.Draw(componentsBatch);
-            wizardGauge.Draw(componentsBatch);
 
-            enemyHealth.Draw(componentsBatch);
-            enemyGauge.Draw(componentsBatch);
+            switch(gameState)
+            {
+                case GameState.MainMenu:
+                    if (!menu.Start)
+                    {
+                        menu.Draw(componentsBatch, graphics);
+                        //restart the game / re-initialize player at the beginning
+                    }
+                    break;
+                default:
+
+                    wizardHealth.Draw(componentsBatch);
+                    wizardGauge.Draw(componentsBatch);
+
+                    enemyHealth.Draw(componentsBatch);
+                    enemyGauge.Draw(componentsBatch);
+
+                    activeEnemy.Draw(componentsBatch, Color.White);
 
 
+                    break;
+            }
             
 
-            if (!menu.Start)
-            {
-                menu.Draw(componentsBatch, graphics);
-            }
+            // if current level Boss is dead 
+               // if !Messages.Continue
+                   // draw Message for Round1 / round 2 / or you Win depending on GameLevel
+            // else if player is dead
+              // if !BackMenu || !Exit
+                   // draw Lose
+                 // else if BackMenu
+                    // Menu.Restart
+                  // else terminate game
 
             //messages.Draw(componentsBatch, graphics);
 

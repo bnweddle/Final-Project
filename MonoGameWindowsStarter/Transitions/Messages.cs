@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Elemancy.Transitions
 {
@@ -15,57 +16,86 @@ namespace Elemancy.Transitions
 
     public class Messages 
     {
-        /// <summary>
-        /// The Sprite Message for the SpriteFont to be displayed
-        /// </summary>
-        public string SpriteMessage { get; protected set; }
+        private Texture2D[] transitions = new Texture2D[4];
 
-        private SpriteFont font;
+        private KeyboardState oldState;
 
-        private Texture2D transition;
+        private Message message;
 
-        private Vector2 messagePostion = new Vector2(515, 335);
+        private int index;
 
-        private Color color;
+        public bool BackMenu { get; protected set; } = false;
+
+        public bool Continue { get; protected set; } = false;
+
+        public bool Exit { get; protected set; } = false;
+
+        public void SetMessage(int boss, out int position)
+        {
+            position = 0;
+            
+            if(boss == 1)
+            {
+                position += 500;
+                message = Message.Round1;
+            }
+            else if(boss == 2)
+            {
+                message = Message.Round2;
+            }
+            else if(boss == 3)
+            {
+                position += 0;
+                message = Message.Win;
+            }
+            else
+            {
+                position += 0;
+                message = Message.Lose;
+            }
+        }
 
         public void LoadContent(ContentManager content)
         {
-            // Why can't make font bold??
-            font = content.Load<SpriteFont>("font");
-            transition = content.Load<Texture2D>("magicalForest");
-            
-            color.R = 45;
-            color.G = 47;
-            color.B = 132;
-            color.A = 255;
+            transitions = new Texture2D[]
+            {
+               content.Load<Texture2D>("round1"),
+               content.Load<Texture2D>("round2"),
+               content.Load<Texture2D>("win"),
+               content.Load<Texture2D>("lose"),
+            };
         }
 
-        public void GetMessage(Message transition)
+        public void Update(GameTime gameTime)
         {
-            //Change position if needed
-            switch (transition)
+            KeyboardState current = Keyboard.GetState();
+
+            if (current.IsKeyDown(Keys.M))
             {
-                case Message.Round1:
-                    SpriteMessage = "Round 1 \n   Completed"; //Time before continue or something
-                    break;
-                case Message.Round2:
-                    SpriteMessage = "Round 2 \n   Completed";  //Time before continue or something
-                    break;
-                case Message.Win:
-                    SpriteMessage = "You Win! \n   E for Exit \n   M for Menu"; // If finished final level
-                    break;
-                case Message Lose:
-                    SpriteMessage = "Better Luck Next Time. \n   E for Exit \n   M for Menu"; // If they die
-                    break;
+                BackMenu = true;
             }
+            else if (current.IsKeyDown(Keys.C))
+            {
+                Continue = true;
+            }
+            else if (current.IsKeyDown(Keys.E))
+            {
+                Exit = true;
+            }
+
+            oldState = current;
         }
 
         public void Draw(SpriteBatch spriteBatch, GraphicsDeviceManager graphics)
         {
-            spriteBatch.Draw(transition,
+            if (message == Message.Round1) index = 0;
+            if (message == Message.Round2) index = 1;
+            if (message == Message.Win) index = 2;
+            if (message == Message.Lose) index = 3;
+
+            spriteBatch.Draw(transitions[index],
                 new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
                 Color.White);
-            spriteBatch.DrawString(font, "Better Luck Next Time. \n         E for Exit \n        M for Menu", messagePostion, color);
         }
     }
 }
