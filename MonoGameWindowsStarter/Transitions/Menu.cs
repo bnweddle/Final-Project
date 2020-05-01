@@ -48,13 +48,13 @@ namespace Elemancy.Transitions
             else if (current.IsKeyDown(Keys.D2) || current.IsKeyDown(Keys.NumPad2))
             {
                 Spell = "Water";
-                selectedElement = Element.Ice;
+                selectedElement = Element.Water;
                 Start = true;
             }
             else if (current.IsKeyDown(Keys.D3) || current.IsKeyDown(Keys.NumPad3))
             {
                 Spell = "Lightning";
-                selectedElement = Element.Electric;
+                selectedElement = Element.Lightning;
                 Start = true;
             }
 

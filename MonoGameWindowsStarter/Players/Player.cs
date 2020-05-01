@@ -38,9 +38,9 @@ namespace Elemancy
     public enum Element
     {
         None = 0,
-        Electric = 1,
-        Fire = 2,
-        Ice = 3,
+        Fire = 1,
+        Water = 2,
+        Lightning = 3,        
     }
 
 
@@ -306,10 +306,10 @@ namespace Elemancy
                         orbVelocity = new Vector2(-1, 0);
                         break;
                     case Direction.Idle:
-                        orbVelocity = Vector2.Zero;
+                        orbVelocity = new Vector2(1, 0);
                         break;
                     default:
-                        orbVelocity = Vector2.Zero;
+                        orbVelocity = new Vector2(1, 0);
                         break;
                 }
 
@@ -374,10 +374,10 @@ namespace Elemancy
         /// </summary>
         public void CycleElement()
         {
-            if (Element == Element.None) Element = Element.Electric;
-            else if (Element == Element.Electric) Element = Element.Fire;
-            else if (Element == Element.Fire) Element = Element.Ice;
-            else if (Element == Element.Ice) Element = Element.None;
+            if (Element == Element.None) Element = Element.Fire;
+            else if (Element == Element.Fire) Element = Element.Water;
+            else if (Element == Element.Water) Element = Element.Lightning;
+            else if (Element == Element.Lightning) Element = Element.None;
         }
     }
 }

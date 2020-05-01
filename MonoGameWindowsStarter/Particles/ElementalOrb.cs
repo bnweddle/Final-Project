@@ -103,7 +103,7 @@ namespace Elemancy
 
         public void Draw(GameTime gameTime)
         {
-            if (State == ActiveState.Active)
+            //if (State == ActiveState.Active)
                 elementalOrbParticleSystem.Draw(gameTime);
         }
 
@@ -129,7 +129,7 @@ namespace Elemancy
                 elementalOrbParticleSystem.SpawnParticle = (ref Particle particle) =>
                 {
                     Vector2 particlePosition = new Vector2(
-                        MathHelper.Lerp(Position.X - 20, Position.X + 20, (float)random.NextDouble()), // X between this X +-20
+                        MathHelper.Lerp(Position.X, Position.X + 40, (float)random.NextDouble()), // X between this X and X + 40
                         MathHelper.Lerp(Position.Y - 20, Position.Y + 20, (float)random.NextDouble()) // Y between this Y +-20
                         );
                     particle.Position = particlePosition - new Vector2(Bounds.Radius, Bounds.Radius);
@@ -142,13 +142,13 @@ namespace Elemancy
                         case Element.None:
                             particle.Color = Color.Transparent;
                             break;
-                        case Element.Electric:
+                        case Element.Lightning:
                             particle.Color = Color.White;
                             break;
                         case Element.Fire:
                             particle.Color = Color.Red;
                             break;
-                        case Element.Ice:
+                        case Element.Water:
                             particle.Color = Color.Blue;
                             break;
                         default:
@@ -156,7 +156,7 @@ namespace Elemancy
                             break;
                     }
                     particle.Scale = 1f;
-                    particle.Life = 1.0f;
+                    particle.Life = 5.0f;
                 };
 
                 // Set the UpdateParticle method
@@ -165,7 +165,10 @@ namespace Elemancy
                     particle.Velocity += deltaT * particle.Acceleration;
                     particle.Position += deltaT * particle.Velocity;
                     particle.Scale -= deltaT;
-                    particle.Life -= 2 * deltaT;
+                    particle.Life -= deltaT;
+
+                    System.Diagnostics.Debug.WriteLine($"Elemental Orb Particle Life: {particle.Life}");
+
                 };
             }
             game.Components.Add(elementalOrbParticleSystem);
