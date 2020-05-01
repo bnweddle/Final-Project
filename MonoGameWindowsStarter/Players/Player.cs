@@ -32,6 +32,18 @@ namespace Elemancy
         Idle
     }
 
+    /// <summary>
+    /// For the current 'Elemental Power' of the player
+    /// </summary>
+    public enum Element
+    {
+        None = 0,
+        Fire = 1,
+        Water = 2,
+        Lightning = 3,        
+    }
+
+
     public class Player : ISprite
     {
         // Timers for fading and flickering when dying and being hit
@@ -78,6 +90,12 @@ namespace Elemancy
         // Old keyboard state for in Update
         KeyboardState oldState;
 
+        // 'Elemental Power' state of the player
+        public Element Element = Element.None;
+
+        // 'Elemental Power' Orb
+        public ElementalOrb elementalOrb;
+
         // The Game 
         Game game;
         
@@ -119,6 +137,7 @@ namespace Elemancy
         {
             this.game = game;
             this.Color = color;
+            elementalOrb = new ElementalOrb(game);
         }
 
         public void Initialize()
@@ -132,11 +151,16 @@ namespace Elemancy
 
             flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 0.0f, 1.0f);
             fade = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
+
+            Element = Element.None;
+            elementalOrb.Initialize();
         }
 
         public void LoadContent(ContentManager content)
         { 
             player = content.Load<Texture2D>("player");
+
+            elementalOrb.LoadContent(content);
         }
 
         public void Update(GameTime gameTime)
@@ -146,6 +170,8 @@ namespace Elemancy
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
             Bounds.X = Position.X;
             Bounds.Y = Position.Y;
+
+            System.Diagnostics.Debug.WriteLine($"Player's X Position: {Position.X}");
 
             // So the player can't go backwards, would need to change as they 
             // progress through the levels
@@ -269,6 +295,33 @@ namespace Elemancy
                 direction = Direction.Idle;
             }
 
+            // Elemental Orb Activate and Update
+            if (keyboard.IsKeyDown(Keys.Space) && !oldState.IsKeyDown(Keys.Space) && elementalOrb.State == ElementalOrb.ActiveState.Idle)
+            {
+                Vector2 orbVelocity = new Vector2(1, 0);
+                switch (direction)
+                {
+                    case Direction.East:
+                        orbVelocity = new Vector2(1, 0);
+                        break;
+                    case Direction.West:
+                        orbVelocity = new Vector2(-1, 0);
+                        break;
+                    case Direction.Idle:
+                        orbVelocity = new Vector2(1, 0);
+                        break;
+                }
+
+                elementalOrb.Attack(Position, orbVelocity, Element);            
+            }
+            elementalOrb.Update(gameTime);
+            if (keyboard.IsKeyDown(Keys.LeftAlt) && !oldState.IsKeyDown(Keys.LeftAlt) && elementalOrb.State == ElementalOrb.ActiveState.Idle)
+            {
+                CycleElement();
+            }
+            System.Diagnostics.Debug.WriteLine($"Player Element Type: {Element}");
+            
+
             // update animation timer when the player is moving
             if (direction != Direction.Idle)
                 animationTimer += gameTime.ElapsedGameTime;
@@ -298,6 +351,7 @@ namespace Elemancy
 
             spriteBatch.Draw(player, Position, rectSource, Color * multiple);
 
+            elementalOrb.Draw(spriteBatch, gameTime);
         }
 
         /// <summary>
@@ -312,6 +366,17 @@ namespace Elemancy
                 IsDead = true;
                 IsHit = false;
             }
+        }
+
+        /// <summary>
+        /// Method for switching element type - Probably using just for testing
+        /// </summary>
+        public void CycleElement()
+        {
+            if (Element == Element.None) Element = Element.Fire;
+            else if (Element == Element.Fire) Element = Element.Water;
+            else if (Element == Element.Water) Element = Element.Lightning;
+            else if (Element == Element.Lightning) Element = Element.Fire;
         }
     }
 }

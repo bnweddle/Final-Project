@@ -64,7 +64,7 @@ namespace Elemancy.Parallax
                     return transform;
                 }
 
-                System.Diagnostics.Debug.WriteLine($"{x } Matrix");
+                //System.Diagnostics.Debug.WriteLine($"{x } Matrix");
                 return Matrix.CreateTranslation(x, 0, 0);
 
             }

@@ -25,12 +25,12 @@ namespace Elemancy
     /// <summary>
     /// A class representing a particle system 
     /// </summary>
-    public class ParticleSystem : DrawableGameComponent
+    public class ParticleSystem
     {
         /// <summary>
         /// The collection of particles 
         /// </summary>
-        Particle[] particles;
+        public Particle[] particles;
 
         /// <summary>
         /// The texture this particle system uses 
@@ -79,7 +79,7 @@ namespace Elemancy
         /// <param name="graphicsDevice">The graphics device</param>
         /// <param name="size">The maximum number of particles in the system</param>
         /// <param name="texture">The texture of the particles</param> 
-        public ParticleSystem(Game game, int size, Texture2D texture) : base(game)
+        public ParticleSystem(Game game, int size, Texture2D texture)
         {
             this.particles = new Particle[size];
             this.spriteBatch = new SpriteBatch(game.GraphicsDevice);
@@ -91,7 +91,7 @@ namespace Elemancy
         /// moving all live particles around the screen 
         /// </summary>
         /// <param name="gameTime">A structure representing time in the game</param>
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             // Make sure our delegate properties are set
             if (SpawnParticle == null || UpdateParticle == null) return;
@@ -122,7 +122,7 @@ namespace Elemancy
         /// <summary>
         /// Draw the active particles in the particle system
         /// </summary>
-        public override void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime)
         {
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
 
