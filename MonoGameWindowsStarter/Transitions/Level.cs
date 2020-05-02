@@ -13,7 +13,6 @@ namespace Elemancy.Transitions
         Dungeon,
         MainMenu
     }
-
     public class Level // need to make abstract 
     {
         // DungeonLevel inherits level, constructor specific, list of enemies and boss, 
@@ -26,7 +25,7 @@ namespace Elemancy.Transitions
             forest = content.Load<Song>("Nature_Forest");
             cave = content.Load<Song>("Cave_Bats");
             dungeon = content.Load<Song>("Thunder");
-            menu = content.Load<Song>("NatureTheme");
+            menu = content.Load<Song>("WizardTheme");
 
             MediaPlayer.IsMuted = true;
             MediaPlayer.IsRepeating = true;

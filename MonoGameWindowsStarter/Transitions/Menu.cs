@@ -62,29 +62,6 @@ namespace Elemancy.Transitions
                 Start = true;
             }
 
-            // Can do with or without preference.
-            if (Start)
-            {
-                if (fade.TimeElapsed.TotalSeconds >= 0.75)
-                {
-                    fade.Stop();
-                    multiple = 0;
-                }
-
-                if (!fade.IsRunning && multiple != 0)
-                {
-                    fade.Start();
-                }
-                else if (multiple != 0)
-                {
-                    if (fade.IsRunning)
-                        fade.Update(gameTime.ElapsedGameTime);
-
-                    multiple = fade.CurrentValue;
-                }
-                game.GameState = GameState.Forest;
-            }
-
             old = current;
         }
 

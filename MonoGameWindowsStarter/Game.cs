@@ -241,16 +241,9 @@ namespace Elemancy
             // If player is hit Update, using Keyboard for now for testing purposes
             KeyboardState current = Keyboard.GetState();
 
-
             menu.Update(gameTime);
-            if(player.Element == Element.None)
-            {
-                player.Element = menu.selectedElement;
-            }
 
-            //enemy update
-            activeEnemy.Update(player, gameTime);
-            if (activeEnemy.dead)
+            
             switch (gameState)
             {
                 case GameState.MainMenu:
@@ -269,11 +262,11 @@ namespace Elemancy
 
                     player.Update(gameTime);
 
-                    if(player.Position.X == 4120)
+                    if (player.Element == Element.None)
                     {
-                        GameState = GameState.Cave;
+                        player.Element = menu.selectedElement;
                     }
-
+                    
                     //enemy update
                     activeEnemy.Update(player, gameTime);
                     if (activeEnemy.dead)
