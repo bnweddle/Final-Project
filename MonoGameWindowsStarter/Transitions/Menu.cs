@@ -41,25 +41,29 @@ namespace Elemancy.Transitions
         {
             KeyboardState current = Keyboard.GetState();
 
-            if(current.IsKeyDown(Keys.D1) || current.IsKeyDown(Keys.NumPad1))
+            if (!Start)
             {
-                Spell = "Fire";
-                selectedElement = Element.Fire;
-                Start = true;
-                game.GameState = GameState.Forest;
-            }
-            else if (current.IsKeyDown(Keys.D2) || current.IsKeyDown(Keys.NumPad2))
-            {
-                Spell = "Water";
-                selectedElement = Element.Water;
-                Start = true;
-                game.GameState = GameState.Forest;
-            }
-            else if (current.IsKeyDown(Keys.D3) || current.IsKeyDown(Keys.NumPad3))
-            {
-                Spell = "Lightning";
-                selectedElement = Element.Lightning;
-                Start = true;
+                if (current.IsKeyDown(Keys.D1) || current.IsKeyDown(Keys.NumPad1))
+                {
+                    Spell = "Fire";
+                    selectedElement = Element.Fire;
+                    Start = true;
+                    game.GameState = GameState.Forest;
+                }
+                else if (current.IsKeyDown(Keys.D2) || current.IsKeyDown(Keys.NumPad2))
+                {
+                    Spell = "Water";
+                    selectedElement = Element.Water;
+                    Start = true;
+                    game.GameState = GameState.Forest;
+                }
+                else if (current.IsKeyDown(Keys.D3) || current.IsKeyDown(Keys.NumPad3))
+                {
+                    Spell = "Lightning";
+                    selectedElement = Element.Lightning;
+                    Start = true;
+                    game.GameState = GameState.Forest;
+                }
             }
 
             old = current;

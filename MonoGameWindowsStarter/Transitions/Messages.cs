@@ -36,21 +36,22 @@ namespace Elemancy.Transitions
             
             if(boss == 1)
             {
-                position += 500;
+                position += 100;
                 message = Message.Round1;
             }
             else if(boss == 2)
             {
+                position += 100;
                 message = Message.Round2;
             }
             else if(boss == 3)
             {
-                position += 0;
+                position += 100;
                 message = Message.Win;
             }
             else
             {
-                position += 0;
+                position += 100;
                 message = Message.Lose;
             }
         }

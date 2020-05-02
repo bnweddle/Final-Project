@@ -29,12 +29,12 @@ namespace Elemancy.Transitions
 
             MediaPlayer.IsMuted = true;
             MediaPlayer.IsRepeating = true;
-        }
+        } 
 
         public int GetScrollStop(GameState scenes)
         {
             int scrollStop = 0;
-            switch(scenes)
+            switch (scenes)
             {
                 case GameState.Forest:
                     scrollStop = 3117;

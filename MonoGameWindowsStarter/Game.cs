@@ -195,15 +195,14 @@ namespace Elemancy
             playerLayer.ScrollController = playerT;
             levelsLayer.ScrollController = levelsT;
             //transitionsLayer.ScrollController = transitionT;
-
+            GameState = GameState.MainMenu;
 
             //add for loop for enemies when we get texture files
             //Add Enemies to Components with DrawOrder so they appear on top of layers
-            GameState = GameState.MainMenu;
 
             //load enemy content
             //enemies need to be added to the draw order
-            for(int i = 0; i < forestEnemies.Count; i++)
+            for (int i = 0; i < forestEnemies.Count; i++)
             {
                 //name of file will change, added a temp png for testing
                 forestEnemies[i].LoadContent(Content, "tempEnemy");
@@ -365,16 +364,6 @@ namespace Elemancy
                     break;
             }
             
-
-            // if current level Boss is dead 
-               // if !Messages.Continue
-                   // draw Message for Round1 / round 2 / or you Win depending on GameLevel
-            // else if player is dead
-              // if !BackMenu || !Exit
-                   // draw Lose
-                 // else if BackMenu
-                    // Menu.Restart
-                  // else terminate game
 
             //messages.Draw(componentsBatch, graphics);
 
