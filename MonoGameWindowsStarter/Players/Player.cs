@@ -142,7 +142,8 @@ namespace Elemancy
 
         public void Initialize()
         {
-            Position = new Vector2(40,600);  // Start position could change with preference
+            // for test purposes
+            Position = new Vector2(4000,600);  // Start position could change with preference
             health = 25; // Could also change with preference
             direction = Direction.Idle;
             verticalState = VerticalMovementState.OnGround;

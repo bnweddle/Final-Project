@@ -26,6 +26,7 @@ namespace Elemancy.Transitions
         // if current level Boss is dead 
             // if !Messages.Continue
             // draw for Round1 // Round 2 // Win
+            // Update game.GameState to Cave
         // else if player is dead
             // if !BackMenu || !Exit
             // draw for Lose

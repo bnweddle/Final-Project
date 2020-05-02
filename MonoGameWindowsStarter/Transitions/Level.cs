@@ -20,6 +20,8 @@ namespace Elemancy.Transitions
 
         private GameState level = GameState.MainMenu;
 
+        public bool IsPLaying { get; set; } = false;
+
         public void LoadContent(ContentManager content)
         {
             forest = content.Load<Song>("Nature_Forest");
@@ -52,7 +54,7 @@ namespace Elemancy.Transitions
 
         public GameState SetGameState(Player player, bool start)
         {
-            if(start)
+            if(start && !IsPLaying)
             {
                 if (player.Position.X >= 0 && player.Position.X <= 4100)
                 {

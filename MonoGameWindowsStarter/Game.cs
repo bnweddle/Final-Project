@@ -361,6 +361,17 @@ namespace Elemancy
                     activeEnemy.Draw(componentsBatch, Color.White);
 
 
+                    // Cheat way to get song to switch right now
+                    if(player.Position.X >= 4120 && player.Position.X <= 8334 && !level.IsPLaying)
+                    {
+                        gameState = level.SetGameState(player, menu.Start);
+                        level.IsPLaying = true;
+                    }
+                    if(player.Position.X >= 8334 && level.IsPLaying)
+                    {
+                        level.IsPLaying = false;
+                        gameState = level.SetGameState(player, menu.Start);
+                    }
                     break;
             }
             
