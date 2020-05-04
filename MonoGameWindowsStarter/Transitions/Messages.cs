@@ -30,28 +30,30 @@ namespace Elemancy.Transitions
 
         public bool Exit { get; protected set; } = false;
 
-        public void SetMessage(int boss, out int position)
+        public void SetMessage(int boss, out float position)
         {
             position = 0;
             
             if(boss == 1)
             {
-                position += 100;
+                position = 4120;
                 message = Message.Round1;
+                index = 0;
             }
             else if(boss == 2)
             {
-                position += 100;
+                position = 8350;
                 message = Message.Round2;
+                index = 1;
             }
             else if(boss == 3)
             {
-                position += 100;
                 message = Message.Win;
+                index = 2;
             }
             else
             {
-                position += 100;
+                index = 3;
                 message = Message.Lose;
             }
         }

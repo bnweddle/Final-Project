@@ -13,19 +13,6 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin baseElementalOrb.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:baseElementalOrb.png
-
-#begin dungeon.png
 #begin ../../../../../Pictures/Final Game Images/forest1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -49,6 +36,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:../../../../../Pictures/Final Game Images/forest2.png;forest2.png
+
+#begin baseElementalOrb.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:baseElementalOrb.png
 
 #begin Cave_Bats.mp3
 /importer:Mp3Importer
@@ -104,6 +103,18 @@
 /processorParam:TextureFormat=Color
 /build:dungeon2.jpg
 
+#begin fire.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:fire.png
+
 #begin healthbar6.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -115,6 +126,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:healthbar6.png
+
+#begin lightning1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:lightning1.png
 
 #begin lose.png
 /importer:TextureImporter
@@ -223,6 +246,18 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:Thunder.mp3
+
+#begin water1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:water1.png
 
 #begin win.png
 /importer:TextureImporter

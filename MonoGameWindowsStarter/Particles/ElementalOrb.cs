@@ -32,6 +32,7 @@ namespace Elemancy
 
         // Texture for 'Elemental Power' Orb Particles
         Texture2D particle;
+        Texture2D fire;
 
         // Timer for 'Elemental Power' Orbs
         TimeSpan timer = new TimeSpan(0);
@@ -73,6 +74,7 @@ namespace Elemancy
         {
             baseOrb = content.Load<Texture2D>("baseElementalOrb");
             particle = content.Load<Texture2D>("particle");
+            fire = content.Load<Texture2D>("fire");
             elementalOrbParticleSystem = newElementalOrbParticleSystem(game.GraphicsDevice, 0, Element.None, particle);
         }
 
@@ -141,10 +143,11 @@ namespace Elemancy
                     curColor = Color.Transparent;
                     break;
                 case Element.Lightning:
-                    curColor = Color.Yellow;
+                    curColor = Color.White;
                     break;
                 case Element.Fire:
-                    curColor = Color.Red;
+                    curColor = Color.OrangeRed;
+                   // particle = fire;
                     break;
                 case Element.Water:
                     curColor = Color.Blue;

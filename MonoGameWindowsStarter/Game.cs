@@ -11,8 +11,18 @@ namespace Elemancy
     /// <summary>
     /// My TO DO:
     ///  1. Need to synch damage and player heaith with Healthbar width
-    ///
-    /// EXTRA: Think about Success wav, Fail wav, PlayerHit Wav, EnemyHit Wav, Magic wav
+    ///  
+    /// Team left to do:
+    ///  1. Adjust enemies and collision for player/enemy being hit and dying
+    ///     > Create images for types of enemies
+    ///  2. Include narrator when wanting to play it
+    ///     > figure out when tot play and stop each wav
+    ///  3. Adjust particles to follow ball
+    ///  4. Adjust the player's health and enemies health to fit with health bar
+    ///  5. Code for when Boss of specific level dies to show Transition
+    ///  6. Include created drawn players
+    ///  7. Uncomment and include scroll stop 
+    ///  
     /// </summary>
 
     /// <summary>
@@ -31,9 +41,9 @@ namespace Elemancy
         EnemyBoss dungeonBoss;
         IEnemy activeEnemy;
 
-        Player player;
+        public Player player;
 
-        GraphicsDeviceManager graphics;
+        public GraphicsDeviceManager graphics;
 
         /// <summary>
         /// SpriteBatch is for Parallax Layers
@@ -68,7 +78,7 @@ namespace Elemancy
         //Texture2D particleTexture;
 
         private GameState gameState;
-        int scroll = 0;
+        int scroll = 3117; // first level
 
         public GameState GameState 
         { 
@@ -144,9 +154,9 @@ namespace Elemancy
             for (int i = 0; i < 10; i++)
             {
                 //positions may be updated later when the enemies "spawn"
-                forestEnemies.Add(new BasicEnemy(30, 5, "fire", this, new Vector2(player.Position.X + 100, player.Position.Y)));
-                caveEnemies.Add(new BasicEnemy(40, 10, "water", this, new Vector2(player.Position.X + 100, player.Position.Y)));
-                dungeonEnemies.Add(new BasicEnemy(50, 15, "lightning", this, new Vector2(player.Position.X + 100, player.Position.Y)));
+                forestEnemies.Add(new BasicEnemy(30, 5, "fire", this, new Vector2(player.Position.X + 100, 500)));
+                caveEnemies.Add(new BasicEnemy(40, 10, "water", this, new Vector2(player.Position.X + 100, 500)));
+                dungeonEnemies.Add(new BasicEnemy(50, 15, "lightning", this, new Vector2(player.Position.X + 100, 500)));
             }
             //determine where bosses are going to be placed in the level
             forestBoss = new EnemyBoss(60, 10, "fire", this, new Vector2(300, 700)); 
@@ -190,11 +200,8 @@ namespace Elemancy
             playerT = new TrackingPlayer(player, 1.0f);
             levelsT = new TrackingPlayer(player, 1.0f);
 
-            // The health bar may need it's own layer to stay put
-            // componentsLayer.ScrollController = componentT;
             playerLayer.ScrollController = playerT;
             levelsLayer.ScrollController = levelsT;
-            //transitionsLayer.ScrollController = transitionT;
             GameState = GameState.MainMenu;
 
             //add for loop for enemies when we get texture files
@@ -300,20 +307,35 @@ namespace Elemancy
 
                     }
 
+                    // Cheat way to get song to switch right now
+                    if (player.Position.X >= 4120 && player.Position.X <= 8334 && !level.IsPLaying)
+                    {
+                        gameState = level.SetGameState(player, menu.Start);
+                        level.IsPLaying = true;
+                    }
+                    if (player.Position.X >= 8334 && level.IsPLaying)
+                    {
+                        level.IsPLaying = false;
+                        gameState = level.SetGameState(player, menu.Start);
+                    }
+
                     scroll = level.GetScrollStop(gameState);
+
+                    if (player.Position.X >= scroll)
+                    {
+                        levelsT.ScrollStop = scroll;
+                        levelsT.ScrollRatio = 0.0f;
+                        playerT.ScrollRatio = 0.0f;
+                        // probably need to restrict the player's movement 
+                        // So they have to battle the boss; 
+                    }
+
                     break; // END OF DEFAULT
             }
 
            
 
-            /*if(player.Position.X >= scroll)
-            {
-                levelsT.ScrollStop = scroll;
-                levelsT.ScrollRatio = 0.0f;
-                playerT.ScrollRatio = 0.0f;
-                // probably need to restrict the player's movement 
-                // So they have to battle the boss; 
-            }*/
+            /**/
 
             // Transition screen will be shown when the boss for that level is 
             // dead, and then If they hit C for Continue will change Player position 
@@ -359,19 +381,6 @@ namespace Elemancy
                     enemyGauge.Draw(componentsBatch);
 
                     activeEnemy.Draw(componentsBatch, Color.White);
-
-
-                    // Cheat way to get song to switch right now
-                    if(player.Position.X >= 4120 && player.Position.X <= 8334 && !level.IsPLaying)
-                    {
-                        gameState = level.SetGameState(player, menu.Start);
-                        level.IsPLaying = true;
-                    }
-                    if(player.Position.X >= 8334 && level.IsPLaying)
-                    {
-                        level.IsPLaying = false;
-                        gameState = level.SetGameState(player, menu.Start);
-                    }
                     break;
             }
             

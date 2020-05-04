@@ -20,6 +20,8 @@ namespace Elemancy.Transitions
 
         private GameState level = GameState.MainMenu;
 
+        private Game game;
+
         public bool IsPLaying { get; set; } = false;
 
         public void LoadContent(ContentManager content)
