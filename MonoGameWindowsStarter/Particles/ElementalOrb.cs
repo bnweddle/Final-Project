@@ -54,7 +54,7 @@ namespace Elemancy
         Random random = new Random();
 
         // Elemental Particle System
-        public ParticleSystem elementalOrbParticleSystem;
+        //public ParticleSystem elementalOrbParticleSystem;
 
         public enum ActiveState
         { 
@@ -75,7 +75,7 @@ namespace Elemancy
             baseOrb = content.Load<Texture2D>("baseElementalOrb");
             particle = content.Load<Texture2D>("particle");
             fire = content.Load<Texture2D>("fire");
-            elementalOrbParticleSystem = newElementalOrbParticleSystem(game.GraphicsDevice, 0, Element.None, particle);
+            //elementalOrbParticleSystem = newElementalOrbParticleSystem(game.GraphicsDevice, 0, Element.None, particle);
         }
 
         public void Initialize()
@@ -92,31 +92,31 @@ namespace Elemancy
 
                 State = ActiveState.Active;
                 activeTimer = new TimeSpan(0);
-                elementalOrbParticleSystem = newElementalOrbParticleSystem(game.GraphicsDevice, 5000, curElement, particle);
+                //elementalOrbParticleSystem = newElementalOrbParticleSystem(game.GraphicsDevice, 5000, curElement, particle);
             }
             else if(State == ActiveState.Active)
             {
                 Position += (float)gameTime.ElapsedGameTime.TotalMilliseconds * Velocity * speedVar;
                 Bounds.X = Position.X;
                 Bounds.Y = Position.Y;
-                elementalOrbParticleSystem.Update(gameTime);
+                //elementalOrbParticleSystem.Update(gameTime);
                 if (timer.TotalMilliseconds - activeTimer.TotalMilliseconds > DURATION)
                 {
                     State = ActiveState.Idle;
-                    elementalOrbParticleSystem = newElementalOrbParticleSystem(game.GraphicsDevice, 0, Element.None, particle);
+                    //elementalOrbParticleSystem = newElementalOrbParticleSystem(game.GraphicsDevice, 0, Element.None, particle);
                 }
             }
 
             if (State == ActiveState.Active)
             {
                 //System.Diagnostics.Debug.WriteLine($"Elemental Orb Active - Element: {curElement}");
-                System.Diagnostics.Debug.WriteLine($"Elemental Orb Active - X Position: {Position.X}");
-                System.Diagnostics.Debug.WriteLine($"Elemental Orb Active - X Bounds: {Bounds.X}");
+                //System.Diagnostics.Debug.WriteLine($"Elemental Orb Active - X Position: {Position.X}");
+                //System.Diagnostics.Debug.WriteLine($"Elemental Orb Active - X Bounds: {Bounds.X}");
                 //System.Diagnostics.Debug.WriteLine($"Elemental Orb Active - Color: {curColor}");
                 //System.Diagnostics.Debug.WriteLine($"Elemental Orb Active - Particle Color: {elementalOrbParticleSystem.particles[0].Color}");
                 //System.Diagnostics.Debug.WriteLine($"Elemental Orb Active - Particle Life: {elementalOrbParticleSystem.particles[0].Life}");
-                for (int i = 0; i < 20; i++)
-                    System.Diagnostics.Debug.WriteLine($"Elemental Orb Active - Particle's X Position: {elementalOrbParticleSystem.particles[i].Position.X}");
+                //for (int i = 0; i < 20; i++)
+                //    System.Diagnostics.Debug.WriteLine($"Elemental Orb Active - Particle's X Position: {elementalOrbParticleSystem.particles[i].Position.X}");
             }
         }
 
@@ -125,7 +125,7 @@ namespace Elemancy
             if (State == ActiveState.Active)
             {
                 spriteBatch.Draw(baseOrb, Bounds, curColor);
-                elementalOrbParticleSystem.Draw(gameTime);
+                //elementalOrbParticleSystem.Draw(gameTime);
             }
         }
 
@@ -157,39 +157,39 @@ namespace Elemancy
             timer = new TimeSpan(0);
         }
 
-        public ParticleSystem newElementalOrbParticleSystem(GraphicsDevice graphicsDevice, int size, Element curElement, Texture2D elementParticle)
-        {
-            elementalOrbParticleSystem = new ParticleSystem(game, size, elementParticle);
-            //if (size != 0)
-            //{
-                elementalOrbParticleSystem.Emitter = Position;
-                elementalOrbParticleSystem.SpawnPerFrame = 50;
-                // Set the SpawnParticle method
-                elementalOrbParticleSystem.SpawnParticle = (ref Particle particle) =>
-                {
-                    Vector2 particlePosition = randomRadiusPosition(Bounds.Radius);
-                    particle.Position = particlePosition;
-                    Vector2 particleVelocity = (particlePosition - Position) * 2;
-                    particle.Velocity = particleVelocity;
-                    Vector2 particleAcceleration = 0.1f * new Vector2((float)-random.NextDouble(), (float)-random.NextDouble());
-                    particle.Acceleration = particleAcceleration;
-                    particle.Color = curColor;
-                    particle.Scale = .5f;
-                    particle.Life = (float)(random.Next(7500)/10000) + .75f;
-                };
+        //public ParticleSystem newElementalOrbParticleSystem(GraphicsDevice graphicsDevice, int size, Element curElement, Texture2D elementParticle)
+        //{
+        //    elementalOrbParticleSystem = new ParticleSystem(game, size, elementParticle);
+        //    //if (size != 0)
+        //    //{
+        //        elementalOrbParticleSystem.Emitter = Position;
+        //        elementalOrbParticleSystem.SpawnPerFrame = 50;
+        //        // Set the SpawnParticle method
+        //        elementalOrbParticleSystem.SpawnParticle = (ref Particle particle) =>
+        //        {
+        //            Vector2 particlePosition = randomRadiusPosition(Bounds.Radius);
+        //            particle.Position = particlePosition;
+        //            Vector2 particleVelocity = (particlePosition - Position) * 2;
+        //            particle.Velocity = particleVelocity;
+        //            Vector2 particleAcceleration = 0.1f * new Vector2((float)-random.NextDouble(), (float)-random.NextDouble());
+        //            particle.Acceleration = particleAcceleration;
+        //            particle.Color = curColor;
+        //            particle.Scale = .5f;
+        //            particle.Life = (float)(random.Next(7500)/10000) + .75f;
+        //        };
 
-                // Set the UpdateParticle method
-                elementalOrbParticleSystem.UpdateParticle = (float deltaT, ref Particle particle) =>
-                {
-                    particle.Velocity += deltaT * particle.Acceleration;
-                    particle.Position += deltaT * particle.Velocity;
-                    particle.Scale -= deltaT;
-                    particle.Life -= 3 * deltaT;
-                };
-            //}
+        //        // Set the UpdateParticle method
+        //        elementalOrbParticleSystem.UpdateParticle = (float deltaT, ref Particle particle) =>
+        //        {
+        //            particle.Velocity += deltaT * particle.Acceleration;
+        //            particle.Position += deltaT * particle.Velocity;
+        //            particle.Scale -= deltaT;
+        //            particle.Life -= 3 * deltaT;
+        //        };
+        //    //}
 
-            return elementalOrbParticleSystem;
-        }
+        //    return elementalOrbParticleSystem;
+        //}
 
         Vector2 randomRadiusPosition(float radius)
         {
