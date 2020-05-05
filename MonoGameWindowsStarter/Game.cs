@@ -212,14 +212,14 @@ namespace Elemancy
             for (int i = 0; i < forestEnemies.Count; i++)
             {
                 //name of file will change, added a temp png for testing
-                forestEnemies[i].LoadContent(Content, "tempEnemy");
-                caveEnemies[i].LoadContent(Content, "tempEnemy");
-                dungeonEnemies[i].LoadContent(Content, "tempEnemy");
+                forestEnemies[i].LoadContent(Content, "tempEnemy", "tempEnemy");
+                caveEnemies[i].LoadContent(Content, "tempEnemy", "tempEnemy");
+                dungeonEnemies[i].LoadContent(Content, "tempEnemy", "tempEnemy");
             }
 
-            forestBoss.LoadContent(Content, "tempEnemy");
-            caveBoss.LoadContent(Content, "tempEnemy");
-            dungeonBoss.LoadContent(Content, "tempEnemy");
+            forestBoss.LoadContent(Content, "tempEnemy", "tempEnemy");
+            caveBoss.LoadContent(Content, "tempEnemy", "tempEnemy");
+            dungeonBoss.LoadContent(Content, "tempEnemy", "tempEnemy");
 
             //setting the first active enemy to be the first enemy in the forest level
             activeEnemy = forestEnemies[0];
