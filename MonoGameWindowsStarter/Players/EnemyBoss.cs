@@ -29,6 +29,14 @@ namespace Elemancy
 
         public Vector2 Position;
 
+        private BoundingCircle attack;
+
+        private Texture2D attackTexture;
+
+        private Vector2 attackPosition;
+
+        public bool canAttack;
+
         //true is enemy is dead, false if they are still alive
         public bool dead { get; set; }
 
@@ -55,16 +63,22 @@ namespace Elemancy
         /// </summary>
         /// <param name="cm">Content Manager</param>
         /// <param name="name">Name of the image used for enemy</param>
-        public void LoadContent(ContentManager cm, string name)
+        public void LoadContent(ContentManager cm, string name, string attackName)
         {
             enemyTexture = cm.Load<Texture2D>(name);
             Bounds.Width = enemyTexture.Width;
             Bounds.Height = enemyTexture.Height;
+            attackTexture = cm.Load<Texture2D>(attackName);
+            attack.Radius = attackTexture.Width;
         }
 
         public void Draw(SpriteBatch spriteBatch, Color color)
         {
             spriteBatch.Draw(enemyTexture, Position, Bounds, color);
+            if (!canAttack)
+            {
+                spriteBatch.Draw(attackTexture, attackPosition, attack, color);
+            }
         }
 
         public void Update(Player player, GameTime gameTime)
@@ -74,6 +88,8 @@ namespace Elemancy
                 dead = true;
             }
 
+            //TODO
+            //should enemy attack the same as a normal enemy?
             //update movement, perhaps move a little randomly?
             //sprite animation?
             if (Bounds.CollidesWith(player.Bounds))

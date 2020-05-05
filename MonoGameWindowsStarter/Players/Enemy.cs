@@ -17,7 +17,7 @@ namespace Elemancy
     {
         void Update(Player player, GameTime gametime);
 
-        void LoadContent(ContentManager cm, string name);
+        void LoadContent(ContentManager cm, string name, string attackName);
 
         bool dead { get; set; }
 

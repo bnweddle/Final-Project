@@ -33,6 +33,8 @@ namespace Elemancy
 
         private BoundingCircle attack;
 
+        private Texture2D attackTexture;
+
         private Vector2 attackPosition;
 
         public bool canAttack;
@@ -71,11 +73,13 @@ namespace Elemancy
         /// </summary>
         /// <param name="cm">Content Manager</param>
         /// <param name="name">Name of the image used for enemy</param>
-        public void LoadContent(ContentManager cm, string name)
+        public void LoadContent(ContentManager cm, string name, string attackName)
         {
             enemyTexture = cm.Load<Texture2D>(name);
             Bounds.Width = enemyTexture.Width;
             Bounds.Height = enemyTexture.Height;
+            attackTexture = cm.Load<Texture2D>(attackName);
+            attack.Radius = attackTexture.Width;
         }
 
        
@@ -83,6 +87,10 @@ namespace Elemancy
         public void Draw(SpriteBatch spriteBatch, Color color)
         {
             spriteBatch.Draw(enemyTexture, Position, Bounds, color);
+            if (!canAttack)
+            {
+                spriteBatch.Draw(attackTexture, attackPosition, attack, color);
+            }
         }
 
         //spawn the enemy with animation or just a time delay to make 
@@ -128,10 +136,16 @@ namespace Elemancy
             }
             else
             {
+                attack.X -= 2;
+                if(attack.X < player.Position.X - 50)
+                {
+                    canAttack = true;
+                }
                 //move attack and check if attack goes off screen
                 //if goes off screen, dont draw attack and 'canAttack' is set to true
             }
-
+            attackPosition.X = attack.X;
+            attackPosition.Y = attack.Y;
             //sprite animation?
             if (attack.CollidesWith(player.Bounds))
             {
