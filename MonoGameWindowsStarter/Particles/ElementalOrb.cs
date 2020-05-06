@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -32,7 +33,9 @@ namespace Elemancy
 
         // Texture for 'Elemental Power' Orb Particles
         Texture2D particle;
-        Texture2D fire;
+
+        // Sound FX for 'Elemental Power' Orb
+        SoundEffect orbSFX;
 
         // Timer for 'Elemental Power' Orbs
         TimeSpan timer = new TimeSpan(0);
@@ -74,8 +77,8 @@ namespace Elemancy
         {
             baseOrb = content.Load<Texture2D>("baseElementalOrb");
             particle = content.Load<Texture2D>("particle");
-            fire = content.Load<Texture2D>("fire");
             //elementalOrbParticleSystem = newElementalOrbParticleSystem(game.GraphicsDevice, 0, Element.None, particle);
+            orbSFX = content.Load<SoundEffect>("orbSFX");
         }
 
         public void Initialize()
@@ -89,7 +92,7 @@ namespace Elemancy
             if(State == ActiveState.ToActivate)
             {
                 // Play SFX here
-
+                orbSFX.Play(.1f, 0f, 0f);
                 State = ActiveState.Active;
                 activeTimer = new TimeSpan(0);
                 //elementalOrbParticleSystem = newElementalOrbParticleSystem(game.GraphicsDevice, 5000, curElement, particle);
@@ -147,7 +150,6 @@ namespace Elemancy
                     break;
                 case Element.Fire:
                     curColor = Color.OrangeRed;
-                   // particle = fire;
                     break;
                 case Element.Water:
                     curColor = Color.Blue;
