@@ -72,10 +72,7 @@ namespace Elemancy
         HealthBar wizardHealth, wizardGauge;
         HealthBar enemyHealth, enemyGauge;
 
-        // Basic Particle Stuff
-        //Random random = new Random();
-        //ParticleSystem particleSystem;
-        //Texture2D particleTexture;
+        Narrator narrator;
 
         private GameState gameState;
         int scroll = 3117; // first level
@@ -103,7 +100,8 @@ namespace Elemancy
 
             enemyHealth = new HealthBar(this, new Vector2(822, 0), Color.Gray);  //Top right corner
             enemyGauge = new HealthBar(this, new Vector2(822, 0), Color.Red);
-        
+
+            narrator = new Narrator(this);
         }
 
         /// <summary>
@@ -142,6 +140,7 @@ namespace Elemancy
             messages.LoadContent(Content);
             level.LoadContent(Content);
 
+            narrator.LoadContent(Content);
 
             // Player Layer
             player = new Player(this, Color.White);
