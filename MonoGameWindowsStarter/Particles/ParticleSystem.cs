@@ -122,9 +122,9 @@ namespace Elemancy
         /// <summary>
         /// Draw the active particles in the particle system
         /// </summary>
-        public void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime, Matrix transform)
         {
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, null, null, null, null, transform);
 
             // Iterate through the particles
             for (int i = 0; i < particles.Length; i++)
