@@ -34,13 +34,13 @@ namespace Elemancy.Transitions
             for (int i = 0; i < 10; i++)
             {
 
-                BasicEnemy caveEnemy = new BasicEnemy(game, GameState.Forest, new Vector2(4500 + offset, 543));
+                BasicEnemy caveEnemy = new BasicEnemy(game, GameState.Cave, new Vector2(4500 + offset, 543));
                 caveLayer.Sprites.Add(caveEnemy);
                 caveEnemies.Add(caveEnemy);
                 offset += random.Next(200, 300);
             }
 
-            caveBoss = new EnemyBoss(game, GameState.Forest, new Vector2(300, 8300));
+            caveBoss = new EnemyBoss(game, GameState.Cave, new Vector2(300, 8300));
             caveLayer.Sprites.Add(caveBoss);
             caveEnemies.Add(caveBoss);
 

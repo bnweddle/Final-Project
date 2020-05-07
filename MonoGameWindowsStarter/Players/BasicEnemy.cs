@@ -77,19 +77,19 @@ namespace Elemancy
         {
             if(level == GameState.Forest)
             {
-                enemyImage = "tempEnemy";
+                enemyImage = "evilplant"; // change for the evil bushes or whatnot
                 Health = 100;
                 Weakness = "Fire"; // Do a little extra damage if Player is using fire
             }
             else if(level == GameState.Cave)
             {
-                enemyImage = "tempEnemy";
+                enemyImage = "tempEnemy"; // Change for the cave troll
                 Health = 150;
                 Weakness = "Water"; // Do a little extra damage if player is using water 
             }
             else if(level == GameState.Dungeon)
             {
-                enemyImage = "tempEnemy";
+                enemyImage = "tempEnemy"; // change for the skeletons
                 Health = 200;
                 Weakness = "Lightning"; //Do a little extra damage if player is using lightning
             }
@@ -109,8 +109,8 @@ namespace Elemancy
             level = state;
             Position = position;
             Dead = false;
-            SetUpEnemy(state);
 
+            SetUpEnemy(level);
             flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 0.0f, 1.0f);
             fade = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
         }
