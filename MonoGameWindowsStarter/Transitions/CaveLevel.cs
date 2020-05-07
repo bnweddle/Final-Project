@@ -36,7 +36,6 @@ namespace Elemancy.Transitions
 
                 BasicEnemy caveEnemy = new BasicEnemy(game, GameState.Cave, new Vector2(4500 + offset, 543));
                 caveEnemy.LoadContent(content);
-                caveEnemy.IsActive = false;
                 caveLayer.Sprites.Add(caveEnemy);
                 caveEnemies.Add(caveEnemy);
                 offset += random.Next(200, 300);

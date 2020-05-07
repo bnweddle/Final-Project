@@ -36,7 +36,6 @@ namespace Elemancy.Transitions
 
                 BasicEnemy dungeonEnemy = new BasicEnemy(game, GameState.Dungeon, new Vector2(8500 + offset, 543));
                 dungeonEnemy.LoadContent(content);
-                dungeonEnemy.IsActive = false;
                 dungeonLayer.Sprites.Add(dungeonEnemy);
                 dungeonEnemies.Add(dungeonEnemy);
                 offset += random.Next(200, 300);

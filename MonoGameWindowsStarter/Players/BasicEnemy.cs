@@ -178,7 +178,7 @@ namespace Elemancy
                 {
                     fade.Stop();
                     multiple = 0;
-                    //RIGHT HERE -> POSTION CHANGE!!
+                    Position.Y -= 1000;
                 }
 
                 if (!fade.IsRunning && multiple != 0)

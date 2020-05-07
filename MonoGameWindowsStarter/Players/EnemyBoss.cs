@@ -175,13 +175,12 @@ namespace Elemancy
 
             if (Dead)
             {
-                //CHANGE THE POSITION TO OUTER SPACE AFTER THEY FADE!!
 
                 if (fade.TimeElapsed.TotalSeconds >= 1.75)
                 {
                     fade.Stop();
                     multiple = 0;
-                    //RIGHT HERE -> POSTION CHANGE!!
+                    Position.Y -= 1000; // launch them off screen if they die
                 }
 
                 if (!fade.IsRunning && multiple != 0)
