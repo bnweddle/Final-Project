@@ -34,6 +34,10 @@ namespace Elemancy
         /// </summary>
         public bool Hit { get; set; }
 
+        /// <summary>
+        /// To indicate only to draw the active enemy (1st enemy)
+        /// </summary>
+        public bool IsActive { get; set; }
 
         private BoundingRectangle bounds;
         /// <summary>
@@ -62,7 +66,7 @@ namespace Elemancy
 
         // texture components
         Texture2D enemyTexture;
-        string enemyImage;
+        string enemyImage = "";
 
         // Timers for fading and flickering when dying and being hit
         InterpolationTimer fade;
@@ -110,7 +114,7 @@ namespace Elemancy
             Position = position;
             Dead = false;
 
-            SetUpEnemy(level);
+            SetUpEnemy(state);
             flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 0.0f, 1.0f);
             fade = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
         }
@@ -193,7 +197,14 @@ namespace Elemancy
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            spriteBatch.Draw(enemyTexture, Position, Bounds, Color.White);
+            if(enemyTexture != null)
+            {
+                if(IsActive == true) // Only draw the active enemy
+                {
+                    spriteBatch.Draw(enemyTexture, Position, Bounds, Color.White);
+                }
+            }
+            
         }
 
         

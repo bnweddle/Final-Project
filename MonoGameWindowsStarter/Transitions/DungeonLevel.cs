@@ -35,6 +35,7 @@ namespace Elemancy.Transitions
             {
 
                 BasicEnemy dungeonEnemy = new BasicEnemy(game, GameState.Dungeon, new Vector2(8500 + offset, 543));
+                ActiveEnemy.LoadContent(content);
                 dungeonLayer.Sprites.Add(dungeonEnemy);
                 dungeonEnemies.Add(dungeonEnemy);
                 offset += random.Next(200, 300);
@@ -45,7 +46,7 @@ namespace Elemancy.Transitions
             dungeonEnemies.Add(dungeonBoss);
 
             ActiveEnemy = dungeonEnemies[0];
-            ActiveEnemy.LoadContent(content); 
+            ActiveEnemy.IsActive = true;
 
             game.Components.Add(dungeonLayer);
             dungeonLayer.DrawOrder = 2;
@@ -61,6 +62,7 @@ namespace Elemancy.Transitions
 
             if (ActiveEnemy.Dead)
             {
+                ActiveEnemy.IsActive = false;
                 if (dungeonEnemies.Count > 0)
                 {
                     dungeonEnemies.RemoveAt(0);
@@ -69,6 +71,7 @@ namespace Elemancy.Transitions
                         ActiveEnemy = dungeonBoss;
                     }
                     else ActiveEnemy = dungeonEnemies[0];
+                    ActiveEnemy.IsActive = true;
                 }
             }
         }

@@ -35,8 +35,14 @@ namespace Elemancy
         /// </summary>
         public bool Hit { get; set; }
 
+        /// <summary>
+        /// Only draw the active boss
+        /// </summary>
+        public bool IsActive { get; set; }
+
 
         private BoundingRectangle bounds;
+       
         /// <summary>
         /// The Bounds of the Enemy
         /// </summary>
@@ -193,7 +199,13 @@ namespace Elemancy
         }
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            spriteBatch.Draw(enemyTexture, Position, Bounds, Color.White);
+            if (enemyTexture != null)
+            {
+                if (IsActive == true) // Only draw the active enemy
+                {
+                    spriteBatch.Draw(enemyTexture, Position, Bounds, Color.White);
+                }
+            }
         }
     }
 }

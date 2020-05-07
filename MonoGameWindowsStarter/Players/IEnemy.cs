@@ -26,6 +26,8 @@ namespace Elemancy
 
         bool Hit { get; set; }
 
+        bool IsActive { get; set; }
+
         BoundingRectangle Bounds { get; set; }
 
     }

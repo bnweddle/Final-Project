@@ -144,12 +144,12 @@ namespace Elemancy
 
             narrator = new Narrator(this);
             forestLevel = new ForestLevel(this);
-            caveLevel = new CaveLevel(this);
-            dungeonLevel = new DungeonLevel(this);
+            //caveLevel = new CaveLevel(this);
+           // dungeonLevel = new DungeonLevel(this);
             
             forestLevel.LoadContent(Content);
-            dungeonLevel.LoadContent(Content);
-            caveLevel.LoadContent(Content);
+            //dungeonLevel.LoadContent(Content);
+           // caveLevel.LoadContent(Content);
 
 
             levelsLayer = new ParallaxLayer(this);
@@ -230,12 +230,12 @@ namespace Elemancy
                 default:
 
                     forestLevel.Update(gameTime);
-                    caveLevel.Update(gameTime);
-                    dungeonLevel.Update(gameTime);
+                    //caveLevel.Update(gameTime);
+                    //dungeonLevel.Update(gameTime);
 
-                    if (player.Bounds.CollidesWith(forestLevel.ActiveEnemy.Bounds) 
-                        || player.Bounds.CollidesWith(caveLevel.ActiveEnemy.Bounds) ||
-                        player.Bounds.CollidesWith(caveLevel.ActiveEnemy.Bounds))
+                    if (player.Bounds.CollidesWith(forestLevel.ActiveEnemy.Bounds))
+                       // || player.Bounds.CollidesWith(caveLevel.ActiveEnemy.Bounds) ||
+                       // player.Bounds.CollidesWith(caveLevel.ActiveEnemy.Bounds))
                     {
                         player.IsHit = true;
                         // Minus the Health by the damage done when player was hit/Is collided with, using -1 for now
@@ -321,8 +321,8 @@ namespace Elemancy
                     enemyGauge.Draw(componentsBatch);
 
                     forestLevel.Draw(componentsBatch);
-                    caveLevel.Draw(componentsBatch);
-                    dungeonLevel.Draw(componentsBatch);
+                    //caveLevel.Draw(componentsBatch);
+                    //dungeonLevel.Draw(componentsBatch);
 
                     break;
             }

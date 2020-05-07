@@ -38,18 +38,20 @@ namespace Elemancy.Transitions
             for (int i = 0; i < 10; i++)
             {
 
-                BasicEnemy forestEnemy = new BasicEnemy(game, GameState.Forest, new Vector2(300 + offset, 543));
+                BasicEnemy forestEnemy = new BasicEnemy(game, GameState.Forest, new Vector2(300 + offset, 500));
+                forestEnemy.LoadContent(content);
                 forestLayer.Sprites.Add(forestEnemy);
                 forestEnemies.Add(forestEnemy);
                 offset += random.Next(200, 300);
             }
 
             forestBoss = new EnemyBoss(game, GameState.Forest, new Vector2(300, 3800));
+            forestBoss.LoadContent(content);
             forestLayer.Sprites.Add(forestBoss);
             forestEnemies.Add(forestBoss);
 
             ActiveEnemy = forestEnemies[0];
-            ActiveEnemy.LoadContent(content); // Do I need this?
+            ActiveEnemy.IsActive = true;
 
             game.Components.Add(forestLayer);
             forestLayer.DrawOrder = 2;
@@ -65,6 +67,7 @@ namespace Elemancy.Transitions
 
             if (ActiveEnemy.Dead)
             {
+                ActiveEnemy.IsActive = false; // Don't draw the old one
                 if (forestEnemies.Count > 0)
                 {
                     forestEnemies.RemoveAt(0);
@@ -72,7 +75,11 @@ namespace Elemancy.Transitions
                     {
                         ActiveEnemy = forestBoss;
                     }
-                    else ActiveEnemy = forestEnemies[0];
+                    else
+                    {
+                        ActiveEnemy = forestEnemies[0];
+                    }
+                    ActiveEnemy.IsActive = true; // Draw active enemy
                 }
             }
         }
