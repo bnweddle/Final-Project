@@ -38,7 +38,7 @@ namespace Elemancy
         /// <summary>
         /// Only draw the active boss
         /// </summary>
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = false;
 
 
         private BoundingRectangle bounds;

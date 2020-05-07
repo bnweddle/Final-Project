@@ -37,7 +37,7 @@ namespace Elemancy
         /// <summary>
         /// To indicate only to draw the active enemy (1st enemy)
         /// </summary>
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = false;
 
         private BoundingRectangle bounds;
         /// <summary>
@@ -81,7 +81,7 @@ namespace Elemancy
         {
             if(level == GameState.Forest)
             {
-                enemyImage = "evilplant"; // change for the evil bushes or whatnot
+                enemyImage = "tempEnemy"; // change for the evil bushes or whatnot
                 Health = 100;
                 Weakness = "Fire"; // Do a little extra damage if Player is using fire
             }

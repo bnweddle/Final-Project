@@ -50,8 +50,8 @@ namespace Elemancy.Transitions
             forestLayer.Sprites.Add(forestBoss);
             forestEnemies.Add(forestBoss);
 
+            forestEnemies[0].IsActive = true;
             ActiveEnemy = forestEnemies[0];
-            ActiveEnemy.IsActive = true;
 
             game.Components.Add(forestLayer);
             forestLayer.DrawOrder = 2;
@@ -67,7 +67,7 @@ namespace Elemancy.Transitions
 
             if (ActiveEnemy.Dead)
             {
-                ActiveEnemy.IsActive = false; // Don't draw the old one
+                forestEnemies[0].IsActive = false; // Don't draw the old one
                 if (forestEnemies.Count > 0)
                 {
                     forestEnemies.RemoveAt(0);
@@ -79,7 +79,7 @@ namespace Elemancy.Transitions
                     {
                         ActiveEnemy = forestEnemies[0];
                     }
-                    ActiveEnemy.IsActive = true; // Draw active enemy
+                    forestEnemies[0].IsActive = true; // Draw active enemy
                 }
             }
         }
