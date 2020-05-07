@@ -9,9 +9,6 @@ using System.Collections.Generic;
 namespace Elemancy
 {
     /// <summary>
-    /// My TO DO:
-    ///  1. Need to synch damage and player heaith with Healthbar width
-    ///  
     /// Team left to do:
     ///  1. Adjust enemies and collision for player/enemy being hit and dying
     ///     > Create images for types of enemies
@@ -137,10 +134,9 @@ namespace Elemancy
             enemyGauge.LoadContent(Content);
 
             menu.LoadContent(Content);
-            messages.LoadContent(Content);
             level.LoadContent(Content);
-
             narrator.LoadContent(Content);
+
 
             // Player Layer
             player = new Player(this, Color.White);
@@ -149,18 +145,6 @@ namespace Elemancy
             playerLayer.Sprites.Add(player);
             playerLayer.DrawOrder = 2;
             Components.Add(playerLayer);
-
-            for (int i = 0; i < 10; i++)
-            {
-                //positions may be updated later when the enemies "spawn"
-                forestEnemies.Add(new BasicEnemy(30, 5, "fire", this, new Vector2(player.Position.X + 100, 500)));
-                caveEnemies.Add(new BasicEnemy(40, 10, "water", this, new Vector2(player.Position.X + 100, 500)));
-                dungeonEnemies.Add(new BasicEnemy(50, 15, "lightning", this, new Vector2(player.Position.X + 100, 500)));
-            }
-            //determine where bosses are going to be placed in the level
-            forestBoss = new EnemyBoss(60, 10, "fire", this, new Vector2(300, 700)); 
-            caveBoss = new EnemyBoss(80, 20, "water", this, new Vector2(300, 700));   
-            dungeonBoss = new EnemyBoss(100, 30, "lightning", this, new Vector2(300, 700));
 
             levelsLayer = new ParallaxLayer(this);
             // Levels Layer - Can just add to to them for other levels
@@ -205,23 +189,6 @@ namespace Elemancy
 
             //add for loop for enemies when we get texture files
             //Add Enemies to Components with DrawOrder so they appear on top of layers
-
-            //load enemy content
-            //enemies need to be added to the draw order
-            for (int i = 0; i < forestEnemies.Count; i++)
-            {
-                //name of file will change, added a temp png for testing
-                forestEnemies[i].LoadContent(Content, "tempEnemy", "tempEnemy");
-                caveEnemies[i].LoadContent(Content, "tempEnemy", "tempEnemy");
-                dungeonEnemies[i].LoadContent(Content, "tempEnemy", "tempEnemy");
-            }
-
-            forestBoss.LoadContent(Content, "tempEnemy", "tempEnemy");
-            caveBoss.LoadContent(Content, "tempEnemy", "tempEnemy");
-            dungeonBoss.LoadContent(Content, "tempEnemy", "tempEnemy");
-
-            //setting the first active enemy to be the first enemy in the forest level
-            activeEnemy = forestEnemies[0];
         }
 
         /// <summary>
@@ -256,6 +223,8 @@ namespace Elemancy
                     break;
                 default:
 
+                    // THIS NEEDS TO CHANGE IF THE Player collides with the Enemy Bounds
+                    // Might need to move to specific level class 
                     if (current.IsKeyDown(Keys.H))
                     {
                         player.IsHit = true;
@@ -272,9 +241,10 @@ namespace Elemancy
                         player.Element = menu.selectedElement;
                     }
                     
+                    //MOVE TO SPECIFIC LEVEL CLASSES
                     //enemy update
-                    activeEnemy.Update(player, gameTime);
-                    if (activeEnemy.dead)
+                    //activeEnemy.Update(player, gameTime);
+                    /*if (activeEnemy.Dead)
                     {
                         if (forestEnemies.Count > 0)
                         {
@@ -304,7 +274,7 @@ namespace Elemancy
                             else activeEnemy = caveEnemies[0];
                         }
 
-                    }
+                    } */
 
                     // Cheat way to get song to switch right now
                     if (player.Position.X >= 4120 && player.Position.X <= 8334 && !level.IsPLaying)
@@ -331,10 +301,6 @@ namespace Elemancy
 
                     break; // END OF DEFAULT
             }
-
-           
-
-            /**/
 
             // Transition screen will be shown when the boss for that level is 
             // dead, and then If they hit C for Continue will change Player position 
@@ -379,12 +345,8 @@ namespace Elemancy
                     enemyHealth.Draw(componentsBatch);
                     enemyGauge.Draw(componentsBatch);
 
-                    activeEnemy.Draw(componentsBatch, Color.White);
                     break;
             }
-            
-
-            //messages.Draw(componentsBatch, graphics);
 
             componentsBatch.End();
         }
