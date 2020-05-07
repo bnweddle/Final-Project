@@ -13,7 +13,7 @@ namespace Elemancy.Transitions
         Dungeon,
         MainMenu
     }
-    public class Level // need to make abstract 
+    public class Music // need to make abstract 
     {
         // DungeonLevel inherits level, constructor specific, list of enemies and boss, 
         Song forest, cave, dungeon, menu;

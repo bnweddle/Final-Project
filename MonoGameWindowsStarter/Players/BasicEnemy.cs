@@ -190,6 +190,7 @@ namespace Elemancy
                 }
             }
         }
+
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             spriteBatch.Draw(enemyTexture, Position, Bounds, Color.White);

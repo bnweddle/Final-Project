@@ -52,7 +52,7 @@ namespace Elemancy
         SpriteBatch componentsBatch;
         Messages messages = new Messages();
         Menu menu;
-        Level level = new Level();
+        Music music = new Music();
 
         KeyboardState oldState;
 
@@ -77,7 +77,7 @@ namespace Elemancy
             set 
             {
                 gameState = value;
-                gameState = level.SetGameState(player, gameState != GameState.MainMenu);              
+                gameState = music.SetGameState(player, gameState != GameState.MainMenu);              
             } 
         }
 
@@ -131,7 +131,7 @@ namespace Elemancy
             enemyGauge.LoadContent(Content);
 
             menu.LoadContent(Content);
-            level.LoadContent(Content);
+            music.LoadContent(Content);
             narrator.LoadContent(Content);
 
             // Player Layer
@@ -252,18 +252,18 @@ namespace Elemancy
                     }
 
                     // Cheat way to get song to switch right now
-                    if (player.Position.X >= 4120 && player.Position.X <= 8334 && !level.IsPLaying)
+                    if (player.Position.X >= 4120 && player.Position.X <= 8334 && !music.IsPLaying)
                     {
-                        gameState = level.SetGameState(player, menu.Start);
-                        level.IsPLaying = true;
+                        gameState = music.SetGameState(player, menu.Start);
+                        music.IsPLaying = true;
                     }
-                    if (player.Position.X >= 8334 && level.IsPLaying)
+                    if (player.Position.X >= 8334 && music.IsPLaying)
                     {
-                        level.IsPLaying = false;
-                        gameState = level.SetGameState(player, menu.Start);
+                        music.IsPLaying = false;
+                        gameState = music.SetGameState(player, menu.Start);
                     }
 
-                    scroll = level.GetScrollStop(gameState);
+                    scroll = music.GetScrollStop(gameState);
 
                     if (player.Position.X >= scroll)
                     {
