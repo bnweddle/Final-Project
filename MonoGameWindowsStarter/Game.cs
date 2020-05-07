@@ -137,6 +137,9 @@ namespace Elemancy
             level.LoadContent(Content);
             narrator.LoadContent(Content);
 
+            forestLevel.LoadContent(Content);
+            dungeonLevel.LoadContent(Content);
+            caveLevel.LoadContent(Content);
 
             // Player Layer
             player = new Player(this, Color.White);
@@ -222,6 +225,10 @@ namespace Elemancy
                     menu.Update(gameTime);
                     break;
                 default:
+
+                    forestLevel.Update(gameTime);
+                    caveLevel.Update(gameTime);
+                    dungeonLevel.Update(gameTime);
 
                     if (player.Bounds.CollidesWith(forestLevel.ActiveEnemy.Bounds) 
                         || player.Bounds.CollidesWith(caveLevel.ActiveEnemy.Bounds) ||
@@ -309,6 +316,10 @@ namespace Elemancy
 
                     enemyHealth.Draw(componentsBatch);
                     enemyGauge.Draw(componentsBatch);
+
+                    forestLevel.Draw(componentsBatch);
+                    caveLevel.Draw(componentsBatch);
+                    dungeonLevel.Draw(componentsBatch);
 
                     break;
             }

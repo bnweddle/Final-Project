@@ -49,6 +49,7 @@ namespace Elemancy.Transitions
             forestEnemies.Add(forestBoss);
 
             ActiveEnemy = forestEnemies[0];
+            ActiveEnemy.LoadContent(content); // Do I need this?
 
             game.Components.Add(forestLayer);
             forestLayer.DrawOrder = 2;

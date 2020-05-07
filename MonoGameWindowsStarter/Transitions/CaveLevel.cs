@@ -45,6 +45,7 @@ namespace Elemancy.Transitions
             caveEnemies.Add(caveBoss);
 
             ActiveEnemy = caveEnemies[0];
+            ActiveEnemy.LoadContent(content); // Do I need this?
 
             game.Components.Add(caveLayer);
             caveLayer.DrawOrder = 2;

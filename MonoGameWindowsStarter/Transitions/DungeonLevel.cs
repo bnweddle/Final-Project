@@ -45,6 +45,7 @@ namespace Elemancy.Transitions
             dungeonEnemies.Add(dungeonBoss);
 
             ActiveEnemy = dungeonEnemies[0];
+            ActiveEnemy.LoadContent(content); // Do I need this?
 
             game.Components.Add(dungeonLayer);
             dungeonLayer.DrawOrder = 2;
