@@ -41,7 +41,7 @@ namespace Elemancy
             Commentary.Add("Seems pretty basic", content.Load<SoundEffect>("Seems pretty basic"));
 
             DeathQuips.Add(content.Load<SoundEffect>("Are you sure"));
-            DeathQuips.Add(content.Load<SoundEffect>("C'mon now"));
+            //DeathQuips.Add(content.Load<SoundEffect>("C'mon now"));
             DeathQuips.Add(content.Load<SoundEffect>("Take the controller back"));
             DeathQuips.Add(content.Load<SoundEffect>("That was pretty stupid of you"));
             DeathQuips.Add(content.Load<SoundEffect>("That was the most pro gamer move"));

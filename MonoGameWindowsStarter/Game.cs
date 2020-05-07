@@ -96,9 +96,6 @@ namespace Elemancy
             enemyGauge = new HealthBar(this, new Vector2(822, 0), Color.Red);
 
             narrator = new Narrator(this);
-            forestLevel = new ForestLevel(this);
-            caveLevel = new CaveLevel(this);
-            dungeonLevel = new DungeonLevel(this);
         }
 
         /// <summary>
@@ -137,10 +134,6 @@ namespace Elemancy
             level.LoadContent(Content);
             narrator.LoadContent(Content);
 
-            forestLevel.LoadContent(Content);
-            dungeonLevel.LoadContent(Content);
-            caveLevel.LoadContent(Content);
-
             // Player Layer
             player = new Player(this, Color.White);
             player.LoadContent(Content);
@@ -148,6 +141,16 @@ namespace Elemancy
             playerLayer.Sprites.Add(player);
             playerLayer.DrawOrder = 2;
             Components.Add(playerLayer);
+
+            narrator = new Narrator(this);
+            forestLevel = new ForestLevel(this);
+            caveLevel = new CaveLevel(this);
+            dungeonLevel = new DungeonLevel(this);
+            
+            forestLevel.LoadContent(Content);
+            dungeonLevel.LoadContent(Content);
+            caveLevel.LoadContent(Content);
+
 
             levelsLayer = new ParallaxLayer(this);
             // Levels Layer - Can just add to to them for other levels
