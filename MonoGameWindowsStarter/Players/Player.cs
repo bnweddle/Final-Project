@@ -102,6 +102,7 @@ namespace Elemancy
         // The player texture
         Texture2D player;
 
+
         /// <summary>
         /// The Player's position
         /// </summary>
@@ -137,7 +138,7 @@ namespace Elemancy
         {
             this.game = game;
             this.Color = color;
-            elementalOrb = new ElementalOrb(game);
+            elementalOrb = new ElementalOrb(game, this);
         }
 
         public void Initialize()
