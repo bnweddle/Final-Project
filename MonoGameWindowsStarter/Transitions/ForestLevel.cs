@@ -15,15 +15,18 @@ namespace Elemancy.Transitions
     {
         private Game game;
 
-        private Messages message;
+        private Messages message = new Messages();
 
         private List<IEnemy> forestEnemies = new List<IEnemy>();
-
         private EnemyBoss forestBoss;
-
         private IEnemy activeEnemy;
 
         private Random random = new Random();
+
+        public ForestLevel(Game game)
+        {
+            this.game = game;
+        }
 
         public void LoadContent(ContentManager content)
         {
@@ -41,8 +44,16 @@ namespace Elemancy.Transitions
                 offset += random.Next(200, 300);
             }
 
+            forestBoss = new EnemyBoss(game, GameState.Forest, new Vector2(300, 3800));
+            forestLayer.Sprites.Add(forestBoss);
+            forestEnemies.Add(forestBoss);
+
+            activeEnemy = forestEnemies[0];
+
             game.Components.Add(forestLayer);
             forestLayer.DrawOrder = 2;
+
+            forestLayer.ScrollController = new TrackingPlayer(game.player, 1.0f);
         }
 
         public void Update(GameTime gameTime)

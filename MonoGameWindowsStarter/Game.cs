@@ -27,16 +27,13 @@ namespace Elemancy
     /// </summary>
     public class Game : Microsoft.Xna.Framework.Game
     {
+
         /// <summary>
-        /// Enemies
+        /// The levels with the enemy logic
         /// </summary>
-        List<IEnemy> forestEnemies = new List<IEnemy>();
-        List<IEnemy> caveEnemies = new List<IEnemy>();
-        List<IEnemy> dungeonEnemies = new List<IEnemy>();
-        EnemyBoss forestBoss;
-        EnemyBoss caveBoss;
-        EnemyBoss dungeonBoss;
-        IEnemy activeEnemy;
+        ForestLevel forestLevel;
+        CaveLevel caveLevel;
+        DungeonLevel dungeonLevel;
 
         public Player player;
 
@@ -99,6 +96,9 @@ namespace Elemancy
             enemyGauge = new HealthBar(this, new Vector2(822, 0), Color.Red);
 
             narrator = new Narrator(this);
+            forestLevel = new ForestLevel(this);
+            caveLevel = new CaveLevel(this);
+            dungeonLevel = new DungeonLevel(this);
         }
 
         /// <summary>

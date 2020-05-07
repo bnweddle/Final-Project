@@ -223,9 +223,10 @@ namespace Elemancy
 
             if(IsHit)
             {
+                // When they hit a enemy, should bounce away from it
+                // So they don't continue being hit
+
                 /* jumpTimer += gameTime.ElapsedGameTime;
-                 // When they hit a enemy, should bounce away from it
-                 // So they don't continue being hit
                  Position.Y -= (350 / (float)jumpTimer.TotalMilliseconds);
                  if (jumpTimer.TotalMilliseconds >= JUMP_TIME)
                      verticalState = VerticalMovementState.Falling; */
@@ -271,9 +272,9 @@ namespace Elemancy
 
             if (IsHit)
             {
-               // for hitting the enemy
+               // for when the player collides with the enenmy
                /* Position.X -= 100 * delta;
-                direction = Direction.West; */
+               direction = Direction.West; */
             }
             else if (keyboard.IsKeyDown(Keys.Left))
             {
