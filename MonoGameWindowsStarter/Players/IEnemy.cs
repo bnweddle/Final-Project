@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Elemancy.Parallax;
+using Elemancy.Transitions;
 
 namespace Elemancy
 {
@@ -17,11 +18,13 @@ namespace Elemancy
     {
         void Update(Player player, GameTime gametime);
 
-        void LoadContent(ContentManager cm, string name, string attackName);
+        void LoadContent(ContentManager content);
 
-        bool dead { get; set; }
+        void SetUpEnemy(GameState level);
 
-        void Draw(SpriteBatch spriteBatch, Color color);
+        bool Dead { get; set; }
+
+        bool Hit { get; set; }
 
     }
 }

@@ -7,65 +7,97 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Elemancy.Transitions;
+using Elemancy.Parallax;
 
 namespace Elemancy
 {
-    public class BasicEnemy : IEnemy
+    public class BasicEnemy : IEnemy, ISprite
     {
-        //the amount of health the enemy has
-        public int health { get; }
+        /// <summary>
+        /// The Health the Enemy starts with, decremented as they are hit
+        /// Hit -> the player's orb collides with them.
+        /// </summary>
+        public int Health { get; set; }
 
-        //the amount of damage the enemy does
-        public int damage { get; }
+        /// <summary>
+        /// the Enemy's weakness: how they lose health more/less
+        /// </summary>
+        public string Weakness { get; protected set; }
 
-        //currently just an idea. The type of damage the enemy is weak to
-        public string weakness { get; }
+        /// <summary>
+        /// true is enemy is dead, false if they are still alive
+        /// </summary>
+        public bool Dead { get; set; }
 
+        /// <summary>
+        /// If the orb collides with the Enemy
+        /// </summary>
+        public bool Hit { get; set; }
+
+        /// <summary>
+        /// The Bounds of the Enemy
+        /// </summary>
         public BoundingRectangle Bounds;
 
-        private Game game;
-
-        private Texture2D enemyTexture;
-
+        /// <summary>
+        /// The Position of the Enemy
+        /// </summary>
         public Vector2 Position;
 
-        private bool wasSpawned;
+        // game components
+        Game game;
+        GameState level;
 
-        private BoundingCircle attack;
+        // texture components
+        Texture2D enemyTexture;
+        string enemyImage;
 
-        private Texture2D attackTexture;
+        // Timers for fading and flickering when dying and being hit
+        InterpolationTimer fade;
+        InterpolationTimer flicker;
+        float multiple = 1;
 
-        private Vector2 attackPosition;
-
-        public bool canAttack;
-
-        public float direction;
-
-        //sets up the initial direction for the attack
-        public Vector2 attackDirection;
-
-
-        //true is enemy is dead, false if they are still alive
-        public bool dead { get; set; }
+        /// <summary>
+        /// Set up the Enemy's health and image according to their Level
+        /// NEED to input enemy image HERE!
+        /// </summary>
+        public void SetUpEnemy(GameState level)
+        {
+            if(level == GameState.Forest)
+            {
+                enemyImage = "tempEnemy";
+                Health = 100;
+                Weakness = "Fire"; // Do a little extra damage if Player is using fire
+            }
+            else if(level == GameState.Cave)
+            {
+                enemyImage = "tempEnemy";
+                Health = 150;
+                Weakness = "Water"; // Do a little extra damage if player is using water 
+            }
+            else if(level == GameState.Dungeon)
+            {
+                enemyImage = "tempEnemy";
+                Health = 200;
+                Weakness = "Lightning"; //Do a little extra damage if player is using lightning
+            }
+        }
 
         /// <summary>
         /// Sets up a new basic enemy
         /// </summary>
-        /// <param name="h">health</param>
-        /// <param name="d">damage</param>
-        /// <param name="w">weakness</param>
+        /// <param name="health">health</param>
+        /// <param name="damage">damage</param>
+        /// <param name="weak">weakness</param>
         /// <param name="g">game</param>
-        /// <param name="p">position</param>
-        public BasicEnemy(int h, int d, string w, Game g, Vector2 p)
+        /// <param name="position">position</param>
+        public BasicEnemy(Game g, GameState state, Vector2 position)
         {
-            health = h;
-            damage = d;
-            weakness = w;
             game = g;
-            Position = p;
-            dead = false;
-            canAttack = true;
-            attackPosition = p;
+            level = state;
+            Position = position;
+            Dead = false;
+            SetUpEnemy(state);
         }
 
         /// <summary>
@@ -73,32 +105,12 @@ namespace Elemancy
         /// </summary>
         /// <param name="cm">Content Manager</param>
         /// <param name="name">Name of the image used for enemy</param>
-        public void LoadContent(ContentManager cm, string name, string attackName)
+        public void LoadContent(ContentManager content)
         {
-            enemyTexture = cm.Load<Texture2D>(name);
+            enemyTexture = content.Load<Texture2D>(enemyImage);
             Bounds.Width = enemyTexture.Width;
             Bounds.Height = enemyTexture.Height;
-            attackTexture = cm.Load<Texture2D>(attackName);
-            attack.Radius = attackTexture.Width;
-        }
-
-       
-
-        public void Draw(SpriteBatch spriteBatch, Color color)
-        {
-            spriteBatch.Draw(enemyTexture, Position, Bounds, color);
-            if (!canAttack)
-            {
-                spriteBatch.Draw(attackTexture, attackPosition, attack, color);
-            }
-        }
-
-        //spawn the enemy with animation or just a time delay to make 
-        //transition between enemies a little more seemless
-        private void Spawn()
-        {
-            wasSpawned = true;
-        }
+        }  
 
         /// <summary>
         /// Takes in player to check bounds and update players health. Maybe also update if 
@@ -107,59 +119,64 @@ namespace Elemancy
         /// <param name="player"></param>
         public void Update(Player player, GameTime gameTime)
         {
-            if (!wasSpawned)
+            // SET HIT TO TRUE IF player orb collides with enemy.Bounds
+            // Decrement health accordingly accounting for Weakness
+
+            if (Health <= 0)
             {
-                Spawn();
+                Dead = true;
             }
 
-            if(health <= 0)
+            if (Hit)
             {
-                dead = true;
-            }
 
-            //keeping away from player but not too far away from the player
-            if(Position.X + 100 < player.Position.X)
-            {
-                direction = 1;
-            }
-            else if(Position.X + 350 > player.Position.X)
-            {
-                direction = -1;
-            }
-            Position.X += direction;
-            //updates position to throw attack
-            if (canAttack)
-            {
-                //attack is active so it should be drawn
-                //set a direction for attack to go
-                canAttack = false;
-            }
-            else
-            {
-                attack.X -= 2;
-                if(attack.X < player.Position.X - 50)
+                if (flicker.TimeElapsed.TotalSeconds >= 0.20)
                 {
-                    canAttack = true;
+                    flicker.Stop();
+                    flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 0.0f, 1.0f);
+                    Hit = false;
                 }
-                //move attack and check if attack goes off screen
-                //if goes off screen, dont draw attack and 'canAttack' is set to true
-            }
-            attackPosition.X = attack.X;
-            attackPosition.Y = attack.Y;
-            //sprite animation?
-            if (attack.CollidesWith(player.Bounds))
-            {
-                //player takes damage, either affecting the hit bar or the actual player
-                canAttack = true;
-                if(!dead)
+                else
                 {
-                    // Commenting out for testing fading purposes
-                    //player.UpdateHealth(damage);
+                    if (!flicker.IsRunning)
+                        flicker.Start();
+
+                    if (flicker.IsRunning)
+                        flicker.Update(gameTime.ElapsedGameTime);
+
+                    multiple = flicker.CurrentValue;
                 }
             }
 
-            //check if enemy was hit
+            if (Dead)
+            {
+                //CHANGE THE POSITION TO OUTER SPACE AFTER THEY FADE!!
+
+                if (fade.TimeElapsed.TotalSeconds >= 1.75)
+                {
+                    fade.Stop();
+                    multiple = 0;
+                    //RIGHT HERE -> POSTION CHANGE!!
+                }
+
+                if (!fade.IsRunning && multiple != 0)
+                {
+                    fade.Start();
+                }
+                else if (multiple != 0)
+                {
+                    if (fade.IsRunning)
+                        fade.Update(gameTime.ElapsedGameTime);
+
+                    multiple = fade.CurrentValue;
+                }
+            }
+        }
+        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        {
+            spriteBatch.Draw(enemyTexture, Position, Bounds, Color.White);
         }
 
+        
     }
 }

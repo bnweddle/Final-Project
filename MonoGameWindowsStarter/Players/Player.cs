@@ -223,7 +223,7 @@ namespace Elemancy
             if(IsHit)
             {
                 /* jumpTimer += gameTime.ElapsedGameTime;
-                 // When they hit a trap, should bounce away from it
+                 // When they hit a enemy, should bounce away from it
                  // So they don't continue being hit
                  Position.Y -= (350 / (float)jumpTimer.TotalMilliseconds);
                  if (jumpTimer.TotalMilliseconds >= JUMP_TIME)
@@ -270,7 +270,7 @@ namespace Elemancy
 
             if (IsHit)
             {
-               // for hitting traps
+               // for hitting the enemy
                /* Position.X -= 100 * delta;
                 direction = Direction.West; */
             }

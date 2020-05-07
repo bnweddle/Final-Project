@@ -45,7 +45,7 @@
     <Compile Include="BoundingRectangle.cs" />
     <Compile Include="Collisions.cs" />
     <Compile Include="Particles\ElementalOrb.cs" />
-    <Compile Include="Players\Enemy.cs" />
+    <Compile Include="Players\IEnemy.cs" />
     <Compile Include="Players\EnemyBoss.cs" />
     <Compile Include="Players\BasicEnemy.cs" />
     <Compile Include="Game.cs" />

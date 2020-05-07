@@ -12,11 +12,7 @@ using System.Threading.Tasks;
 namespace Elemancy.Transitions
 {
     public class ForestLevel
-    { 
-        // Have a bool ForestStart
-        // if the Start is true Draw everything for level
-        // set the Start false if player deads or boss is dead
-
+    {
         private Game game;
 
         private Messages message;
@@ -27,21 +23,40 @@ namespace Elemancy.Transitions
 
         private IEnemy activeEnemy;
 
+        private Random random = new Random();
+
         public void LoadContent(ContentManager content)
         {
-            // Load Enemy Components
+            message.LoadContent(content);
+
+            var forestLayer = new ParallaxLayer(game);
+
+            float offset = 200;
+            for (int i = 0; i < 10; i++)
+            {
+
+                BasicEnemy forestEnemy = new BasicEnemy(game, GameState.Forest, new Vector2(300 + offset, 543));
+                forestLayer.Sprites.Add(forestEnemy);
+                forestEnemies.Add(forestEnemy);
+                offset += random.Next(200, 300);
+            }
+
+            game.Components.Add(forestLayer);
+            forestLayer.DrawOrder = 2;
         }
 
         public void Update(GameTime gameTime)
         {
-            // Update Enemy Components
             message.Update(gameTime);
         }
 
+        /// <summary>
+        /// Will need to pass in componentsBatch, I think
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch)
         {
-
-            if(forestBoss.dead)
+            if(forestBoss.Dead)
             {
                 message.SetMessage(1, out game.player.Position.X);
                 if(!message.Continue)
