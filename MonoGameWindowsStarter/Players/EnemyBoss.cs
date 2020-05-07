@@ -35,10 +35,22 @@ namespace Elemancy
         /// </summary>
         public bool Hit { get; set; }
 
+
+        private BoundingRectangle bounds;
         /// <summary>
         /// The Bounds of the Enemy
         /// </summary>
-        public BoundingRectangle Bounds;
+        public BoundingRectangle Bounds
+        {
+            get
+            {
+                return bounds;
+            }
+            set
+            {
+                bounds = value;
+            }
+        }
 
         /// <summary>
         /// The Position of the Enemy
@@ -99,6 +111,9 @@ namespace Elemancy
             Position = position;
             Dead = false;
             SetUpEnemy(state);
+
+            flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 0.0f, 1.0f);
+            fade = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
         }
 
         /// <summary>
@@ -109,8 +124,8 @@ namespace Elemancy
         public void LoadContent(ContentManager content)
         {
             enemyTexture = content.Load<Texture2D>(enemyImage);
-            Bounds.Width = enemyTexture.Width;
-            Bounds.Height = enemyTexture.Height;
+            bounds.Width = enemyTexture.Width;
+            bounds.Height = enemyTexture.Height;
         }
 
         /// <summary>
@@ -120,6 +135,8 @@ namespace Elemancy
         /// <param name="player"></param>
         public void Update(Player player, GameTime gameTime)
         {
+            bounds.X = Position.X;
+            bounds.Y = Position.Y;
             // SET HIT TO TRUE IF player orb collides with enemy.Bounds
             // Decrement health accordingly accounting for Weakness
 

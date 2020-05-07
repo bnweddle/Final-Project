@@ -19,7 +19,7 @@ namespace Elemancy.Transitions
 
         private List<IEnemy> forestEnemies = new List<IEnemy>();
         private EnemyBoss forestBoss;
-        private IEnemy activeEnemy;
+        public IEnemy ActiveEnemy;
 
         private Random random = new Random();
 
@@ -48,7 +48,7 @@ namespace Elemancy.Transitions
             forestLayer.Sprites.Add(forestBoss);
             forestEnemies.Add(forestBoss);
 
-            activeEnemy = forestEnemies[0];
+            ActiveEnemy = forestEnemies[0];
 
             game.Components.Add(forestLayer);
             forestLayer.DrawOrder = 2;
@@ -59,6 +59,21 @@ namespace Elemancy.Transitions
         public void Update(GameTime gameTime)
         {
             message.Update(gameTime);
+
+            ActiveEnemy.Update(game.player, gameTime);
+
+            if (ActiveEnemy.Dead)
+            {
+                if (forestEnemies.Count > 0)
+                {
+                    forestEnemies.RemoveAt(0);
+                    if (forestEnemies.Count == 0)
+                    {
+                        ActiveEnemy = forestBoss;
+                    }
+                    else ActiveEnemy = forestEnemies[0];
+                }
+            }
         }
 
         /// <summary>

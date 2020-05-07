@@ -223,9 +223,9 @@ namespace Elemancy
                     break;
                 default:
 
-                    // THIS NEEDS TO CHANGE IF THE Player collides with the Enemy Bounds
-                    // Might need to move to specific level class 
-                    if (current.IsKeyDown(Keys.H))
+                    if (player.Bounds.CollidesWith(forestLevel.ActiveEnemy.Bounds) 
+                        || player.Bounds.CollidesWith(caveLevel.ActiveEnemy.Bounds) ||
+                        player.Bounds.CollidesWith(caveLevel.ActiveEnemy.Bounds))
                     {
                         player.IsHit = true;
                         // Minus the Health by the damage done when player was hit/Is collided with, using -1 for now
@@ -240,41 +240,6 @@ namespace Elemancy
                     {
                         player.Element = menu.selectedElement;
                     }
-                    
-                    //MOVE TO SPECIFIC LEVEL CLASSES
-                    //enemy update
-                    //activeEnemy.Update(player, gameTime);
-                    /*if (activeEnemy.Dead)
-                    {
-                        if (forestEnemies.Count > 0)
-                        {
-                            forestEnemies.RemoveAt(0);
-                            if (forestEnemies.Count == 0)
-                            {
-                                activeEnemy = forestBoss;
-                            }
-                            else activeEnemy = forestEnemies[0];
-                        }
-                        else if (caveEnemies.Count > 0)
-                        {
-                            caveEnemies.RemoveAt(0);
-                            if (caveEnemies.Count == 0)
-                            {
-                                activeEnemy = caveBoss;
-                            }
-                            else activeEnemy = caveEnemies[0];
-                        }
-                        else if (dungeonEnemies.Count > 0)
-                        {
-                            dungeonEnemies.RemoveAt(0);
-                            if (dungeonEnemies.Count == 0)
-                            {
-                                activeEnemy = dungeonBoss;
-                            }
-                            else activeEnemy = caveEnemies[0];
-                        }
-
-                    } */
 
                     // Cheat way to get song to switch right now
                     if (player.Position.X >= 4120 && player.Position.X <= 8334 && !level.IsPLaying)

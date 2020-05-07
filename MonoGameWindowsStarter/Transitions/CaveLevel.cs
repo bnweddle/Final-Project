@@ -15,7 +15,7 @@ namespace Elemancy.Transitions
 
         private List<IEnemy> caveEnemies = new List<IEnemy>();
         private EnemyBoss caveBoss;
-        private IEnemy activeEnemy;
+        public IEnemy ActiveEnemy;
 
         private Random random = new Random();
 
@@ -44,7 +44,7 @@ namespace Elemancy.Transitions
             caveLayer.Sprites.Add(caveBoss);
             caveEnemies.Add(caveBoss);
 
-            activeEnemy = caveEnemies[0];
+            ActiveEnemy = caveEnemies[0];
 
             game.Components.Add(caveLayer);
             caveLayer.DrawOrder = 2;
@@ -55,6 +55,21 @@ namespace Elemancy.Transitions
         public void Update(GameTime gameTime)
         {
             message.Update(gameTime);
+
+            ActiveEnemy.Update(game.player, gameTime);
+
+            if (ActiveEnemy.Dead)
+            {
+                if (caveEnemies.Count > 0)
+                {
+                    caveEnemies.RemoveAt(0);
+                    if (caveEnemies.Count == 0)
+                    {
+                        ActiveEnemy = caveBoss;
+                    }
+                    else ActiveEnemy = caveEnemies[0];
+                }
+            }
         }
 
         /// <summary>

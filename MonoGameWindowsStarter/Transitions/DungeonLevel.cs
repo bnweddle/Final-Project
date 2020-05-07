@@ -15,7 +15,7 @@ namespace Elemancy.Transitions
 
         private List<IEnemy> dungeonEnemies = new List<IEnemy>();
         private EnemyBoss dungeonBoss;
-        private IEnemy activeEnemy;
+        private IEnemy ActiveEnemy;
 
         private Random random = new Random();
 
@@ -44,7 +44,7 @@ namespace Elemancy.Transitions
             dungeonLayer.Sprites.Add(dungeonBoss);
             dungeonEnemies.Add(dungeonBoss);
 
-            activeEnemy = dungeonEnemies[0];
+            ActiveEnemy = dungeonEnemies[0];
 
             game.Components.Add(dungeonLayer);
             dungeonLayer.DrawOrder = 2;
@@ -55,6 +55,21 @@ namespace Elemancy.Transitions
         public void Update(GameTime gameTime)
         {
             message.Update(gameTime);
+
+            ActiveEnemy.Update(game.player, gameTime);
+
+            if (ActiveEnemy.Dead)
+            {
+                if (dungeonEnemies.Count > 0)
+                {
+                    dungeonEnemies.RemoveAt(0);
+                    if (dungeonEnemies.Count == 0)
+                    {
+                        ActiveEnemy = dungeonBoss;
+                    }
+                    else ActiveEnemy = dungeonEnemies[0];
+                }
+            }
         }
 
         /// <summary>
