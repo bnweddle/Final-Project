@@ -13,6 +13,7 @@ namespace Elemancy
 {
     public class BasicEnemy : IEnemy, ISprite
     {
+
         /// <summary>
         /// The Health the Enemy starts with, decremented as they are hit
         /// Hit -> the player's orb collides with them.
@@ -73,6 +74,9 @@ namespace Elemancy
         InterpolationTimer flicker;
         float multiple = 1;
 
+        // the enemy's health bar
+        HealthBar enemyHealth, enemyGauge;
+
         /// <summary>
         /// Set up the Enemy's health and image according to their Level
         /// NEED to input enemy image HERE!
@@ -82,19 +86,19 @@ namespace Elemancy
             if(level == GameState.Forest)
             {
                 enemyImage = "tempEnemy"; // change for the evil bushes or whatnot
-                Health = 100;
+                Health = 50;
                 Weakness = "Fire"; // Do a little extra damage if Player is using fire
             }
             else if(level == GameState.Cave)
             {
                 enemyImage = "tempEnemy"; // Change for the cave troll
-                Health = 150;
+                Health = 100;
                 Weakness = "Water"; // Do a little extra damage if player is using water 
             }
             else if(level == GameState.Dungeon)
             {
                 enemyImage = "tempEnemy"; // change for the skeletons
-                Health = 200;
+                Health = 150;
                 Weakness = "Lightning"; //Do a little extra damage if player is using lightning
             }
         }
@@ -114,9 +118,15 @@ namespace Elemancy
             Position = position;
             Dead = false;
 
-            SetUpEnemy(state);
+
             flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 0.0f, 1.0f);
             fade = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
+
+            enemyHealth = new HealthBar(game, new Vector2(822, 0), Color.Gray);  //Top right corner
+            enemyGauge = new HealthBar(game, new Vector2(822, 0), Color.Red);
+
+
+            SetUpEnemy(state);
         }
 
         /// <summary>
@@ -129,6 +139,9 @@ namespace Elemancy
             enemyTexture = content.Load<Texture2D>(enemyImage);
             bounds.Width = enemyTexture.Width;
             bounds.Height = enemyTexture.Height;
+
+            enemyHealth.LoadContent(content);
+            enemyGauge.LoadContent(content);
         }  
 
         /// <summary>
@@ -143,7 +156,14 @@ namespace Elemancy
 
             // SET HIT TO TRUE IF player orb collides with enemy.Bounds
             // Decrement health accordingly accounting for Weakness
-
+            
+            if(Bounds.CollidesWith(player.elementalOrb.Bounds))
+            {
+                Hit = true;
+                enemyGauge.Update(gameTime, Health, 5);
+                Health -= 5;
+            }
+            
             if (Health <= 0)
             {
                 Dead = true;
@@ -179,6 +199,7 @@ namespace Elemancy
                     fade.Stop();
                     multiple = 0;
                     Position.Y -= 1000;
+                    enemyHealth.RestartHealth(); // for the next enemy;
                 }
 
                 if (!fade.IsRunning && multiple != 0)
@@ -201,9 +222,16 @@ namespace Elemancy
             {
                 if(IsActive == true) // Only draw the active enemy
                 {
-                    spriteBatch.Draw(enemyTexture, Position, Bounds, Color.White);
+                    spriteBatch.Draw(enemyTexture, Position, Bounds, Color.White * multiple);
                 }
             }
+
+            game.componentsBatch.Begin();
+
+            enemyHealth.Draw(game.componentsBatch);
+            enemyGauge.Draw(game.componentsBatch);
+
+            game.componentsBatch.End();
             
         }
 

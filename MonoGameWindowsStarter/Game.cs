@@ -10,16 +10,21 @@ namespace Elemancy
 {
     /// <summary>
     /// Team left to do:
-    ///  1. Adjust enemies and collision for player/enemy being hit and dying
-    ///     > Create images for types of enemies
-    ///  2. Include narrator when wanting to play it
-    ///     > figure out when tot play and stop each wav
-    ///  3. Adjust particles to follow ball
-    ///  4. Adjust the player's health and enemies health to fit with health bar
-    ///  5. Code for when Boss of specific level dies to show Transition
-    ///  6. Include created drawn players
-    ///  7. Uncomment and include scroll stop 
-    ///  
+    ///  1. Adjust enemies and collision for player/enemy    -> PARTIAL
+    ///     being hit and dying
+    ///     > Create images for types of enemies             -> STARTED
+    ///  2. Include narrator when wanting to play it         -> STARTED
+    ///     > figure out when to play the wav                 
+    ///  3. Adjust particles to follow ball                  -> COMPLETE!
+    ///  4. Adjust the player's health and enemies health 
+    ///     to fit with health bar
+    ///  5. Code for when Boss of specific level dies to     -> PARTIAL
+    ///     show Transition
+    ///  6. Include created drawn players                    -> STARTED
+    ///  7. Test to make sure transitions happen smoothly    -> UNTESTED
+    ///  8. Implement restarting the game if the user goes   -> UNTESTED
+    ///     back to the Menu
+    ///  9. Restrict Player's movement to the level, maybe?  -> POTENTIAL?
     /// </summary>
 
     /// <summary>
@@ -49,8 +54,7 @@ namespace Elemancy
         /// Is for Game Components that don't move
         /// HealthBar, Messages, Transitions Screens, etc.
         /// </summary>
-        SpriteBatch componentsBatch;
-        Messages messages = new Messages();
+        public SpriteBatch componentsBatch;
         Menu menu;
         Music music = new Music();
 
@@ -64,7 +68,7 @@ namespace Elemancy
         /// When another enemy appears -> appear and start at full health
         /// </summary>
         HealthBar wizardHealth, wizardGauge;
-        HealthBar enemyHealth, enemyGauge;
+
 
         Narrator narrator;
 
@@ -91,9 +95,6 @@ namespace Elemancy
             // Creating and Positioning Healthbars
             wizardHealth = new HealthBar(this, new Vector2(20, 0), Color.Gray);  //Top left corner
             wizardGauge = new HealthBar(this, new Vector2(20, 0), Color.Red);  
-
-            enemyHealth = new HealthBar(this, new Vector2(822, 0), Color.Gray);  //Top right corner
-            enemyGauge = new HealthBar(this, new Vector2(822, 0), Color.Red);
 
             narrator = new Narrator(this);
         }
@@ -126,9 +127,6 @@ namespace Elemancy
 
             wizardHealth.LoadContent(Content);
             wizardGauge.LoadContent(Content);
-
-            enemyHealth.LoadContent(Content);
-            enemyGauge.LoadContent(Content);
 
             menu.LoadContent(Content);
             music.LoadContent(Content);
@@ -238,10 +236,10 @@ namespace Elemancy
                         player.Bounds.CollidesWith(caveLevel.ActiveEnemy.Bounds))
                     {
                         player.IsHit = true;
-                        // Minus the Health by the damage done when player was hit/Is collided with, using -1 for now
-                        // Need to synch damage and player heaith with Healthbar width
-                        wizardGauge.Bounds.Width -= 1;
-                        player.UpdateHealth(1);
+
+                        // NEED TO CHANGE:
+                        wizardGauge.Update(gameTime, 200, 5);
+                        player.UpdateHealth(5);
                     }
 
                     player.Update(gameTime);
@@ -308,8 +306,8 @@ namespace Elemancy
                 case GameState.MainMenu:
                     if (!menu.Start)
                     {
+                        // NEED TO ADD TO:
                         menu.Draw(componentsBatch, graphics);
-                        //restart the game / re-initialize player at the beginning
                     }
                     break;
                 default:
@@ -317,12 +315,9 @@ namespace Elemancy
                     wizardHealth.Draw(componentsBatch);
                     wizardGauge.Draw(componentsBatch);
 
-                    enemyHealth.Draw(componentsBatch);
-                    enemyGauge.Draw(componentsBatch);
-
                     forestLevel.Draw(componentsBatch);
-                    //caveLevel.Draw(componentsBatch);
-                    //dungeonLevel.Draw(componentsBatch);
+                    caveLevel.Draw(componentsBatch);
+                    dungeonLevel.Draw(componentsBatch);
 
                     break;
             }

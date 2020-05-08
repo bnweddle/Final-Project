@@ -85,19 +85,19 @@ namespace Elemancy
             if (level == GameState.Forest)
             {
                 enemyImage = "tempEnemy"; // change for the Sprite
-                Health = 200;
+                Health = 100;
                 Weakness = "Fire"; // Do a little extra damage if Player is using fire
             }
             else if (level == GameState.Cave)
             {
                 enemyImage = "tempEnemy"; // Change for the Giant Troll
-                Health = 250;
+                Health = 150;
                 Weakness = "Water"; // Do a little extra damage if player is using water 
             }
             else if (level == GameState.Dungeon)
             {
                 enemyImage = "tempEnemy"; // Change for the dragon
-                Health = 300;
+                Health = 200;
                 Weakness = "Lightning"; //Do a little extra damage if player is using lightning
             }
         }
@@ -143,9 +143,6 @@ namespace Elemancy
         {
             bounds.X = Position.X;
             bounds.Y = Position.Y;
-
-            // SET HIT TO TRUE IF player orb collides with enemy.Bounds
-            // Decrement health accordingly accounting for Weakness
 
             if (Health <= 0)
             {

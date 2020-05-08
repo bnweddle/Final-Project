@@ -94,7 +94,7 @@ namespace Elemancy
         public Element Element = Element.None;
 
         // 'Elemental Power' Orb
-        public ElementalOrb elementalOrb;
+        public ElementalOrb elementalOrb { get; }
 
         // The Game 
         Game game;
@@ -144,7 +144,7 @@ namespace Elemancy
         public void Initialize()
         {
             Position = new Vector2(40,600);  // Start position could change with preference
-            health = 25; // Could also change with preference
+            health = 200; // Could also change with preference
             direction = Direction.Idle;
             verticalState = VerticalMovementState.OnGround;
             Bounds.Width = FRAME_WIDTH;
@@ -224,7 +224,7 @@ namespace Elemancy
             if(IsHit)
             {
                 // for when the player collides with the enenmy
-                Position.X -= 100 * delta;
+                Position.X -= 200 * delta;
                 direction = Direction.East;
 
                 if (flicker.TimeElapsed.TotalSeconds >= 0.20)
