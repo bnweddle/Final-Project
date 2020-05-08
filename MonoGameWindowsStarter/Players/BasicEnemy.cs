@@ -159,10 +159,12 @@ namespace Elemancy
             
             if(Bounds.CollidesWith(player.elementalOrb.Bounds))
             {
+                player.elementalOrb.Attack(Vector2.Zero, Vector2.Zero, Element.None);
                 Hit = true;
                 enemyGauge.Update(gameTime, Health, 5);
                 Health -= 5;
             }
+ 
             
             if (Health <= 0)
             {
