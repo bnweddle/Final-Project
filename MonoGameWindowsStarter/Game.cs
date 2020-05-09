@@ -58,7 +58,7 @@ namespace Elemancy
         /// HealthBar, Messages, Transitions Screens, etc.
         /// </summary>
         public SpriteBatch componentsBatch;
-        Menu menu;
+        public Menu menu;
         Music music = new Music();
 
         KeyboardState oldState;
@@ -84,7 +84,7 @@ namespace Elemancy
             set 
             {
                 gameState = value;
-                gameState = music.SetGameState(player, gameState != GameState.MainMenu);              
+               // gameState = music.SetGameState(player, gameState != GameState.MainMenu);              
             } 
         }
 
@@ -245,25 +245,6 @@ namespace Elemancy
                         player.UpdateHealth(5);
                     }
 
-                   /* if (player.elementalOrb.Bounds.CollidesWith(ActiveEnemy.Bounds))
-                    {
-                        System.Diagnostics.Debug.WriteLine($"{ActiveEnemy.Hit } Hit");
-                        System.Diagnostics.Debug.WriteLine($"{player.elementalOrb.Bounds.X } Orb");
-                        player.elementalOrb.Attack(Vector2.Zero, Vector2.Zero, Element.None);
-                        enemyGauge.Update(gameTime, ActiveEnemy.Health, player.HitDamage);
-                        System.Diagnostics.Debug.WriteLine($"{enemyGauge.Bounds.Width } Minus");
-                        ActiveEnemy.Hit = true;
-                        ActiveEnemy.UpdateHealth(player.HitDamage);
-                        System.Diagnostics.Debug.WriteLine($"{enemyGauge.Bounds.Width } Updated");
-                        System.Diagnostics.Debug.WriteLine($"{ActiveEnemy.Dead } Dead");
-                    } */
-
-                   /* if (ActiveEnemy.Dead)
-                    {
-                        enemyGauge.RestartHealth(); // for the next enemy;
-                        System.Diagnostics.Debug.WriteLine($"{enemyGauge.Bounds.Width } Restored");
-                    } */
-
                     player.Update(gameTime);
                     forestLevel.Update(gameTime);
                     caveLevel.Update(gameTime);
@@ -298,10 +279,6 @@ namespace Elemancy
                     break; // END OF DEFAULT
             }
 
-            // Transition screen will be shown when the boss for that level is 
-            // dead, and then If they hit C for Continue will change Player position 
-            // and  scroll will change.
-
             base.Update(gameTime);
             oldState = current;
 
@@ -323,18 +300,13 @@ namespace Elemancy
 
             componentsBatch.Begin();
 
-
             switch(gameState)
             {
                 case GameState.MainMenu:
-                    if (!menu.Start)
-                    {
-                        // NEED TO ADD TO:
-                        menu.Draw(componentsBatch, graphics);
-                    }
+                     menu.Draw(componentsBatch, graphics);
                     break;
                 case GameState.Forest:
-                    forestLevel.Draw(componentsBatch);
+                    forestLevel.Draw(componentsBatch, gameTime);
                     break;
                 case GameState.Cave:
                     caveLevel.Draw(componentsBatch);

@@ -11,7 +11,7 @@ namespace Elemancy.Transitions
     {
         private Game game;
 
-        private Messages message = new Messages();
+        private Messages message;
 
         private List<IEnemy> caveEnemies = new List<IEnemy>();
         private EnemyBoss caveBoss;
@@ -25,6 +25,7 @@ namespace Elemancy.Transitions
         public CaveLevel(Game game)
         {
             this.game = game;
+            message = new Messages(game);
 
             enemyHealth = new HealthBar(game, new Vector2(822, 0), Color.Gray);  //Top right corner
             enemyGauge = new HealthBar(game, new Vector2(822, 0), Color.Red);
@@ -64,7 +65,6 @@ namespace Elemancy.Transitions
 
         public void Update(GameTime gameTime)
         {
-            message.Update(gameTime);
 
             ActiveEnemy.Update(game.player, gameTime);
 

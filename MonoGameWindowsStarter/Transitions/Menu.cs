@@ -25,7 +25,7 @@ namespace Elemancy.Transitions
         /// </summary>
         public string Spell { get; protected set; } = "";
 
-        public bool Start { get; protected set; } = false;
+        public bool Start { get; set; } = false;
 
 
         public Menu(Game game)

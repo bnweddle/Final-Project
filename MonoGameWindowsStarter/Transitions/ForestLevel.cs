@@ -15,7 +15,7 @@ namespace Elemancy.Transitions
     {
         private Game game;
 
-        private Messages message = new Messages();
+        private Messages message;
 
         private List<IEnemy> forestEnemies = new List<IEnemy>();
         private EnemyBoss forestBoss;
@@ -31,6 +31,8 @@ namespace Elemancy.Transitions
         public ForestLevel(Game game)
         {
             this.game = game;
+
+            message = new Messages(game);
 
             enemyHealth = new HealthBar(game, new Vector2(822, 0), Color.Gray);  //Top right corner
             enemyGauge = new HealthBar(game, new Vector2(822, 0), Color.Red);
@@ -72,8 +74,6 @@ namespace Elemancy.Transitions
 
         public void Update(GameTime gameTime)
         {
-            message.Update(gameTime);
-
             ActiveEnemy.Update(game.player, gameTime);
 
             if (ActiveEnemy.Hit)
@@ -113,7 +113,7 @@ namespace Elemancy.Transitions
         /// Will need to pass in componentsBatch, I think
         /// </summary>
         /// <param name="spriteBatch"></param>
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             enemyHealth.Draw(spriteBatch);
             enemyGauge.Draw(spriteBatch);
@@ -121,23 +121,31 @@ namespace Elemancy.Transitions
             if (forestBoss.Dead)
             {
                 message.SetMessage(1, out game.player.Position.X);
+                message.Update(gameTime);
                 if(!message.Continue)
                 {
                     message.Draw(spriteBatch, game.graphics);
+                }
+                else if(message.Continue)
+                {
+                    game.GameState = GameState.Cave;
                 }
             }
             else if (game.player.IsDead)
             {
                 message.SetMessage(-1, out game.player.Position.X);
-                if (!message.BackMenu || !message.Exit)
+                message.Update(gameTime);
+                if (!message.BackMenu)
                 {
                     message.Draw(spriteBatch, game.graphics);
                 }
                 else if (message.BackMenu)
                 {
                     game.GameState = GameState.MainMenu;
+                    game.menu.Start = true;
+                    game.player.IsDead = false;
                 }
-                else
+                else 
                 {
                     game.Exit();
                 }
