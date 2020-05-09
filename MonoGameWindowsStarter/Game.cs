@@ -256,12 +256,12 @@ namespace Elemancy
                     }
 
                     // Cheat way to get song to switch right now
-                    if (player.Position.X >= 4120 && player.Position.X <= 8334 && !music.IsPLaying)
+                    if (player.Position.X >= 4150 && player.Position.X <= 8334 && !music.IsPLaying)
                     {
                         gameState = music.SetGameState(player, menu.Start);
                         music.IsPLaying = true;
                     }
-                    if (player.Position.X >= 8334 && music.IsPLaying)
+                    if (player.Position.X >= 8375 && music.IsPLaying)
                     {
                         music.IsPLaying = false;
                         gameState = music.SetGameState(player, menu.Start);

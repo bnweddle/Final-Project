@@ -62,6 +62,7 @@ namespace Elemancy.Transitions
             forestLayer.Sprites.Add(forestBoss);
             forestEnemies.Add(forestBoss);
 
+            // Testing!!!
             forestEnemies[10].IsActive = true;
             ActiveEnemy = forestEnemies[10];
 

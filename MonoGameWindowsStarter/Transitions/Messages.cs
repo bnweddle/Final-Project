@@ -43,13 +43,13 @@ namespace Elemancy.Transitions
             
             if(boss == 1)
             {
-                position = 4120;
+                position = 4150;
                 message = Message.Round1;
                 index = 0;
             }
             else if(boss == 2)
             {
-                position = 8350;
+                position = 8375;
                 message = Message.Round2;
                 index = 1;
             }
