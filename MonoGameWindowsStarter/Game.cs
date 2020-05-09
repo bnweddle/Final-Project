@@ -32,13 +32,16 @@ namespace Elemancy
     /// </summary>
     public class Game : Microsoft.Xna.Framework.Game
     {
-
+        public IEnemy ActiveEnemy;  
         /// <summary>
         /// The levels with the enemy logic
         /// </summary>
         ForestLevel forestLevel;
         CaveLevel caveLevel;
         DungeonLevel dungeonLevel;
+
+        // the enemy's health bar
+        HealthBar enemyHealth, enemyGauge;
 
         public Player player;
 
@@ -61,7 +64,7 @@ namespace Elemancy
         KeyboardState oldState;
 
         ParallaxLayer playerLayer, levelsLayer;
-        TrackingPlayer playerT, levelsT;
+        public TrackingPlayer playerT, levelsT;
 
         /// <summary>
         /// The enemy Health when enemy dies -> disappear
@@ -91,6 +94,9 @@ namespace Elemancy
             Content.RootDirectory = "Content";
 
             menu = new Menu(this);
+
+            enemyHealth = new HealthBar(this, new Vector2(822, 0), Color.Gray);  //Top right corner
+            enemyGauge = new HealthBar(this, new Vector2(822, 0), Color.Red);
 
             // Creating and Positioning Healthbars
             wizardHealth = new HealthBar(this, new Vector2(20, 0), Color.Gray);  //Top left corner
@@ -149,6 +155,8 @@ namespace Elemancy
             caveLevel.LoadContent(Content);
             forestLevel.LoadContent(Content);
 
+            enemyHealth.LoadContent(Content);
+            enemyGauge.LoadContent(Content);
 
             levelsLayer = new ParallaxLayer(this);
             // Levels Layer - Can just add to to them for other levels
@@ -228,10 +236,6 @@ namespace Elemancy
                     break;
                 default:
 
-                    forestLevel.Update(gameTime);
-                    caveLevel.Update(gameTime);
-                    dungeonLevel.Update(gameTime);
-
                     if (player.Bounds.CollidesWith(forestLevel.ActiveEnemy.Bounds)
                         || player.Bounds.CollidesWith(caveLevel.ActiveEnemy.Bounds) ||
                         player.Bounds.CollidesWith(caveLevel.ActiveEnemy.Bounds))
@@ -241,7 +245,29 @@ namespace Elemancy
                         player.UpdateHealth(5);
                     }
 
+                   /* if (player.elementalOrb.Bounds.CollidesWith(ActiveEnemy.Bounds))
+                    {
+                        System.Diagnostics.Debug.WriteLine($"{ActiveEnemy.Hit } Hit");
+                        System.Diagnostics.Debug.WriteLine($"{player.elementalOrb.Bounds.X } Orb");
+                        player.elementalOrb.Attack(Vector2.Zero, Vector2.Zero, Element.None);
+                        enemyGauge.Update(gameTime, ActiveEnemy.Health, player.HitDamage);
+                        System.Diagnostics.Debug.WriteLine($"{enemyGauge.Bounds.Width } Minus");
+                        ActiveEnemy.Hit = true;
+                        ActiveEnemy.UpdateHealth(player.HitDamage);
+                        System.Diagnostics.Debug.WriteLine($"{enemyGauge.Bounds.Width } Updated");
+                        System.Diagnostics.Debug.WriteLine($"{ActiveEnemy.Dead } Dead");
+                    } */
+
+                   /* if (ActiveEnemy.Dead)
+                    {
+                        enemyGauge.RestartHealth(); // for the next enemy;
+                        System.Diagnostics.Debug.WriteLine($"{enemyGauge.Bounds.Width } Restored");
+                    } */
+
                     player.Update(gameTime);
+                    forestLevel.Update(gameTime);
+                    caveLevel.Update(gameTime);
+                    dungeonLevel.Update(gameTime);
 
                     if (player.Element == Element.None)
                     {
@@ -267,8 +293,6 @@ namespace Elemancy
                         levelsT.ScrollStop = scroll;
                         levelsT.ScrollRatio = 0.0f;
                         playerT.ScrollRatio = 0.0f;
-                        // probably need to restrict the player's movement 
-                        // So they have to battle the boss; 
                     }
 
                     break; // END OF DEFAULT
@@ -319,7 +343,7 @@ namespace Elemancy
                     dungeonLevel.Draw(componentsBatch);
                     break;
             }
-            if(menu.Start)
+            if(menu.Start && !player.IsDead)
             {
                 wizardHealth.Draw(componentsBatch);
                 wizardGauge.Draw(componentsBatch);

@@ -24,6 +24,8 @@ namespace Elemancy.Transitions
         // the enemy's health bar
         HealthBar enemyHealth, enemyGauge;
 
+        TrackingPlayer forestT;
+
         private Random random = new Random();
 
         public ForestLevel(Game game)
@@ -46,52 +48,62 @@ namespace Elemancy.Transitions
             for (int i = 0; i < 10; i++)
             {
 
-                BasicEnemy forestEnemy = new BasicEnemy(game, GameState.Forest, new Vector2(300 + offset, 500));
+                BasicEnemy forestEnemy = new BasicEnemy(game, GameState.Forest, new Vector2(300 + offset, 600));
                 forestEnemy.LoadContent(content);
                 forestLayer.Sprites.Add(forestEnemy);
                 forestEnemies.Add(forestEnemy);
                 offset += random.Next(200, 300);
             }
 
-            forestBoss = new EnemyBoss(game, GameState.Forest, new Vector2(300, 3500));
+            forestBoss = new EnemyBoss(game, GameState.Forest, new Vector2(3500, 600));
             forestBoss.LoadContent(content);
             forestLayer.Sprites.Add(forestBoss);
             forestEnemies.Add(forestBoss);
 
-            forestEnemies[10].IsActive = true;
-            ActiveEnemy = forestEnemies[10];
+            forestEnemies[0].IsActive = true;
+            ActiveEnemy = forestEnemies[0];
 
             game.Components.Add(forestLayer);
             forestLayer.DrawOrder = 2;
+            forestT = new TrackingPlayer(game.player, 1.0f);
 
-            forestLayer.ScrollController = new TrackingPlayer(game.player, 1.0f);
+            forestLayer.ScrollController = forestT;
         }
 
         public void Update(GameTime gameTime)
         {
             message.Update(gameTime);
+
             ActiveEnemy.Update(game.player, gameTime);
 
-            if(ActiveEnemy.Hit)
+            if (ActiveEnemy.Hit)
             {
-                enemyGauge.Update(gameTime, ActiveEnemy.Health, game.player.HitDamage);              
-            }
+                enemyGauge.Update(gameTime, ActiveEnemy.Health, game.player.HitDamage);
+                ActiveEnemy.Hit = false;
+                ActiveEnemy.UpdateHealth(game.player.HitDamage);
+            }         
 
             if (ActiveEnemy.Dead)
             {
                 forestEnemies[0].IsActive = false; // Don't draw the old one
-                if (forestEnemies.Count > 0)
+                if (forestEnemies.Count > 1)
                 {
                     forestEnemies.RemoveAt(0);
                     if (forestEnemies.Count == 0)
                     {
                         ActiveEnemy = forestBoss;
+                        forestEnemies[0].IsActive = true;
+                        if(forestBoss.Health <= 0)
+                        {
+                            forestBoss.Dead = true;
+                        }
+                        // Draw active enemy
                     }
                     else
                     {
                         ActiveEnemy = forestEnemies[0];
-                    }
-                    forestEnemies[0].IsActive = true; // Draw active enemy
+                        forestEnemies[0].IsActive = true; // Draw active enemy
+                    }                  
                     enemyGauge.RestartHealth(); // for the next enemy;
                 }
             }
@@ -113,22 +125,21 @@ namespace Elemancy.Transitions
                 {
                     message.Draw(spriteBatch, game.graphics);
                 }
-                else if(game.player.IsDead)
+            }
+            else if (game.player.IsDead)
+            {
+                message.SetMessage(-1, out game.player.Position.X);
+                if (!message.BackMenu || !message.Exit)
                 {
-                    message.SetMessage(-1, out game.player.Position.X);
-                    if(!message.BackMenu || !message.Exit)
-                    {
-                        message.Draw(spriteBatch, game.graphics);
-                    }
-                    else if(message.BackMenu)
-                    {
-                        game.GameState = GameState.MainMenu;
-                    }
-                    else
-                    {
-                        game.Exit();
-                    }
-
+                    message.Draw(spriteBatch, game.graphics);
+                }
+                else if (message.BackMenu)
+                {
+                    game.GameState = GameState.MainMenu;
+                }
+                else
+                {
+                    game.Exit();
                 }
             }
         }

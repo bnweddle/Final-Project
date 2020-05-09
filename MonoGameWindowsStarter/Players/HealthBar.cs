@@ -64,7 +64,7 @@ namespace Elemancy
         /// </summary>
         public void RestartHealth()
         {
-            Bounds.Width = healthbar.Width;
+            Bounds.Width = 200 ;
         }
     }
 }

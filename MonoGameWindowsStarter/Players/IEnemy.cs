@@ -22,6 +22,8 @@ namespace Elemancy
 
         void SetUpEnemy(GameState level);
 
+        void UpdateHealth(int damage);
+
         bool Dead { get; set; }
 
         bool Hit { get; set; }

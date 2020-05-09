@@ -142,6 +142,7 @@ namespace Elemancy
 
         public void Initialize()
         {
+            // For testing purposes
             Position = new Vector2(40,600);  // Start position could change with preference
             Health = 200; // Could also change with preference
             direction = Direction.Idle;
@@ -170,8 +171,6 @@ namespace Elemancy
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
             Bounds.X = Position.X;
             Bounds.Y = Position.Y;
-
-            System.Diagnostics.Debug.WriteLine($"Player's X Position: {Position.X}");
 
             // So the player can't go backwards, would need to change as they 
             // progress through the levels
@@ -310,9 +309,7 @@ namespace Elemancy
             if (keyboard.IsKeyDown(Keys.LeftAlt) && !oldState.IsKeyDown(Keys.LeftAlt) && elementalOrb.State == ElementalOrb.ActiveState.Idle)
             {
                 CycleElement();
-            }
-            System.Diagnostics.Debug.WriteLine($"Player Element Type: {Element}");
-            
+            }       
 
             // update animation timer when the player is moving
             if (direction != Direction.Idle)

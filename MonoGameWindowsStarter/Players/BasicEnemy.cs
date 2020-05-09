@@ -82,7 +82,7 @@ namespace Elemancy
         public void SetUpEnemy(GameState level)
         {
             if(level == GameState.Forest)
-            {
+            {           
                 enemyImage = "tempEnemy"; // change for the evil bushes or whatnot
                 Health = 50;
                 Weakness = "Fire"; // Do a little extra damage if Player is using fire
@@ -152,15 +152,9 @@ namespace Elemancy
             {
                 player.elementalOrb.Attack(Vector2.Zero, Vector2.Zero, Element.None);
                 Hit = true;
-                Health -= game.player.HitDamage;
-            }
-            
-            if (Health <= 0)
-            {
-                Dead = true;
             }
 
-            if (Hit)
+          /*  if (Hit)
             {
 
                 if (flicker.TimeElapsed.TotalSeconds >= 0.20)
@@ -203,6 +197,16 @@ namespace Elemancy
 
                     multiple = fade.CurrentValue;
                 }
+            } */
+        }
+
+        public void UpdateHealth(int damage)
+        {
+            Health -= damage;
+            if (Health <= 0)
+            {
+                Dead = true;
+                Hit = false;
             }
         }
 

@@ -200,6 +200,12 @@ namespace Elemancy
                 }
             }
         }
+
+        public void UpdateHealth(int damage)
+        {
+
+        }
+
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             if (enemyTexture != null)
