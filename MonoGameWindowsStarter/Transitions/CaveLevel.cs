@@ -17,16 +17,24 @@ namespace Elemancy.Transitions
         private EnemyBoss caveBoss;
         public IEnemy ActiveEnemy;
 
+        // the enemy's health bar
+        HealthBar enemyHealth, enemyGauge;
+
         private Random random = new Random();
 
         public CaveLevel(Game game)
         {
             this.game = game;
+
+            enemyHealth = new HealthBar(game, new Vector2(822, 0), Color.Gray);  //Top right corner
+            enemyGauge = new HealthBar(game, new Vector2(822, 0), Color.Red);
         }
 
         public void LoadContent(ContentManager content)
         {
             message.LoadContent(content);
+            enemyHealth.LoadContent(content);
+            enemyGauge.LoadContent(content);
 
             var caveLayer = new ParallaxLayer(game);
 
@@ -60,6 +68,10 @@ namespace Elemancy.Transitions
 
             ActiveEnemy.Update(game.player, gameTime);
 
+            if (ActiveEnemy.Hit)
+            {
+                enemyGauge.Update(gameTime, ActiveEnemy.Health, game.player.HitDamage);
+            }
             if (ActiveEnemy.Dead)
             {
                 ActiveEnemy.IsActive = false;
@@ -72,6 +84,7 @@ namespace Elemancy.Transitions
                     }
                     else ActiveEnemy = caveEnemies[0];
                     ActiveEnemy.IsActive = true;
+                    enemyGauge.RestartHealth(); // for the next enemy;
                 }
             }
         }
@@ -82,6 +95,9 @@ namespace Elemancy.Transitions
         /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch)
         {
+            enemyHealth.Draw(spriteBatch);
+            enemyGauge.Draw(spriteBatch);
+
             if (caveBoss.Dead)
             {
                 message.SetMessage(1, out game.player.Position.X);

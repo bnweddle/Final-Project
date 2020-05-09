@@ -141,13 +141,13 @@ namespace Elemancy
             Components.Add(playerLayer);
 
             narrator = new Narrator(this);
-            forestLevel = new ForestLevel(this);
-            caveLevel = new CaveLevel(this);
             dungeonLevel = new DungeonLevel(this);
-            
-            forestLevel.LoadContent(Content);
+            caveLevel = new CaveLevel(this);
+            forestLevel = new ForestLevel(this);
+
             dungeonLevel.LoadContent(Content);
             caveLevel.LoadContent(Content);
+            forestLevel.LoadContent(Content);
 
 
             levelsLayer = new ParallaxLayer(this);
@@ -202,6 +202,7 @@ namespace Elemancy
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+            
         }
 
         /// <summary>
@@ -236,9 +237,7 @@ namespace Elemancy
                         player.Bounds.CollidesWith(caveLevel.ActiveEnemy.Bounds))
                     {
                         player.IsHit = true;
-
-                        // NEED TO CHANGE:
-                        wizardGauge.Update(gameTime, 200, 5);
+                        wizardGauge.Update(gameTime, player.Health, 5);
                         player.UpdateHealth(5);
                     }
 
@@ -310,16 +309,20 @@ namespace Elemancy
                         menu.Draw(componentsBatch, graphics);
                     }
                     break;
-                default:
-
-                    wizardHealth.Draw(componentsBatch);
-                    wizardGauge.Draw(componentsBatch);
-
+                case GameState.Forest:
                     forestLevel.Draw(componentsBatch);
-                    caveLevel.Draw(componentsBatch);
-                    dungeonLevel.Draw(componentsBatch);
-
                     break;
+                case GameState.Cave:
+                    caveLevel.Draw(componentsBatch);
+                    break;
+                case GameState.Dungeon:
+                    dungeonLevel.Draw(componentsBatch);
+                    break;
+            }
+            if(menu.Start)
+            {
+                wizardHealth.Draw(componentsBatch);
+                wizardGauge.Draw(componentsBatch);
             }
 
             componentsBatch.End();

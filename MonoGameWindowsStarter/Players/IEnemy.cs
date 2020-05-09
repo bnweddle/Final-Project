@@ -28,6 +28,8 @@ namespace Elemancy
 
         bool IsActive { get; set; }
 
+        int Health { get; set; }
+
         BoundingRectangle Bounds { get; set; }
 
     }

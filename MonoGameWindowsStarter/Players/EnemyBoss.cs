@@ -144,6 +144,13 @@ namespace Elemancy
             bounds.X = Position.X;
             bounds.Y = Position.Y;
 
+            if (Bounds.CollidesWith(player.elementalOrb.Bounds))
+            {
+                player.elementalOrb.Attack(Vector2.Zero, Vector2.Zero, Element.None);
+                Hit = true;
+                Health -= game.player.HitDamage;
+            }
+
             if (Health <= 0)
             {
                 Dead = true;
@@ -199,7 +206,7 @@ namespace Elemancy
             {
                 if (IsActive == true) // Only draw the active enemy
                 {
-                    spriteBatch.Draw(enemyTexture, Position, Bounds, Color.White);
+                    spriteBatch.Draw(enemyTexture, Position, Bounds, Color.White * multiple);
                 }
             }
         }

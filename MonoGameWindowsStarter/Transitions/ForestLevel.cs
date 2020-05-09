@@ -21,16 +21,24 @@ namespace Elemancy.Transitions
         private EnemyBoss forestBoss;
         public IEnemy ActiveEnemy;
 
+        // the enemy's health bar
+        HealthBar enemyHealth, enemyGauge;
+
         private Random random = new Random();
 
         public ForestLevel(Game game)
         {
             this.game = game;
+
+            enemyHealth = new HealthBar(game, new Vector2(822, 0), Color.Gray);  //Top right corner
+            enemyGauge = new HealthBar(game, new Vector2(822, 0), Color.Red);
         }
 
         public void LoadContent(ContentManager content)
         {
             message.LoadContent(content);
+            enemyHealth.LoadContent(content);
+            enemyGauge.LoadContent(content);
 
             var forestLayer = new ParallaxLayer(game);
 
@@ -45,13 +53,13 @@ namespace Elemancy.Transitions
                 offset += random.Next(200, 300);
             }
 
-            forestBoss = new EnemyBoss(game, GameState.Forest, new Vector2(300, 3800));
+            forestBoss = new EnemyBoss(game, GameState.Forest, new Vector2(300, 3500));
             forestBoss.LoadContent(content);
             forestLayer.Sprites.Add(forestBoss);
             forestEnemies.Add(forestBoss);
 
-            forestEnemies[0].IsActive = true;
-            ActiveEnemy = forestEnemies[0];
+            forestEnemies[10].IsActive = true;
+            ActiveEnemy = forestEnemies[10];
 
             game.Components.Add(forestLayer);
             forestLayer.DrawOrder = 2;
@@ -62,8 +70,12 @@ namespace Elemancy.Transitions
         public void Update(GameTime gameTime)
         {
             message.Update(gameTime);
-
             ActiveEnemy.Update(game.player, gameTime);
+
+            if(ActiveEnemy.Hit)
+            {
+                enemyGauge.Update(gameTime, ActiveEnemy.Health, game.player.HitDamage);              
+            }
 
             if (ActiveEnemy.Dead)
             {
@@ -80,6 +92,7 @@ namespace Elemancy.Transitions
                         ActiveEnemy = forestEnemies[0];
                     }
                     forestEnemies[0].IsActive = true; // Draw active enemy
+                    enemyGauge.RestartHealth(); // for the next enemy;
                 }
             }
         }
@@ -90,7 +103,10 @@ namespace Elemancy.Transitions
         /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch)
         {
-            if(forestBoss.Dead)
+            enemyHealth.Draw(spriteBatch);
+            enemyGauge.Draw(spriteBatch);
+
+            if (forestBoss.Dead)
             {
                 message.SetMessage(1, out game.player.Position.X);
                 if(!message.Continue)

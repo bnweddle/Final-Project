@@ -74,8 +74,6 @@ namespace Elemancy
         InterpolationTimer flicker;
         float multiple = 1;
 
-        // the enemy's health bar
-        HealthBar enemyHealth, enemyGauge;
 
         /// <summary>
         /// Set up the Enemy's health and image according to their Level
@@ -122,10 +120,6 @@ namespace Elemancy
             flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 0.0f, 1.0f);
             fade = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
 
-            enemyHealth = new HealthBar(game, new Vector2(822, 0), Color.Gray);  //Top right corner
-            enemyGauge = new HealthBar(game, new Vector2(822, 0), Color.Red);
-
-
             SetUpEnemy(state);
         }
 
@@ -139,9 +133,6 @@ namespace Elemancy
             enemyTexture = content.Load<Texture2D>(enemyImage);
             bounds.Width = enemyTexture.Width;
             bounds.Height = enemyTexture.Height;
-
-            enemyHealth.LoadContent(content);
-            enemyGauge.LoadContent(content);
         }  
 
         /// <summary>
@@ -161,10 +152,8 @@ namespace Elemancy
             {
                 player.elementalOrb.Attack(Vector2.Zero, Vector2.Zero, Element.None);
                 Hit = true;
-                enemyGauge.Update(gameTime, Health, 5);
-                Health -= 5;
+                Health -= game.player.HitDamage;
             }
- 
             
             if (Health <= 0)
             {
@@ -201,7 +190,6 @@ namespace Elemancy
                     fade.Stop();
                     multiple = 0;
                     Position.Y -= 1000;
-                    enemyHealth.RestartHealth(); // for the next enemy;
                 }
 
                 if (!fade.IsRunning && multiple != 0)
@@ -228,13 +216,6 @@ namespace Elemancy
                 }
             }
 
-            game.componentsBatch.Begin();
-
-            enemyHealth.Draw(game.componentsBatch);
-            enemyGauge.Draw(game.componentsBatch);
-
-            game.componentsBatch.End();
-            
         }
 
         

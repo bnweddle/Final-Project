@@ -72,9 +72,6 @@ namespace Elemancy
         // current frame
         int frame;
 
-        // the health of the player, need to bind with healthbar
-        int health;
-
         // The player's vertical movement state
         VerticalMovementState verticalState;
 
@@ -118,10 +115,12 @@ namespace Elemancy
         /// </summary>
         public Color Color;
 
+        public int HitDamage;
+
         /// <summary>
-        /// Could change depending on spell cast/type of attack
+        /// the health of the player, need to bind with healthbar
         /// </summary>
-        public int HitDamage { get; set; }
+        public int Health { get; protected set; }
 
         public bool IsDead { get; set; } = false;
 
@@ -144,7 +143,7 @@ namespace Elemancy
         public void Initialize()
         {
             Position = new Vector2(40,600);  // Start position could change with preference
-            health = 200; // Could also change with preference
+            Health = 200; // Could also change with preference
             direction = Direction.Idle;
             verticalState = VerticalMovementState.OnGround;
             Bounds.Width = FRAME_WIDTH;
@@ -304,7 +303,8 @@ namespace Elemancy
                         break;
                 }
 
-                elementalOrb.Attack(Position, orbVelocity, Element);            
+                elementalOrb.Attack(Position, orbVelocity, Element);
+                SetDamage(game.GameState, Element);
             }
             elementalOrb.Update(gameTime);
             if (keyboard.IsKeyDown(Keys.LeftAlt) && !oldState.IsKeyDown(Keys.LeftAlt) && elementalOrb.State == ElementalOrb.ActiveState.Idle)
@@ -352,11 +352,31 @@ namespace Elemancy
         /// <param name="damage">The damage done to the player's health.</param>
         public void UpdateHealth(int damage)
         {           
-            health -= damage;
-            if(health <= 0)
+            Health -= damage;
+            if(Health <= 0)
             {
                 IsDead = true;
                 IsHit = false;
+            }
+        }
+
+        public void SetDamage(GameState level, Element element)
+        {
+            if(level == GameState.Forest && element == Element.Fire)
+            {
+                HitDamage = 20;
+            }
+            else if(level == GameState.Cave && element == Element.Water)
+            {
+                HitDamage = 25;
+            }
+            else if(level == GameState.Dungeon && element == Element.Lightning)
+            {
+                HitDamage = 30;
+            }
+            else
+            {
+                HitDamage = 15;
             }
         }
 
