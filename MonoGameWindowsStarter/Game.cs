@@ -59,7 +59,7 @@ namespace Elemancy
         /// </summary>
         public SpriteBatch componentsBatch;
         public Menu menu;
-        Music music = new Music();
+        public Music music = new Music();
 
         KeyboardState oldState;
 
@@ -84,7 +84,7 @@ namespace Elemancy
             set 
             {
                 gameState = value;
-               // gameState = music.SetGameState(player, gameState != GameState.MainMenu);              
+                music.SetGameState(player, menu.Start);
             } 
         }
 

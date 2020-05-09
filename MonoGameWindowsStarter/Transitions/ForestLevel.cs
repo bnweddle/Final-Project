@@ -62,8 +62,8 @@ namespace Elemancy.Transitions
             forestLayer.Sprites.Add(forestBoss);
             forestEnemies.Add(forestBoss);
 
-            forestEnemies[0].IsActive = true;
-            ActiveEnemy = forestEnemies[0];
+            forestEnemies[10].IsActive = true;
+            ActiveEnemy = forestEnemies[10];
 
             game.Components.Add(forestLayer);
             forestLayer.DrawOrder = 2;
@@ -121,10 +121,10 @@ namespace Elemancy.Transitions
             if (forestBoss.Dead)
             {
                 message.SetMessage(1, out game.player.Position.X);
-                message.Update(gameTime);
                 if(!message.Continue)
                 {
                     message.Draw(spriteBatch, game.graphics);
+                    message.Update(gameTime);
                 }
                 else if(message.Continue)
                 {
@@ -141,9 +141,9 @@ namespace Elemancy.Transitions
                 }
                 else if (message.BackMenu)
                 {
+                    game.menu.Start = false;
+                    game.music.SetGameState(game.player, false);
                     game.GameState = GameState.MainMenu;
-                    game.menu.Start = true;
-                    game.player.IsDead = false;
                 }
                 else 
                 {
