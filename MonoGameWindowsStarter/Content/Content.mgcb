@@ -13,6 +13,24 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin A dragon in a dungeon.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:A dragon in a dungeon.wav
+
+#begin All that work.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:All that work.wav
+
+#begin Are you sure.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Are you sure.wav
+
 #begin baseElementalOrb.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -24,6 +42,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:baseElementalOrb.png
+
+#begin C’mon now.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:C’mon now.wav
 
 #begin Cave_Bats.mp3
 /importer:Mp3Importer
@@ -55,6 +79,18 @@
 /processorParam:TextureFormat=Color
 /build:cave2.jpg
 
+#begin dragonBoss.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:dragonBoss.png
+
 #begin dungeon1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -79,7 +115,13 @@
 /processorParam:TextureFormat=Color
 /build:dungeon2.jpg
 
-#begin fire.png
+#begin Eww Thunder.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Eww Thunder.wav
+
+#begin flytrapBasic.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -89,7 +131,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:fire.png
+/build:flytrapBasic.png
 
 #begin forest1.png
 /importer:TextureImporter
@@ -115,6 +157,18 @@
 /processorParam:TextureFormat=Color
 /build:forest2.png
 
+#begin goblinBasic.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:goblinBasic.png
+
 #begin healthbar6.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -127,17 +181,11 @@
 /processorParam:TextureFormat=Color
 /build:healthbar6.png
 
-#begin lightning1.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:lightning1.png
+#begin Huh not a lot here.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Huh not a lot here.wav
 
 #begin lose.png
 /importer:TextureImporter
@@ -199,6 +247,18 @@
 /processorParam:TextureFormat=Color
 /build:particle.png
 
+#begin Picked a less annoying.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Picked a less annoying.wav
+
+#begin Picked a more annoying.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Picked a more annoying.wav
+
 #begin player.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -235,6 +295,30 @@
 /processorParam:TextureFormat=Color
 /build:round2.png
 
+#begin Seems pretty basic.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Seems pretty basic.wav
+
+#begin skeletonBasic.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:skeletonBasic.png
+
+#begin Take the controller back.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Take the controller back.wav
+
 #begin tempEnemy.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -247,13 +331,31 @@
 /processorParam:TextureFormat=Color
 /build:tempEnemy.png
 
+#begin That was pretty stupid of you.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:That was pretty stupid of you.wav
+
+#begin That was the most pro gamer move.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:That was the most pro gamer move.wav
+
+#begin This is almost torture to watch.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:This is almost torture to watch.wav
+
 #begin Thunder.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:Thunder.mp3
 
-#begin water1.png
+#begin tree.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -263,7 +365,31 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:water1.png
+/build:tree.jpg
+
+#begin treeBoss.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:treeBoss.png
+
+#begin trollBoss.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:trollBoss.png
 
 #begin win.png
 /importer:TextureImporter

@@ -13,14 +13,12 @@ namespace Elemancy.Transitions
         Dungeon,
         MainMenu
     }
-    public class Level // need to make abstract 
+    public class Music // need to make abstract 
     {
         // DungeonLevel inherits level, constructor specific, list of enemies and boss, 
         Song forest, cave, dungeon, menu;
 
         private GameState level = GameState.MainMenu;
-
-        private Game game;
 
         public bool IsPLaying { get; set; } = false;
 
@@ -44,10 +42,10 @@ namespace Elemancy.Transitions
                     scrollStop = 3117;
                     break;
                 case GameState.Cave:
-                    scrollStop = 3117 * 2;
+                    scrollStop = 7284;
                     break;
                 case GameState.Dungeon:
-                    scrollStop = 3117 * 3;
+                    scrollStop = 11451;
                     break;
             }
 

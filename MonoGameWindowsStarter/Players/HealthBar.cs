@@ -26,9 +26,15 @@ namespace Elemancy
         public Color Color;
 
         /// <summary>
+        /// The health of the current player/enemy
+        /// </summary>
+        public int Health { get; set; }
+
+        /// <summary>
         /// The Damage done for the hit, should be set when an attack is successful
         /// </summary>
         public int Damage { get; set; }
+
         public HealthBar(Game g, Vector2 position, Color color)
         {
             this.game = g;
@@ -43,9 +49,9 @@ namespace Elemancy
             Bounds.Height = healthbar.Height;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, int health, int damage)
         {
-
+            Bounds.Width -= (Bounds.Width / health) * damage;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -58,7 +64,7 @@ namespace Elemancy
         /// </summary>
         public void RestartHealth()
         {
-            Bounds.Width = healthbar.Width;
+            Bounds.Width = 200 ;
         }
     }
 }

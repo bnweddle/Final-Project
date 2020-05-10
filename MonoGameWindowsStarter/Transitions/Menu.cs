@@ -25,7 +25,7 @@ namespace Elemancy.Transitions
         /// </summary>
         public string Spell { get; protected set; } = "";
 
-        public bool Start { get; protected set; } = false;
+        public bool Start { get; set; } = false;
 
 
         public Menu(Game game)
@@ -75,12 +75,6 @@ namespace Elemancy.Transitions
                 new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
                 Color.White);
         }
-
-        public void Restart()
-        {
-            Start = false;
-        }
-
 
     }
 }

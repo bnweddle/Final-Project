@@ -16,6 +16,8 @@ namespace Elemancy.Transitions
 
     public class Messages 
     {
+        private Game game;
+
         private Texture2D[] transitions = new Texture2D[4];
 
         private KeyboardState oldState;
@@ -30,19 +32,24 @@ namespace Elemancy.Transitions
 
         public bool Exit { get; protected set; } = false;
 
+        public Messages(Game game)
+        {
+            this.game = game;
+        }
+
         public void SetMessage(int boss, out float position)
         {
             position = 0;
             
             if(boss == 1)
             {
-                position = 4120;
+                position = 4175;
                 message = Message.Round1;
                 index = 0;
             }
             else if(boss == 2)
             {
-                position = 8350;
+                position = 8375;
                 message = Message.Round2;
                 index = 1;
             }
@@ -76,6 +83,7 @@ namespace Elemancy.Transitions
             if (current.IsKeyDown(Keys.M))
             {
                 BackMenu = true;
+                game.GameState = GameState.MainMenu;
             }
             else if (current.IsKeyDown(Keys.C))
             {
@@ -83,7 +91,7 @@ namespace Elemancy.Transitions
             }
             else if (current.IsKeyDown(Keys.E))
             {
-                Exit = true;
+                game.Exit();
             }
 
             oldState = current;

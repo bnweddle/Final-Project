@@ -58,7 +58,7 @@ namespace Elemancy.Parallax
 
                 // Will need to tailor according to the levels.
 
-               if (ScrollRatio == 0f)
+                if (ScrollRatio == 0f)
                 {
                     transform.M41 = -ScrollStop + Offset;
                     return transform;

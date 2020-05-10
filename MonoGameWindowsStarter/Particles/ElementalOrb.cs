@@ -135,7 +135,7 @@ namespace Elemancy
             if (State == ActiveState.Active)
             {
                 spriteBatch.Draw(baseOrb, Bounds, curColor);
-                elementalOrbParticleSystem.Draw(gameTime, playerT.Transform);
+                elementalOrbParticleSystem.Draw(gameTime, playerT.Transform);             
             }
         }
 

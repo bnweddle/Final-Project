@@ -44,8 +44,9 @@
     <Compile Include="BoundingCircle.cs" />
     <Compile Include="BoundingRectangle.cs" />
     <Compile Include="Collisions.cs" />
+    <Compile Include="Narrator.cs" />
     <Compile Include="Particles\ElementalOrb.cs" />
-    <Compile Include="Players\Enemy.cs" />
+    <Compile Include="Players\IEnemy.cs" />
     <Compile Include="Players\EnemyBoss.cs" />
     <Compile Include="Players\BasicEnemy.cs" />
     <Compile Include="Game.cs" />
@@ -67,7 +68,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transitions\Menu.cs" />
     <Compile Include="Transitions\Messages.cs" />
-    <Compile Include="Transitions\Level.cs" />
+    <Compile Include="Transitions\Music.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

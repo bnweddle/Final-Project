@@ -9,20 +9,22 @@ using System.Collections.Generic;
 namespace Elemancy
 {
     /// <summary>
-    /// My TO DO:
-    ///  1. Need to synch damage and player heaith with Healthbar width
-    ///  
     /// Team left to do:
-    ///  1. Adjust enemies and collision for player/enemy being hit and dying
-    ///     > Create images for types of enemies
-    ///  2. Include narrator when wanting to play it
-    ///     > figure out when tot play and stop each wav
-    ///  3. Adjust particles to follow ball
-    ///  4. Adjust the player's health and enemies health to fit with health bar
-    ///  5. Code for when Boss of specific level dies to show Transition
-    ///  6. Include created drawn players
-    ///  7. Uncomment and include scroll stop 
-    ///  
+    ///  1. Adjust enemies and collision for player/enemy    -> PARTIAL
+    ///     being hit and dying
+    ///     > Create images for types of enemies             -> STARTED
+    ///  2. Include narrator when wanting to play it         -> STARTED
+    ///     > figure out when to play the wav                 
+    ///  3. Adjust particles to follow ball                  -> COMPLETE!
+    ///  4. Adjust the player's health and enemies health 
+    ///     to fit with health bar
+    ///  5. Code for when Boss of specific level dies to     -> PARTIAL
+    ///     show Transition
+    ///  6. Include created drawn players                    -> STARTED
+    ///  7. Test to make sure transitions happen smoothly    -> UNTESTED
+    ///  8. Implement restarting the game if the user goes   -> UNTESTED
+    ///     back to the Menu
+    ///  9. Restrict Player's movement to the level, maybe?  -> POTENTIAL?
     /// </summary>
 
     /// <summary>
@@ -30,16 +32,19 @@ namespace Elemancy
     /// </summary>
     public class Game : Microsoft.Xna.Framework.Game
     {
+        public IEnemy ActiveEnemy;  
         /// <summary>
-        /// Enemies
+        /// The levels with the enemy logic
         /// </summary>
-        List<IEnemy> forestEnemies = new List<IEnemy>();
-        List<IEnemy> caveEnemies = new List<IEnemy>();
-        List<IEnemy> dungeonEnemies = new List<IEnemy>();
-        EnemyBoss forestBoss;
-        EnemyBoss caveBoss;
-        EnemyBoss dungeonBoss;
-        IEnemy activeEnemy;
+        ForestLevel forestLevel;
+        CaveLevel caveLevel;
+        DungeonLevel dungeonLevel;
+        public bool TransitionCave = false;
+        public bool TransitionDungeon = false;
+        public bool Restart = false;
+
+        // the enemy's health bar
+        HealthBar enemyHealth, enemyGauge;
 
         public Player player;
 
@@ -55,22 +60,21 @@ namespace Elemancy
         /// Is for Game Components that don't move
         /// HealthBar, Messages, Transitions Screens, etc.
         /// </summary>
-        SpriteBatch componentsBatch;
-        Messages messages = new Messages();
-        Menu menu;
-        Level level = new Level();
+        public SpriteBatch componentsBatch;
+        public Menu menu;
+        public Music music = new Music();
 
         KeyboardState oldState;
 
         ParallaxLayer playerLayer, levelsLayer;
-        TrackingPlayer playerT, levelsT;
+        public TrackingPlayer playerT, levelsT;
 
         /// <summary>
         /// The enemy Health when enemy dies -> disappear
         /// When another enemy appears -> appear and start at full health
         /// </summary>
         HealthBar wizardHealth, wizardGauge;
-        HealthBar enemyHealth, enemyGauge;
+
 
         public Narrator narrator;
 
@@ -83,7 +87,7 @@ namespace Elemancy
             set 
             {
                 gameState = value;
-                gameState = level.SetGameState(player, gameState != GameState.MainMenu);              
+                music.SetGameState(player, menu.Start);
             } 
         }
 
@@ -94,12 +98,12 @@ namespace Elemancy
 
             menu = new Menu(this);
 
+            enemyHealth = new HealthBar(this, new Vector2(822, 0), Color.Gray);  //Top right corner
+            enemyGauge = new HealthBar(this, new Vector2(822, 0), Color.Red);
+
             // Creating and Positioning Healthbars
             wizardHealth = new HealthBar(this, new Vector2(20, 0), Color.Gray);  //Top left corner
             wizardGauge = new HealthBar(this, new Vector2(20, 0), Color.Red);  
-
-            enemyHealth = new HealthBar(this, new Vector2(822, 0), Color.Gray);  //Top right corner
-            enemyGauge = new HealthBar(this, new Vector2(822, 0), Color.Red);
 
             narrator = new Narrator(this);
         }
@@ -133,13 +137,8 @@ namespace Elemancy
             wizardHealth.LoadContent(Content);
             wizardGauge.LoadContent(Content);
 
-            enemyHealth.LoadContent(Content);
-            enemyGauge.LoadContent(Content);
-
             menu.LoadContent(Content);
-            messages.LoadContent(Content);
-            level.LoadContent(Content);
-
+            music.LoadContent(Content);
             narrator.LoadContent(Content);
 
             // Player Layer
@@ -150,17 +149,17 @@ namespace Elemancy
             playerLayer.DrawOrder = 2;
             Components.Add(playerLayer);
 
-            for (int i = 0; i < 10; i++)
-            {
-                //positions may be updated later when the enemies "spawn"
-                forestEnemies.Add(new BasicEnemy(30, 5, "fire", this, new Vector2(player.Position.X + 100, 500)));
-                caveEnemies.Add(new BasicEnemy(40, 10, "water", this, new Vector2(player.Position.X + 100, 500)));
-                dungeonEnemies.Add(new BasicEnemy(50, 15, "lightning", this, new Vector2(player.Position.X + 100, 500)));
-            }
-            //determine where bosses are going to be placed in the level
-            forestBoss = new EnemyBoss(60, 10, "fire", this, new Vector2(300, 700)); 
-            caveBoss = new EnemyBoss(80, 20, "water", this, new Vector2(300, 700));   
-            dungeonBoss = new EnemyBoss(100, 30, "lightning", this, new Vector2(300, 700));
+            narrator = new Narrator(this);
+            dungeonLevel = new DungeonLevel(this);
+            caveLevel = new CaveLevel(this);
+            forestLevel = new ForestLevel(this);
+
+            dungeonLevel.LoadContent(Content);
+            caveLevel.LoadContent(Content);
+            forestLevel.LoadContent(Content);
+
+            enemyHealth.LoadContent(Content);
+            enemyGauge.LoadContent(Content);
 
             levelsLayer = new ParallaxLayer(this);
             // Levels Layer - Can just add to to them for other levels
@@ -173,17 +172,15 @@ namespace Elemancy
                Content.Load<Texture2D>("cave1"),
                Content.Load<Texture2D>("cave2"),
                Content.Load<Texture2D>("cave1"),
-               Content.Load<Texture2D>("dungeon1"),
+               Content.Load<Texture2D>("dungeon2"),
+               Content.Load<Texture2D>("dungeon2"),
                Content.Load<Texture2D>("dungeon2")
             };
 
-            var position = Vector2.Zero;
             var levelSprites = new List<StaticSprite>();
             for (int i = 0; i < levelTextures.Count; i++)
             {
-                if(i == 7) position = new Vector2((9 * 1389) - 50, 0);
-                else  position = new Vector2((i * 1389) - 50, 0);
-
+                var position = new Vector2((i * 1389) - 50, 0);
                 var sprite = new StaticSprite(levelTextures[i], position);
                 levelSprites.Add(sprite);
             }
@@ -205,23 +202,6 @@ namespace Elemancy
 
             //add for loop for enemies when we get texture files
             //Add Enemies to Components with DrawOrder so they appear on top of layers
-
-            //load enemy content
-            //enemies need to be added to the draw order
-            for (int i = 0; i < forestEnemies.Count; i++)
-            {
-                //name of file will change, added a temp png for testing
-                forestEnemies[i].LoadContent(Content, "tempEnemy", "tempEnemy");
-                caveEnemies[i].LoadContent(Content, "tempEnemy", "tempEnemy");
-                dungeonEnemies[i].LoadContent(Content, "tempEnemy", "tempEnemy");
-            }
-
-            forestBoss.LoadContent(Content, "tempEnemy", "tempEnemy");
-            caveBoss.LoadContent(Content, "tempEnemy", "tempEnemy");
-            dungeonBoss.LoadContent(Content, "tempEnemy", "tempEnemy");
-
-            //setting the first active enemy to be the first enemy in the forest level
-            activeEnemy = forestEnemies[0];
         }
 
         /// <summary>
@@ -231,6 +211,7 @@ namespace Elemancy
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+            
         }
 
         /// <summary>
@@ -253,92 +234,72 @@ namespace Elemancy
             {
                 case GameState.MainMenu:
                     menu.Update(gameTime);
+
+
                     break;
                 default:
 
-                    if (current.IsKeyDown(Keys.H))
+                    if (player.Bounds.CollidesWith(forestLevel.ActiveEnemy.Bounds)
+                        || player.Bounds.CollidesWith(caveLevel.ActiveEnemy.Bounds) ||
+                        player.Bounds.CollidesWith(dungeonLevel.ActiveEnemy.Bounds))
                     {
                         player.IsHit = true;
-                        // Minus the Health by the damage done when player was hit/Is collided with, using -1 for now
-                        // Need to synch damage and player heaith with Healthbar width
-                        wizardGauge.Bounds.Width -= 1;
-                        player.UpdateHealth(1);
+                        wizardGauge.Update(gameTime, player.Health, 5);
+                        player.UpdateHealth(5);
                     }
 
                     player.Update(gameTime);
+                    forestLevel.Update(gameTime);
+                    caveLevel.Update(gameTime);
+                    dungeonLevel.Update(gameTime);
 
                     if (player.Element == Element.None)
                     {
                         player.Element = menu.selectedElement;
                     }
+
+                    if (TransitionCave)
+                    {
+                        // Cheat way to get song to switch right now
+                        if (player.Position.X >= 4150 && player.Position.X <= 8334 && !music.IsPLaying)
+                        {
+                            gameState = music.SetGameState(player, menu.Start);
+                            music.IsPLaying = true;
+                        }
+                        TransitionCave = false;
+                    }
+                    if(TransitionDungeon)
+                    {
+                        if (player.Position.X >= 8375 && music.IsPLaying)
+                        {
+                            music.IsPLaying = false;
+                            gameState = music.SetGameState(player, menu.Start);
+                        }
+                        System.Diagnostics.Debug.WriteLine($"{player.Position.X } player position");
+                        System.Diagnostics.Debug.WriteLine($"{gameState } gameState");
+                        TransitionDungeon = false;
+                    }
+                       
                     
-                    //enemy update
-                    activeEnemy.Update(player, gameTime);
-                    if (activeEnemy.dead)
-                    {
-                        if (forestEnemies.Count > 0)
-                        {
-                            forestEnemies.RemoveAt(0);
-                            if (forestEnemies.Count == 0)
-                            {
-                                activeEnemy = forestBoss;
-                            }
-                            else activeEnemy = forestEnemies[0];
-                        }
-                        else if (caveEnemies.Count > 0)
-                        {
-                            caveEnemies.RemoveAt(0);
-                            if (caveEnemies.Count == 0)
-                            {
-                                activeEnemy = caveBoss;
-                            }
-                            else activeEnemy = caveEnemies[0];
-                        }
-                        else if (dungeonEnemies.Count > 0)
-                        {
-                            dungeonEnemies.RemoveAt(0);
-                            if (dungeonEnemies.Count == 0)
-                            {
-                                activeEnemy = dungeonBoss;
-                            }
-                            else activeEnemy = caveEnemies[0];
-                        }
 
-                    }
-
-                    // Cheat way to get song to switch right now
-                    if (player.Position.X >= 4120 && player.Position.X <= 8334 && !level.IsPLaying)
-                    {
-                        gameState = level.SetGameState(player, menu.Start);
-                        level.IsPLaying = true;
-                    }
-                    if (player.Position.X >= 8334 && level.IsPLaying)
-                    {
-                        level.IsPLaying = false;
-                        gameState = level.SetGameState(player, menu.Start);
-                    }
-
-                    scroll = level.GetScrollStop(gameState);
+                    scroll = music.GetScrollStop(gameState);
+                    System.Diagnostics.Debug.WriteLine($"{scroll } scrolling stop");
+                    System.Diagnostics.Debug.WriteLine($"{player.Position.X } player position");
 
                     if (player.Position.X >= scroll)
                     {
-                        levelsT.ScrollStop = scroll;
-                        levelsT.ScrollRatio = 0.0f;
                         playerT.ScrollRatio = 0.0f;
-                        // probably need to restrict the player's movement 
-                        // So they have to battle the boss; 
+                        levelsT.ScrollRatio = 0.0f;
+                        levelsT.ScrollStop = scroll;
+                    }
+                    else
+                    {
+                        levelsT.ScrollRatio = 1.0f;
+                        playerT.ScrollRatio = 1.0f;
                     }
 
                     break; // END OF DEFAULT
             }
-
-           
-
-            /**/
-
-            // Transition screen will be shown when the boss for that level is 
-            // dead, and then If they hit C for Continue will change Player position 
-            // and  scroll will change.
 
             base.Update(gameTime);
             oldState = current;
@@ -361,30 +322,37 @@ namespace Elemancy
 
             componentsBatch.Begin();
 
-
             switch(gameState)
             {
                 case GameState.MainMenu:
-                    if (!menu.Start)
+                    menu.Draw(componentsBatch, graphics);
+
+                    if(Restart == true)
                     {
-                        menu.Draw(componentsBatch, graphics);
-                        //restart the game / re-initialize player at the beginning
+                        player.Initialize();
+                        menu.Update(gameTime);
+                        Restart = false;
                     }
                     break;
-                default:
-
+                case GameState.Forest:
                     wizardHealth.Draw(componentsBatch);
                     wizardGauge.Draw(componentsBatch);
 
-                    enemyHealth.Draw(componentsBatch);
-                    enemyGauge.Draw(componentsBatch);
+                    forestLevel.Draw(componentsBatch, gameTime);
+                    break;
+                case GameState.Cave:
+                    wizardHealth.Draw(componentsBatch);
+                    wizardGauge.Draw(componentsBatch);
 
-                    activeEnemy.Draw(componentsBatch, Color.White);
+                    caveLevel.Draw(componentsBatch, gameTime);
+                    break;
+                case GameState.Dungeon:                    
+                    wizardHealth.Draw(componentsBatch);
+                    wizardGauge.Draw(componentsBatch);
+
+                    dungeonLevel.Draw(componentsBatch, gameTime);
                     break;
             }
-            
-
-            //messages.Draw(componentsBatch, graphics);
 
             componentsBatch.End();
         }

@@ -49,7 +49,7 @@ namespace Elemancy
         // Timers for fading and flickering when dying and being hit
         InterpolationTimer fade;
         InterpolationTimer flicker;
-        float multiple = 1;
+        float multiple;
 
         // How much the animation moves per frames 
         const int FRAME_RATE = 124;
@@ -72,9 +72,6 @@ namespace Elemancy
         // current frame
         int frame;
 
-        // the health of the player, need to bind with healthbar
-        int health;
-
         // The player's vertical movement state
         VerticalMovementState verticalState;
 
@@ -94,7 +91,7 @@ namespace Elemancy
         public Element Element = Element.None;
 
         // 'Elemental Power' Orb
-        public ElementalOrb elementalOrb;
+        public ElementalOrb elementalOrb { get; }
 
         // The Game 
         Game game;
@@ -118,10 +115,12 @@ namespace Elemancy
         /// </summary>
         public Color Color;
 
+        public int HitDamage;
+
         /// <summary>
-        /// Could change depending on spell cast/type of attack
+        /// the health of the player, need to bind with healthbar
         /// </summary>
-        public int HitDamage { get; set; }
+        public int Health { get; protected set; }
 
         public bool IsDead { get; set; } = false;
 
@@ -143,8 +142,9 @@ namespace Elemancy
 
         public void Initialize()
         {
+            // For testing purposes
             Position = new Vector2(40,600);  // Start position could change with preference
-            health = 25; // Could also change with preference
+            Health = 200; // Could also change with preference
             direction = Direction.Idle;
             verticalState = VerticalMovementState.OnGround;
             Bounds.Width = FRAME_WIDTH;
@@ -152,6 +152,7 @@ namespace Elemancy
 
             flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 0.0f, 1.0f);
             fade = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
+            multiple = 1;
 
             Element = Element.None;
             elementalOrb.Initialize();
@@ -160,7 +161,6 @@ namespace Elemancy
         public void LoadContent(ContentManager content)
         { 
             player = content.Load<Texture2D>("player");
-
             elementalOrb.LoadContent(content);
         }
 
@@ -171,8 +171,6 @@ namespace Elemancy
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
             Bounds.X = Position.X;
             Bounds.Y = Position.Y;
-
-            System.Diagnostics.Debug.WriteLine($"Player's X Position: {Position.X}");
 
             // So the player can't go backwards, would need to change as they 
             // progress through the levels
@@ -223,12 +221,9 @@ namespace Elemancy
 
             if(IsHit)
             {
-                /* jumpTimer += gameTime.ElapsedGameTime;
-                 // When they hit a trap, should bounce away from it
-                 // So they don't continue being hit
-                 Position.Y -= (350 / (float)jumpTimer.TotalMilliseconds);
-                 if (jumpTimer.TotalMilliseconds >= JUMP_TIME)
-                     verticalState = VerticalMovementState.Falling; */
+                // for when the player collides with the enenmy
+                Position.X -= 200 * delta;
+                direction = Direction.East;
 
                 if (flicker.TimeElapsed.TotalSeconds >= 0.20)
                 {
@@ -269,13 +264,7 @@ namespace Elemancy
                 }        
             }
 
-            if (IsHit)
-            {
-               // for hitting traps
-               /* Position.X -= 100 * delta;
-                direction = Direction.West; */
-            }
-            else if (keyboard.IsKeyDown(Keys.Left))
+            if (keyboard.IsKeyDown(Keys.Left))
             {
                 if (verticalState == VerticalMovementState.Jumping || verticalState == VerticalMovementState.Falling)
                     direction = Direction.West;                       
@@ -313,15 +302,14 @@ namespace Elemancy
                         break;
                 }
 
-                elementalOrb.Attack(Position, orbVelocity, Element);            
+                elementalOrb.Attack(Position, orbVelocity, Element);
+                SetDamage(game.GameState, Element);
             }
             elementalOrb.Update(gameTime);
             if (keyboard.IsKeyDown(Keys.LeftAlt) && !oldState.IsKeyDown(Keys.LeftAlt) && elementalOrb.State == ElementalOrb.ActiveState.Idle)
             {
                 CycleElement();
-            }
-            System.Diagnostics.Debug.WriteLine($"Player Element Type: {Element}");
-            
+            }       
 
             // update animation timer when the player is moving
             if (direction != Direction.Idle)
@@ -361,12 +349,32 @@ namespace Elemancy
         /// <param name="damage">The damage done to the player's health.</param>
         public void UpdateHealth(int damage)
         {           
-            health -= damage;
-            if(health <= 0)
+            Health -= damage;
+            if(Health <= 0)
             {
                 game.narrator.playDeathQuip();
                 IsDead = true;
                 IsHit = false;
+            }
+        }
+
+        public void SetDamage(GameState level, Element element)
+        {
+            if(level == GameState.Forest && element == Element.Fire)
+            {
+                HitDamage = 20;
+            }
+            else if(level == GameState.Cave && element == Element.Water)
+            {
+                HitDamage = 25;
+            }
+            else if(level == GameState.Dungeon && element == Element.Lightning)
+            {
+                HitDamage = 30;
+            }
+            else
+            {
+                HitDamage = 15;
             }
         }
 
