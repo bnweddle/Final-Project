@@ -43,7 +43,7 @@ namespace Elemancy.Transitions
             
             if(boss == 1)
             {
-                position = 4150;
+                position = 4175;
                 message = Message.Round1;
                 index = 0;
             }

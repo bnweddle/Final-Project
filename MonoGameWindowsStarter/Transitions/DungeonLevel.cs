@@ -15,7 +15,7 @@ namespace Elemancy.Transitions
 
         private List<IEnemy> dungeonEnemies = new List<IEnemy>();
         private EnemyBoss dungeonBoss;
-        private IEnemy ActiveEnemy;
+        public IEnemy ActiveEnemy;
 
         private Random random = new Random();
 
@@ -50,7 +50,7 @@ namespace Elemancy.Transitions
                 offset += random.Next(200, 300);
             }
 
-            dungeonBoss = new EnemyBoss(game, GameState.Dungeon, new Vector2(10000, 600));
+            dungeonBoss = new EnemyBoss(game, GameState.Dungeon, new Vector2(11200, 600));
             dungeonBoss.LoadContent(content);
             dungeonLayer.Sprites.Add(dungeonBoss);
             dungeonEnemies.Add(dungeonBoss);

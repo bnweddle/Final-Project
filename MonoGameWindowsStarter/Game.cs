@@ -171,17 +171,15 @@ namespace Elemancy
                Content.Load<Texture2D>("cave1"),
                Content.Load<Texture2D>("cave2"),
                Content.Load<Texture2D>("cave1"),
-               Content.Load<Texture2D>("dungeon1"),
+               Content.Load<Texture2D>("dungeon2"),
+               Content.Load<Texture2D>("dungeon2"),
                Content.Load<Texture2D>("dungeon2")
             };
 
-            var position = Vector2.Zero;
             var levelSprites = new List<StaticSprite>();
             for (int i = 0; i < levelTextures.Count; i++)
             {
-                if(i == 7) position = new Vector2((9 * 1389) - 50, 0);
-                else  position = new Vector2((i * 1389) - 50, 0);
-
+                var position = new Vector2((i * 1389) - 50, 0);
                 var sprite = new StaticSprite(levelTextures[i], position);
                 levelSprites.Add(sprite);
             }
@@ -240,7 +238,7 @@ namespace Elemancy
 
                     if (player.Bounds.CollidesWith(forestLevel.ActiveEnemy.Bounds)
                         || player.Bounds.CollidesWith(caveLevel.ActiveEnemy.Bounds) ||
-                        player.Bounds.CollidesWith(caveLevel.ActiveEnemy.Bounds))
+                        player.Bounds.CollidesWith(dungeonLevel.ActiveEnemy.Bounds))
                     {
                         player.IsHit = true;
                         wizardGauge.Update(gameTime, player.Health, 5);
