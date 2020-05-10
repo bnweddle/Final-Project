@@ -52,6 +52,7 @@ namespace Elemancy.Transitions
 
                 BasicEnemy forestEnemy = new BasicEnemy(game, GameState.Forest, new Vector2(300 + offset, 600));
                 forestEnemy.LoadContent(content);
+                //forestEnemy.IsActive = true;
                 forestLayer.Sprites.Add(forestEnemy);
                 forestEnemies.Add(forestEnemy);
                 offset += random.Next(200, 300);
@@ -62,9 +63,9 @@ namespace Elemancy.Transitions
             forestLayer.Sprites.Add(forestBoss);
             forestEnemies.Add(forestBoss);
 
-            // Testing!!!
-            forestEnemies[10].IsActive = true;
-            ActiveEnemy = forestEnemies[10];
+            ActiveEnemy = forestEnemies[0];
+            ActiveEnemy.IsActive = true;
+
 
             game.Components.Add(forestLayer);
             forestLayer.DrawOrder = 2;
@@ -75,7 +76,7 @@ namespace Elemancy.Transitions
 
         public void Update(GameTime gameTime)
         {
-            ActiveEnemy.Update(game.player, gameTime);
+            
 
             if (ActiveEnemy.Hit)
             {
@@ -108,6 +109,8 @@ namespace Elemancy.Transitions
                     enemyGauge.RestartHealth(); // for the next enemy;
                 }
             }
+
+            ActiveEnemy.Update(game.player, gameTime);
         }
 
         /// <summary>
@@ -122,14 +125,15 @@ namespace Elemancy.Transitions
             if (forestBoss.Dead)
             {
                 message.SetMessage(1, out game.player.Position.X);
-                if(!message.Continue)
+                message.Update(gameTime);
+                if (message.Continue == false)
                 {
+                    game.NextLevel = false;
                     message.Draw(spriteBatch, game.graphics);
-                    message.Update(gameTime);
                 }
-                else if(message.Continue)
+                else if(message.Continue == true)
                 {
-                    game.GameState = GameState.Cave;
+                    game.NextLevel = true;                 
                 }
             }
             else if (game.player.IsDead)

@@ -148,15 +148,9 @@ namespace Elemancy
             {
                 player.elementalOrb.Attack(Vector2.Zero, Vector2.Zero, Element.None);
                 Hit = true;
-                Health -= game.player.HitDamage;
             }
 
-            if (Health <= 0)
-            {
-                Dead = true;
-            }
-
-            if (Hit)
+           /* if (Hit)
             {
 
                 if (flicker.TimeElapsed.TotalSeconds >= 0.20)
@@ -198,12 +192,17 @@ namespace Elemancy
 
                     multiple = fade.CurrentValue;
                 }
-            }
+            } */
         }
 
         public void UpdateHealth(int damage)
         {
-
+            Health -= damage;
+            if (Health <= 0)
+            {
+                Dead = true;
+                Hit = false;
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
@@ -212,7 +211,7 @@ namespace Elemancy
             {
                 if (IsActive == true) // Only draw the active enemy
                 {
-                    spriteBatch.Draw(enemyTexture, Position, Bounds, Color.White * multiple);
+                    spriteBatch.Draw(enemyTexture, Position, Bounds, Color.White);
                 }
             }
         }

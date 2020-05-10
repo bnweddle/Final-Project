@@ -39,6 +39,7 @@ namespace Elemancy
         ForestLevel forestLevel;
         CaveLevel caveLevel;
         DungeonLevel dungeonLevel;
+        public bool NextLevel = false;
 
         // the enemy's health bar
         HealthBar enemyHealth, enemyGauge;
@@ -255,25 +256,37 @@ namespace Elemancy
                         player.Element = menu.selectedElement;
                     }
 
-                    // Cheat way to get song to switch right now
-                    if (player.Position.X >= 4150 && player.Position.X <= 8334 && !music.IsPLaying)
+                    if(NextLevel)
                     {
-                        gameState = music.SetGameState(player, menu.Start);
-                        music.IsPLaying = true;
+                        // Cheat way to get song to switch right now
+                        if (player.Position.X >= 4150 && player.Position.X <= 8334 && !music.IsPLaying)
+                        {
+                            gameState = music.SetGameState(player, menu.Start);
+                            music.IsPLaying = true;
+                        }
+                        if (player.Position.X >= 8375 && music.IsPLaying)
+                        {
+                            music.IsPLaying = false;
+                            gameState = music.SetGameState(player, menu.Start);
+                        }
+                        System.Diagnostics.Debug.WriteLine($"{player.Position.X } player position");
+                        System.Diagnostics.Debug.WriteLine($"{gameState } gameState");
                     }
-                    if (player.Position.X >= 8375 && music.IsPLaying)
-                    {
-                        music.IsPLaying = false;
-                        gameState = music.SetGameState(player, menu.Start);
-                    }
+                    
 
                     scroll = music.GetScrollStop(gameState);
+                    System.Diagnostics.Debug.WriteLine($"{scroll } scrolling stop");
 
                     if (player.Position.X >= scroll)
                     {
                         levelsT.ScrollStop = scroll;
                         levelsT.ScrollRatio = 0.0f;
                         playerT.ScrollRatio = 0.0f;
+                    }
+                    else
+                    {
+                        levelsT.ScrollRatio = 1.0f;
+                        playerT.ScrollRatio = 1.0f;
                     }
 
                     break; // END OF DEFAULT

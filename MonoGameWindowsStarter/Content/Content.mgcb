@@ -79,6 +79,18 @@
 /processorParam:TextureFormat=Color
 /build:cave2.jpg
 
+#begin dragonBoss.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:dragonBoss.png
+
 #begin dungeon1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -109,6 +121,18 @@
 /processorParam:Quality=Best
 /build:Eww Thunder.wav
 
+#begin flytrapBasic.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:flytrapBasic.png
+
 #begin forest1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -132,6 +156,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:forest2.png
+
+#begin goblinBasic.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:goblinBasic.png
 
 #begin healthbar6.png
 /importer:TextureImporter
@@ -265,6 +301,18 @@
 /processorParam:Quality=Best
 /build:Seems pretty basic.wav
 
+#begin skeletonBasic.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:skeletonBasic.png
+
 #begin Take the controller back.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -306,6 +354,42 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:Thunder.mp3
+
+#begin tree.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:tree.jpg
+
+#begin treeBoss.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:treeBoss.png
+
+#begin trollBoss.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:trollBoss.png
 
 #begin win.png
 /importer:TextureImporter

@@ -117,8 +117,8 @@ namespace Elemancy
             Dead = false;
 
 
-            flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 0.0f, 1.0f);
-            fade = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
+            //flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 0.0f, 1.0f);
+            //fade = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
 
             SetUpEnemy(state);
         }
@@ -212,11 +212,11 @@ namespace Elemancy
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            if(enemyTexture != null)
+           if(enemyTexture != null)
             {
                 if(IsActive == true) // Only draw the active enemy
                 {
-                    spriteBatch.Draw(enemyTexture, Position, Bounds, Color.White * multiple);
+                    spriteBatch.Draw(enemyTexture, Position, Bounds, Color.White);
                 }
             }
 
