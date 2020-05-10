@@ -151,6 +151,9 @@ namespace Elemancy
             Bounds.Width = FRAME_WIDTH;
             Bounds.Height = FRAME_HEIGHT;
 
+            IsDead = false;
+            IsHit = false;
+
             flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 0.0f, 1.0f);
             fade = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
             multiple = 1;

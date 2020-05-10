@@ -26,7 +26,7 @@ namespace Elemancy.Transitions
 
         private int index;
 
-        public bool BackMenu { get; protected set; } = false;
+        public bool BackMenu { get; set; } = false;
 
         public bool Continue { get; protected set; } = false;
 

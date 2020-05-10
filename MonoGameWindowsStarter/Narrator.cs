@@ -38,7 +38,7 @@ namespace Elemancy
             Commentary.Add("Huh not a lot here", content.Load<SoundEffect>("Huh not a lot here"));
             Commentary.Add("Picked a less annoying", content.Load<SoundEffect>("Picked a less annoying"));
             Commentary.Add("Picked a more annoying", content.Load<SoundEffect>("Picked a more annoying"));
-            Commentary.Add("Seems pretty basic", content.Load<SoundEffect>("Seems pretty basic"));
+            Commentary.Add("Seems pretty basic", content.Load<SoundEffect>("Seems pretty basic")); 
 
             DeathQuips.Add(content.Load<SoundEffect>("Are you sure"));
             //DeathQuips.Add(content.Load<SoundEffect>("C'mon now")); // Why isn't this one cooperating?

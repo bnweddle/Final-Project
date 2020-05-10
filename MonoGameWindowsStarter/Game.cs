@@ -274,16 +274,14 @@ namespace Elemancy
                             music.IsPLaying = false;
                             gameState = music.SetGameState(player, menu.Start);
                         }
-                        System.Diagnostics.Debug.WriteLine($"{player.Position.X } player position");
-                        System.Diagnostics.Debug.WriteLine($"{gameState } gameState");
+                        //System.Diagnostics.Debug.WriteLine($"{player.Position.X } player position");
+                        //System.Diagnostics.Debug.WriteLine($"{gameState } gameState");
                         TransitionDungeon = false;
-                    }
-                       
-                    
+                    }                      
 
                     scroll = music.GetScrollStop(gameState);
-                    System.Diagnostics.Debug.WriteLine($"{scroll } scrolling stop");
-                    System.Diagnostics.Debug.WriteLine($"{player.Position.X } player position");
+                   // System.Diagnostics.Debug.WriteLine($"{scroll } scrolling stop");
+                   // System.Diagnostics.Debug.WriteLine($"{player.Position.X } player position");
 
                     if (player.Position.X >= scroll)
                     {
@@ -324,14 +322,24 @@ namespace Elemancy
             switch(gameState)
             {
                 case GameState.MainMenu:
-                    menu.Draw(componentsBatch, graphics);
-
-                    if(Restart == true)
+                    if(!menu.Start)
                     {
-                        player.Initialize();
-                        menu.Update(gameTime);
-                        Restart = false;
-                    }
+                        menu.Draw(componentsBatch, graphics);
+
+                        if (Restart == true)
+                        {
+                            wizardGauge.RestartHealth();
+                            player.Initialize();
+                            menu.Update(gameTime);
+
+                            if (menu.Start)
+                            {
+                                Restart = false;
+                            }
+                           // System.Diagnostics.Debug.WriteLine($"{menu.Start } menu begin");
+                           // System.Diagnostics.Debug.WriteLine($"{gameState } game state");
+                        }
+                    }                  
                     break;
                 case GameState.Forest:
                     wizardHealth.Draw(componentsBatch);
