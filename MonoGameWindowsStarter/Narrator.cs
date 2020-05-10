@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Elemancy
 {
-    class Narrator
+    public class Narrator
     {
         Game game;
 

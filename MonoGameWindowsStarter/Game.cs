@@ -72,7 +72,7 @@ namespace Elemancy
         HealthBar wizardHealth, wizardGauge;
         HealthBar enemyHealth, enemyGauge;
 
-        Narrator narrator;
+        public Narrator narrator;
 
         private GameState gameState;
         int scroll = 3117; // first level

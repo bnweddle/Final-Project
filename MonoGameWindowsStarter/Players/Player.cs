@@ -364,6 +364,7 @@ namespace Elemancy
             health -= damage;
             if(health <= 0)
             {
+                game.narrator.playDeathQuip();
                 IsDead = true;
                 IsHit = false;
             }
