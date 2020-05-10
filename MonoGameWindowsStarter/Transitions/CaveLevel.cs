@@ -43,19 +43,20 @@ namespace Elemancy.Transitions
             for (int i = 0; i < 10; i++)
             {
 
-                BasicEnemy caveEnemy = new BasicEnemy(game, GameState.Cave, new Vector2(4500 + offset, 543));
+                BasicEnemy caveEnemy = new BasicEnemy(game, GameState.Cave, new Vector2(4500 + offset, 600));
                 caveEnemy.LoadContent(content);
                 caveLayer.Sprites.Add(caveEnemy);
                 caveEnemies.Add(caveEnemy);
                 offset += random.Next(200, 300);
             }
 
-            caveBoss = new EnemyBoss(game, GameState.Cave, new Vector2(8300, 600));
+            caveBoss = new EnemyBoss(game, GameState.Cave, new Vector2(7300, 600));
+            caveBoss.LoadContent(content);
             caveLayer.Sprites.Add(caveBoss);
             caveEnemies.Add(caveBoss);
 
-            caveEnemies[0].IsActive = true;
             ActiveEnemy = caveEnemies[0];
+            ActiveEnemy.IsActive = true;
 
             game.Components.Add(caveLayer);
             caveLayer.DrawOrder = 2;
@@ -66,61 +67,80 @@ namespace Elemancy.Transitions
         public void Update(GameTime gameTime)
         {
 
-            ActiveEnemy.Update(game.player, gameTime);
-
             if (ActiveEnemy.Hit)
             {
                 enemyGauge.Update(gameTime, ActiveEnemy.Health, game.player.HitDamage);
+                ActiveEnemy.Hit = false;
+                ActiveEnemy.UpdateHealth(game.player.HitDamage);
             }
+
             if (ActiveEnemy.Dead)
             {
-                ActiveEnemy.IsActive = false;
-                if (caveEnemies.Count > 0)
+                caveEnemies[0].IsActive = false; // Don't draw the old one
+                if (caveEnemies.Count > 1)
                 {
                     caveEnemies.RemoveAt(0);
                     if (caveEnemies.Count == 0)
                     {
                         ActiveEnemy = caveBoss;
+                        caveEnemies[0].IsActive = true;
+                        if (caveBoss.Health <= 0)
+                        {
+                            caveBoss.Dead = true;
+                        }
                     }
-                    else ActiveEnemy = caveEnemies[0];
-                    ActiveEnemy.IsActive = true;
+                    else
+                    {
+                        ActiveEnemy = caveEnemies[0];
+                        caveEnemies[0].IsActive = true; // Draw active enemy
+                    }
                     enemyGauge.RestartHealth(); // for the next enemy;
                 }
             }
+
+            ActiveEnemy.Update(game.player, gameTime);
         }
 
         /// <summary>
         /// Will need to pass in componentsBatch, I think
         /// </summary>
         /// <param name="spriteBatch"></param>
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             enemyHealth.Draw(spriteBatch);
             enemyGauge.Draw(spriteBatch);
 
             if (caveBoss.Dead)
             {
-                message.SetMessage(1, out game.player.Position.X);
-                if (!message.Continue)
+                message.SetMessage(2, out game.player.Position.X);
+                message.Update(gameTime);
+                if (message.Continue == false)
+                {
+                    game.TransitionDungeon = false;
+                    message.Draw(spriteBatch, game.graphics);
+                }
+                else if (message.Continue == true)
+                {
+                    game.TransitionDungeon = true;
+                }
+            }
+            else if (game.player.IsDead)
+            {
+                message.SetMessage(-1, out game.player.Position.X);
+                message.Update(gameTime);
+                if (!message.BackMenu)
                 {
                     message.Draw(spriteBatch, game.graphics);
                 }
-                else if (game.player.IsDead)
+                else if (message.BackMenu)
                 {
-                    message.SetMessage(-1, out game.player.Position.X);
-                    if (!message.BackMenu || !message.Exit)
-                    {
-                        message.Draw(spriteBatch, game.graphics);
-                    }
-                    else if (message.BackMenu)
-                    {
-                        game.GameState = GameState.MainMenu;
-                    }
-                    else
-                    {
-                        game.Exit();
-                    }
-
+                    game.menu.Start = false;
+                    game.music.SetGameState(game.player, false);
+                    game.GameState = GameState.MainMenu;
+                }
+                else
+                {
+                    game.Exit();
                 }
             }
         }

@@ -42,10 +42,10 @@ namespace Elemancy.Transitions
                     scrollStop = 3117;
                     break;
                 case GameState.Cave:
-                    scrollStop = 3117 * 2;
+                    scrollStop = 7284;
                     break;
                 case GameState.Dungeon:
-                    scrollStop = 3117 * 3;
+                    scrollStop = 11451;
                     break;
             }
 

@@ -52,7 +52,6 @@ namespace Elemancy.Transitions
 
                 BasicEnemy forestEnemy = new BasicEnemy(game, GameState.Forest, new Vector2(300 + offset, 600));
                 forestEnemy.LoadContent(content);
-                //forestEnemy.IsActive = true;
                 forestLayer.Sprites.Add(forestEnemy);
                 forestEnemies.Add(forestEnemy);
                 offset += random.Next(200, 300);
@@ -66,7 +65,6 @@ namespace Elemancy.Transitions
             ActiveEnemy = forestEnemies[0];
             ActiveEnemy.IsActive = true;
 
-
             game.Components.Add(forestLayer);
             forestLayer.DrawOrder = 2;
             forestT = new TrackingPlayer(game.player, 1.0f);
@@ -76,8 +74,7 @@ namespace Elemancy.Transitions
 
         public void Update(GameTime gameTime)
         {
-            
-
+           
             if (ActiveEnemy.Hit)
             {
                 enemyGauge.Update(gameTime, ActiveEnemy.Health, game.player.HitDamage);
@@ -128,12 +125,12 @@ namespace Elemancy.Transitions
                 message.Update(gameTime);
                 if (message.Continue == false)
                 {
-                    game.NextLevel = false;
+                    game.TransitionCave = false;
                     message.Draw(spriteBatch, game.graphics);
                 }
                 else if(message.Continue == true)
                 {
-                    game.NextLevel = true;                 
+                    game.TransitionCave = true;                 
                 }
             }
             else if (game.player.IsDead)

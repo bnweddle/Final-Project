@@ -43,7 +43,7 @@ namespace Elemancy.Transitions
             for (int i = 0; i < 10; i++)
             {
 
-                BasicEnemy dungeonEnemy = new BasicEnemy(game, GameState.Dungeon, new Vector2(8500 + offset, 543));
+                BasicEnemy dungeonEnemy = new BasicEnemy(game, GameState.Dungeon, new Vector2(8500 + offset, 600));
                 dungeonEnemy.LoadContent(content);
                 dungeonLayer.Sprites.Add(dungeonEnemy);
                 dungeonEnemies.Add(dungeonEnemy);
@@ -51,6 +51,7 @@ namespace Elemancy.Transitions
             }
 
             dungeonBoss = new EnemyBoss(game, GameState.Dungeon, new Vector2(10000, 600));
+            dungeonBoss.LoadContent(content);
             dungeonLayer.Sprites.Add(dungeonBoss);
             dungeonEnemies.Add(dungeonBoss);
 
@@ -66,62 +67,91 @@ namespace Elemancy.Transitions
         public void Update(GameTime gameTime)
         {
 
-            ActiveEnemy.Update(game.player, gameTime);
-
             if (ActiveEnemy.Hit)
             {
                 enemyGauge.Update(gameTime, ActiveEnemy.Health, game.player.HitDamage);
+                ActiveEnemy.Hit = false;
+                ActiveEnemy.UpdateHealth(game.player.HitDamage);
             }
 
             if (ActiveEnemy.Dead)
             {
-                ActiveEnemy.IsActive = false;
-                if (dungeonEnemies.Count > 0)
+                dungeonEnemies[0].IsActive = false; // Don't draw the old one
+                if (dungeonEnemies.Count > 1)
                 {
                     dungeonEnemies.RemoveAt(0);
                     if (dungeonEnemies.Count == 0)
                     {
                         ActiveEnemy = dungeonBoss;
+                        dungeonEnemies[0].IsActive = true;
+                        if (dungeonBoss.Health <= 0)
+                        {
+                            dungeonBoss.Dead = true;
+                        }
+                        // Draw active enemy
                     }
-                    else ActiveEnemy = dungeonEnemies[0];
-                    ActiveEnemy.IsActive = true;
+                    else
+                    {
+                        ActiveEnemy = dungeonEnemies[0];
+                        dungeonEnemies[0].IsActive = true; // Draw active enemy
+                    }
                     enemyGauge.RestartHealth(); // for the next enemy;
                 }
             }
+
+            ActiveEnemy.Update(game.player, gameTime);
         }
 
         /// <summary>
         /// Will need to pass in componentsBatch, I think
         /// </summary>
         /// <param name="spriteBatch"></param>
-        public void Draw(SpriteBatch spriteBatch)
+        /// <summary>
+        /// Will need to pass in componentsBatch, I think
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             enemyHealth.Draw(spriteBatch);
             enemyGauge.Draw(spriteBatch);
 
             if (dungeonBoss.Dead)
             {
-                message.SetMessage(1, out game.player.Position.X);
-                if (!message.Continue)
+                message.SetMessage(3, out game.player.Position.X);
+                message.Update(gameTime);
+                if (!message.BackMenu)
                 {
                     message.Draw(spriteBatch, game.graphics);
                 }
-                else if (game.player.IsDead)
+                else if (message.BackMenu)
                 {
-                    message.SetMessage(-1, out game.player.Position.X);
-                    if (!message.BackMenu || !message.Exit)
-                    {
-                        message.Draw(spriteBatch, game.graphics);
-                    }
-                    else if (message.BackMenu)
-                    {
-                        game.GameState = GameState.MainMenu;
-                    }
-                    else
-                    {
-                        game.Exit();
-                    }
+                    game.menu.Start = false;
+                    game.music.SetGameState(game.player, false);
+                    game.GameState = GameState.MainMenu;
+                }
+                else
+                {
+                    game.Exit();
+                }
 
+            }
+            else if (game.player.IsDead)
+            {
+                message.SetMessage(-1, out game.player.Position.X);
+                message.Update(gameTime);
+                if (!message.BackMenu)
+                {
+                    message.Draw(spriteBatch, game.graphics);
+                }
+                else if (message.BackMenu)
+                {
+                    game.menu.Start = false;
+                    game.music.SetGameState(game.player, false);
+                    game.GameState = GameState.MainMenu;
+                }
+                else
+                {
+                    game.Exit();
                 }
             }
         }

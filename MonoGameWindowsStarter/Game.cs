@@ -39,7 +39,8 @@ namespace Elemancy
         ForestLevel forestLevel;
         CaveLevel caveLevel;
         DungeonLevel dungeonLevel;
-        public bool NextLevel = false;
+        public bool TransitionCave = false;
+        public bool TransitionDungeon = false;
 
         // the enemy's health bar
         HealthBar enemyHealth, enemyGauge;
@@ -256,7 +257,7 @@ namespace Elemancy
                         player.Element = menu.selectedElement;
                     }
 
-                    if(NextLevel)
+                    if (TransitionCave)
                     {
                         // Cheat way to get song to switch right now
                         if (player.Position.X >= 4150 && player.Position.X <= 8334 && !music.IsPLaying)
@@ -264,6 +265,10 @@ namespace Elemancy
                             gameState = music.SetGameState(player, menu.Start);
                             music.IsPLaying = true;
                         }
+                        TransitionCave = false;
+                    }
+                    if(TransitionDungeon)
+                    {
                         if (player.Position.X >= 8375 && music.IsPLaying)
                         {
                             music.IsPLaying = false;
@@ -271,17 +276,20 @@ namespace Elemancy
                         }
                         System.Diagnostics.Debug.WriteLine($"{player.Position.X } player position");
                         System.Diagnostics.Debug.WriteLine($"{gameState } gameState");
+                        TransitionDungeon = false;
                     }
+                       
                     
 
                     scroll = music.GetScrollStop(gameState);
                     System.Diagnostics.Debug.WriteLine($"{scroll } scrolling stop");
+                    System.Diagnostics.Debug.WriteLine($"{player.Position.X } player position");
 
                     if (player.Position.X >= scroll)
                     {
-                        levelsT.ScrollStop = scroll;
-                        levelsT.ScrollRatio = 0.0f;
                         playerT.ScrollRatio = 0.0f;
+                        levelsT.ScrollRatio = 0.0f;
+                        levelsT.ScrollStop = scroll;
                     }
                     else
                     {
@@ -319,19 +327,23 @@ namespace Elemancy
                      menu.Draw(componentsBatch, graphics);
                     break;
                 case GameState.Forest:
+                    wizardHealth.Draw(componentsBatch);
+                    wizardGauge.Draw(componentsBatch);
+
                     forestLevel.Draw(componentsBatch, gameTime);
                     break;
                 case GameState.Cave:
-                    caveLevel.Draw(componentsBatch);
+                    wizardHealth.Draw(componentsBatch);
+                    wizardGauge.Draw(componentsBatch);
+
+                    caveLevel.Draw(componentsBatch, gameTime);
                     break;
-                case GameState.Dungeon:
-                    dungeonLevel.Draw(componentsBatch);
+                case GameState.Dungeon:                    
+                    wizardHealth.Draw(componentsBatch);
+                    wizardGauge.Draw(componentsBatch);
+
+                    dungeonLevel.Draw(componentsBatch, gameTime);
                     break;
-            }
-            if(menu.Start && !player.IsDead)
-            {
-                wizardHealth.Draw(componentsBatch);
-                wizardGauge.Draw(componentsBatch);
             }
 
             componentsBatch.End();
