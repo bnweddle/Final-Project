@@ -99,6 +99,7 @@ namespace Elemancy
         // The player texture
         Texture2D player;
 
+        bool deathQuipped = false;
 
         /// <summary>
         /// The Player's position
@@ -352,9 +353,17 @@ namespace Elemancy
             Health -= damage;
             if(Health <= 0)
             {
-                game.narrator.playDeathQuip();
                 IsDead = true;
                 IsHit = false;
+                if (!deathQuipped)
+                {
+                    game.narrator.playDeathQuip();
+                    deathQuipped = true;
+                }
+            }
+            else
+            {
+                deathQuipped = false;
             }
         }
 

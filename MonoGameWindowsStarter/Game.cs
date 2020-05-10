@@ -149,7 +149,6 @@ namespace Elemancy
             playerLayer.DrawOrder = 2;
             Components.Add(playerLayer);
 
-            narrator = new Narrator(this);
             dungeonLevel = new DungeonLevel(this);
             caveLevel = new CaveLevel(this);
             forestLevel = new ForestLevel(this);
