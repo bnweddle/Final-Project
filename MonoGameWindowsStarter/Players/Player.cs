@@ -49,7 +49,7 @@ namespace Elemancy
         // Timers for fading and flickering when dying and being hit
         InterpolationTimer fade;
         InterpolationTimer flicker;
-        float multiple = 1;
+        float multiple;
 
         // How much the animation moves per frames 
         const int FRAME_RATE = 124;
@@ -152,6 +152,7 @@ namespace Elemancy
 
             flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 0.0f, 1.0f);
             fade = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
+            multiple = 1;
 
             Element = Element.None;
             elementalOrb.Initialize();
@@ -160,7 +161,6 @@ namespace Elemancy
         public void LoadContent(ContentManager content)
         { 
             player = content.Load<Texture2D>("player");
-
             elementalOrb.LoadContent(content);
         }
 

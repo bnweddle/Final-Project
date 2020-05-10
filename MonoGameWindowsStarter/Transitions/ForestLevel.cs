@@ -146,6 +146,7 @@ namespace Elemancy.Transitions
                     game.menu.Start = false;
                     game.music.SetGameState(game.player, false);
                     game.GameState = GameState.MainMenu;
+                    game.Restart = true;
                 }
                 else 
                 {

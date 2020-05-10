@@ -41,6 +41,7 @@ namespace Elemancy
         DungeonLevel dungeonLevel;
         public bool TransitionCave = false;
         public bool TransitionDungeon = false;
+        public bool Restart = false;
 
         // the enemy's health bar
         HealthBar enemyHealth, enemyGauge;
@@ -233,6 +234,8 @@ namespace Elemancy
             {
                 case GameState.MainMenu:
                     menu.Update(gameTime);
+
+
                     break;
                 default:
 
@@ -322,7 +325,14 @@ namespace Elemancy
             switch(gameState)
             {
                 case GameState.MainMenu:
-                     menu.Draw(componentsBatch, graphics);
+                    menu.Draw(componentsBatch, graphics);
+
+                    if(Restart == true)
+                    {
+                        player.Initialize();
+                        menu.Update(gameTime);
+                        Restart = false;
+                    }
                     break;
                 case GameState.Forest:
                     wizardHealth.Draw(componentsBatch);

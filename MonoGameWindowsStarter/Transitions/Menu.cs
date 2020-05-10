@@ -76,11 +76,5 @@ namespace Elemancy.Transitions
                 Color.White);
         }
 
-        public void Restart()
-        {
-            Start = false;
-        }
-
-
     }
 }
