@@ -82,14 +82,14 @@ namespace Elemancy
         public void SetUpEnemy(GameState level)
         {
             if(level == GameState.Forest)
-            {           
-                enemyImage = "tempEnemy"; // change for the evil bushes or whatnot
+            {
+                enemyImage = "Sprites/Enemies/Fairy/Fairy-Idle";
                 Health = 50;
                 Weakness = "Fire"; // Do a little extra damage if Player is using fire
             }
             else if(level == GameState.Cave)
             {
-                enemyImage = "tempEnemy"; // Change for the cave troll
+                enemyImage = "Sprites/Enemies/Bat/Bat-Idle-0005"; // Change for the cave troll
                 Health = 100;
                 Weakness = "Water"; // Do a little extra damage if player is using water 
             }
@@ -216,7 +216,7 @@ namespace Elemancy
             {
                 if(IsActive == true) // Only draw the active enemy
                 {
-                    spriteBatch.Draw(enemyTexture, Position, Bounds, Color.White);
+                    spriteBatch.Draw(enemyTexture, Position, Color.White);
                 }
             }
 
