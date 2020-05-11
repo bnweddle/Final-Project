@@ -314,8 +314,8 @@ namespace Elemancy
                 UpdateHealth(Health);
             }
 
-                // Elemental Orb Activate and Update
-                if (keyboard.IsKeyDown(Keys.Space) && !oldState.IsKeyDown(Keys.Space) && elementalOrb.State == ElementalOrb.ActiveState.Idle)
+            // Elemental Orb Activate and Update
+            if (keyboard.IsKeyDown(Keys.Space) && !oldState.IsKeyDown(Keys.Space) && elementalOrb.State == ElementalOrb.ActiveState.Idle)
             {
                 Vector2 orbVelocity = new Vector2(1, 0);
                 switch (direction)
