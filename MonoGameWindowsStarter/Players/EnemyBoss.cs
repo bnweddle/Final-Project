@@ -146,7 +146,8 @@ namespace Elemancy
 
             if (Bounds.CollidesWith(player.elementalOrb.Bounds))
             {
-                player.elementalOrb.Attack(Vector2.Zero, Vector2.Zero, Element.None);
+                //player.elementalOrb.Attack(Vector2.Zero, Vector2.Zero, Element.None);
+                player.elementalOrb.Kill();
                 Hit = true;
             }
 

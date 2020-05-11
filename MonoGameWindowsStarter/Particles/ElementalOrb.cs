@@ -215,5 +215,13 @@ namespace Elemancy
             result.Y = MathHelper.Lerp(Bounds.Y - 1.1f * radius, Bounds.Y + 0.7f * radius, (float)random.NextDouble());
             return result;
         }
+
+        public void Kill()
+        {
+            State = ActiveState.Idle;
+            Position = Vector2.Zero;
+            Bounds.X = Position.X;
+            Bounds.Y = Position.Y;
+        }
     }
 }
