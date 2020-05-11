@@ -309,8 +309,13 @@ namespace Elemancy
                 direction = Direction.Idle;
             }
 
-            // Elemental Orb Activate and Update
-            if (keyboard.IsKeyDown(Keys.Space) && !oldState.IsKeyDown(Keys.Space) && elementalOrb.State == ElementalOrb.ActiveState.Idle)
+            if (keyboard.IsKeyDown(Keys.K) && !oldState.IsKeyDown(Keys.K))
+            {
+                UpdateHealth(Health);
+            }
+
+                // Elemental Orb Activate and Update
+                if (keyboard.IsKeyDown(Keys.Space) && !oldState.IsKeyDown(Keys.Space) && elementalOrb.State == ElementalOrb.ActiveState.Idle)
             {
                 Vector2 orbVelocity = new Vector2(1, 0);
                 switch (direction)
