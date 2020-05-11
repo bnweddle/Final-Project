@@ -10,21 +10,20 @@ namespace Elemancy
 {
     /// <summary>
     /// Team left to do:
-    ///  1. Adjust enemies and collision for player/enemy    -> PARTIAL
+    ///  1. Adjust enemies and collision for player/enemy    -> COMPLETE!
     ///     being hit and dying
-    ///     > Create images for types of enemies             -> STARTED
+    ///     > Create images for types of enemies             -> ERROR
     ///  2. Include narrator when wanting to play it         -> STARTED
     ///     > figure out when to play the wav                 
     ///  3. Adjust particles to follow ball                  -> COMPLETE!
     ///  4. Adjust the player's health and enemies health 
     ///     to fit with health bar
-    ///  5. Code for when Boss of specific level dies to     -> PARTIAL
+    ///  5. Code for when Boss of specific level dies to     -> COMPLETED
     ///     show Transition
     ///  6. Include created drawn players                    -> STARTED
-    ///  7. Test to make sure transitions happen smoothly    -> UNTESTED
-    ///  8. Implement restarting the game if the user goes   -> UNTESTED
+    ///  7. Test to make sure transitions happen smoothly    -> COMPLETED
+    ///  8. Implement restarting the game if the user goes   -> TESTING
     ///     back to the Menu
-    ///  9. Restrict Player's movement to the level, maybe?  -> POTENTIAL?
     /// </summary>
 
     /// <summary>
@@ -281,8 +280,8 @@ namespace Elemancy
                     }                      
 
                     scroll = music.GetScrollStop(gameState);
-                    System.Diagnostics.Debug.WriteLine($"{scroll } scrolling stop");
-                    System.Diagnostics.Debug.WriteLine($"{player.Position.X } player position");
+                    //System.Diagnostics.Debug.WriteLine($"{scroll } scrolling stop");
+                    //System.Diagnostics.Debug.WriteLine($"{player.Position.X } player position");
 
                     if (player.Position.X >= scroll)
                     {
@@ -329,6 +328,7 @@ namespace Elemancy
 
                         if (Restart == true)
                         {
+                            // Restart Layers Parallax
                             wizardGauge.RestartHealth();
                             player.Initialize();
                             scroll = 3117;

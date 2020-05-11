@@ -67,12 +67,12 @@ namespace Elemancy
 
         // texture components
         Texture2D enemyTexture;
-        string enemyImage = "";
+        public string enemyImage = "";
 
         // Timers for fading and flickering when dying and being hit
-        InterpolationTimer fade;
-        InterpolationTimer flicker;
-        float multiple = 1;
+        //InterpolationTimer fade;
+        //InterpolationTimer flicker;
+        //float multiple = 1;
 
 
         /// <summary>
@@ -83,19 +83,19 @@ namespace Elemancy
         {
             if(level == GameState.Forest)
             {           
-                enemyImage = "tempEnemy"; // change for the evil bushes or whatnot
+                enemyImage = "flytrapBasic"; // change for the evil bushes or whatnot
                 Health = 50;
                 Weakness = "Fire"; // Do a little extra damage if Player is using fire
             }
             else if(level == GameState.Cave)
             {
-                enemyImage = "tempEnemy"; // Change for the cave troll
+                enemyImage = "goblinBasic"; // Change for the cave troll
                 Health = 100;
                 Weakness = "Water"; // Do a little extra damage if player is using water 
             }
             else if(level == GameState.Dungeon)
             {
-                enemyImage = "tempEnemy"; // change for the skeletons
+                enemyImage = "skeletonBasic"; // change for the skeletons
                 Health = 150;
                 Weakness = "Lightning"; //Do a little extra damage if player is using lightning
             }
@@ -115,12 +115,13 @@ namespace Elemancy
             level = state;
             Position = position;
             Dead = false;
-
-
             //flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 0.0f, 1.0f);
             //fade = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
 
             SetUpEnemy(state);
+
+            if (state == GameState.Forest)
+                System.Diagnostics.Debug.WriteLine($"{enemyImage } Image");
         }
 
         /// <summary>
@@ -133,6 +134,9 @@ namespace Elemancy
             enemyTexture = content.Load<Texture2D>(enemyImage);
             bounds.Width = enemyTexture.Width;
             bounds.Height = enemyTexture.Height;
+
+           // System.Diagnostics.Debug.WriteLine($"{bounds.Width } bounds width");
+           // System.Diagnostics.Debug.WriteLine($"{bounds.Height } bounds height");
         }  
 
         /// <summary>
@@ -154,7 +158,8 @@ namespace Elemancy
                 Hit = true;
             }
 
-          /*  if (Hit)
+            /*
+            if (Hit) // Took out Fading and Flickering for Enemies for now
             {
 
                 if (flicker.TimeElapsed.TotalSeconds >= 0.20)
@@ -212,11 +217,12 @@ namespace Elemancy
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-           if(enemyTexture != null)
+            if(enemyTexture != null)
             {
                 if(IsActive == true) // Only draw the active enemy
                 {
                     spriteBatch.Draw(enemyTexture, Position, Bounds, Color.White);
+                    System.Diagnostics.Debug.WriteLine($"{enemyImage } drew image");
                 }
             }
 
