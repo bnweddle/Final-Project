@@ -1,7 +1,4 @@
-﻿/* Author: Bethany Weddle
- * Class: Player.cs
- * */
-using System;
+﻿using System;
 using Elemancy.Parallax;
 using Elemancy.Transitions;
 using Microsoft.Xna.Framework;
@@ -43,7 +40,6 @@ namespace Elemancy
         Lightning = 3,        
     }
 
-
     public class Player : ISprite
     {
         // Timers for fading and flickering when dying and being hit
@@ -58,10 +54,10 @@ namespace Elemancy
         const int JUMP_TIME = 500;
 
         // The speed of the player
-        public const float PLAYER_SPEED = 75;
+        public const float PLAYER_SPEED = 125;
 
         // The speed that the player falls
-        public const float FALL_SPEED = 125;
+        public const float FALL_SPEED = 200;
 
         // Width of animation frames
         public const int FRAME_WIDTH = 215;
