@@ -128,10 +128,17 @@ namespace Elemancy.Transitions
                     game.menu.Start = false;
                     game.music.SetGameState(game.player, false);
                     game.GameState = GameState.MainMenu;
+                    game.Restart = true;
                 }
                 else
                 {
                     game.Exit();
+                }
+
+                // So it shows the message again and doesn't skip right to MainMenu
+                if (game.GameState == GameState.MainMenu)
+                {
+                    message.BackMenu = false;
                 }
 
             }
@@ -148,10 +155,17 @@ namespace Elemancy.Transitions
                     game.menu.Start = false;
                     game.music.SetGameState(game.player, false);
                     game.GameState = GameState.MainMenu;
+                    game.Restart = true;
                 }
                 else
                 {
                     game.Exit();
+                }
+
+                // So it shows the message again and doesn't skip right to MainMenu
+                if (game.GameState == GameState.MainMenu)
+                {
+                    message.BackMenu = false;
                 }
             }
         }

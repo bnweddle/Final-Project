@@ -96,7 +96,6 @@ namespace Elemancy.Transitions
                         {
                             forestBoss.Dead = true;
                         }
-                        // Draw active enemy
                     }
                     else
                     {
@@ -144,7 +143,7 @@ namespace Elemancy.Transitions
                 else if (message.BackMenu)
                 {
                     game.menu.Start = false;
-                    game.GameState = game.music.SetGameState(game.player, false);
+                    game.music.SetGameState(game.player, false);
                     game.GameState = GameState.MainMenu;
                     game.Restart = true;
                 }

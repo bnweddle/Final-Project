@@ -79,7 +79,7 @@ namespace Elemancy
         public Narrator narrator;
 
         private GameState gameState;
-        int scroll = 3117; // first level
+        int scroll; // first level
 
         public GameState GameState 
         { 
@@ -122,6 +122,7 @@ namespace Elemancy
             graphics.ApplyChanges();
 
             player.Initialize();
+            scroll = 3117;
         }
 
         /// <summary>
@@ -280,8 +281,8 @@ namespace Elemancy
                     }                      
 
                     scroll = music.GetScrollStop(gameState);
-                   // System.Diagnostics.Debug.WriteLine($"{scroll } scrolling stop");
-                   // System.Diagnostics.Debug.WriteLine($"{player.Position.X } player position");
+                    System.Diagnostics.Debug.WriteLine($"{scroll } scrolling stop");
+                    System.Diagnostics.Debug.WriteLine($"{player.Position.X } player position");
 
                     if (player.Position.X >= scroll)
                     {
@@ -330,14 +331,13 @@ namespace Elemancy
                         {
                             wizardGauge.RestartHealth();
                             player.Initialize();
+                            scroll = 3117;
                             menu.Update(gameTime);
 
                             if (menu.Start)
                             {
                                 Restart = false;
                             }
-                           // System.Diagnostics.Debug.WriteLine($"{menu.Start } menu begin");
-                           // System.Diagnostics.Debug.WriteLine($"{gameState } game state");
                         }
                     }                  
                     break;
