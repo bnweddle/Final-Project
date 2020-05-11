@@ -64,13 +64,10 @@ namespace Elemancy
         public const float FALL_SPEED = 125;
 
         // Width of animation frames
-        public const int FRAME_WIDTH = 67;
+        public const int FRAME_WIDTH = 215;
 
         // height of animation frames
-        const int FRAME_HEIGHT = 100;
-
-        // current frame
-        int frame;
+        const int FRAME_HEIGHT = 289;
 
         // The player's vertical movement state
         VerticalMovementState verticalState;
@@ -81,8 +78,17 @@ namespace Elemancy
         // A timer for jumping
         TimeSpan jumpTimer;
 
-        // A timer for animations
-        TimeSpan animationTimer;
+        Animation walkAnimation;
+        Texture2D playerIdle;
+
+        Animation fireWalkAnimation;
+        Animation waterWalkAnimation;
+        Animation lightningWalkAnimation;
+
+        Texture2D fireIdle;
+        Texture2D waterIdle;
+        Texture2D lightningIdle;
+
 
         // Old keyboard state for in Update
         KeyboardState oldState;
@@ -95,9 +101,6 @@ namespace Elemancy
 
         // The Game 
         Game game;
-        
-        // The player texture
-        Texture2D player;
 
         bool deathQuipped = false;
 
@@ -144,7 +147,7 @@ namespace Elemancy
         public void Initialize()
         {
             // For testing purposes
-            Position = new Vector2(40,600);  // Start position could change with preference
+            Position = new Vector2(40,450);  // Start position could change with preference
             Health = 200; // Could also change with preference
             direction = Direction.Idle;
             verticalState = VerticalMovementState.OnGround;
@@ -164,7 +167,24 @@ namespace Elemancy
 
         public void LoadContent(ContentManager content)
         { 
-            player = content.Load<Texture2D>("player");
+            fireIdle = content.Load<Texture2D>("Sprites/Player/Player-Idle-Fire");
+            waterIdle = content.Load<Texture2D>("Sprites/Player/Player-Idle-Water");
+            lightningIdle = content.Load<Texture2D>("Sprites/Player/Player-Idle-Lightning");
+            Texture2D[] fireWalk = new Texture2D[8];
+            Texture2D[] waterWalk = new Texture2D[8];
+            Texture2D[] lightningWalk = new Texture2D[8];
+            for (int i = 0; i < 8; i++) {
+                fireWalk[i] = content.Load<Texture2D>("Sprites/Player/Player-Run-Fire-000" + i);
+                waterWalk[i] = content.Load<Texture2D>("Sprites/Player/Player-Run-Water-000" + i);
+                lightningWalk[i] = content.Load<Texture2D>("Sprites/Player/Player-Run-Lightning-000" + i);
+            }
+            fireWalkAnimation = new Animation(fireWalk, 8);
+            waterWalkAnimation = new Animation(waterWalk, 8);
+            lightningWalkAnimation = new Animation(lightningWalk, 8);
+
+            playerIdle = fireIdle;
+            walkAnimation = fireWalkAnimation;
+
             elementalOrb.LoadContent(content);
         }
 
@@ -215,9 +235,9 @@ namespace Elemancy
                 case VerticalMovementState.Falling:
                     Position.Y += delta * FALL_SPEED;
                     // Come back to the ground
-                    if (Position.Y > 600)
+                    if (Position.Y > 450)
                     {
-                        Position.Y = 600;
+                        Position.Y = 450;
                         verticalState = VerticalMovementState.OnGround;
                     }
                     break;                 
@@ -289,6 +309,11 @@ namespace Elemancy
                 direction = Direction.Idle;
             }
 
+            if (keyboard.IsKeyDown(Keys.K) && !oldState.IsKeyDown(Keys.K))
+            {
+                UpdateHealth(Health);
+            }
+
             // Elemental Orb Activate and Update
             if (keyboard.IsKeyDown(Keys.Space) && !oldState.IsKeyDown(Keys.Space) && elementalOrb.State == ElementalOrb.ActiveState.Idle)
             {
@@ -313,37 +338,17 @@ namespace Elemancy
             if (keyboard.IsKeyDown(Keys.LeftAlt) && !oldState.IsKeyDown(Keys.LeftAlt) && elementalOrb.State == ElementalOrb.ActiveState.Idle)
             {
                 CycleElement();
-            }       
-
-            // update animation timer when the player is moving
-            if (direction != Direction.Idle)
-                animationTimer += gameTime.ElapsedGameTime;
-
-            // Check if animation should increase by more than one frame
-            while (animationTimer.TotalMilliseconds > FRAME_RATE)
-            {
-                // increase frame
-                frame++;
-                // Decrease the timer by one frame duration
-                animationTimer -= new TimeSpan(0, 0, 0, 0, FRAME_RATE);
             }
-
-            frame %= 4;
             oldState = keyboard;
         }
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-
-            Rectangle rectSource = new Rectangle(
-                frame * FRAME_WIDTH,  // X value
-                (int)direction % 4 * FRAME_HEIGHT, // Y value
-                FRAME_WIDTH,
-                FRAME_HEIGHT
-                );
-
-            spriteBatch.Draw(player, Position, rectSource, Color * multiple);
-
+            
+            if (direction == Direction.Idle) {
+                spriteBatch.Draw(playerIdle, Position, Color * multiple);
+            } 
+            else walkAnimation.Draw(spriteBatch, gameTime, Position, direction == Direction.West, Color, multiple);
             elementalOrb.Draw(spriteBatch, gameTime);
         }
 
@@ -395,10 +400,29 @@ namespace Elemancy
         /// </summary>
         public void CycleElement()
         {
-            if (Element == Element.None) Element = Element.Fire;
-            else if (Element == Element.Fire) Element = Element.Water;
-            else if (Element == Element.Water) Element = Element.Lightning;
-            else if (Element == Element.Lightning) Element = Element.Fire;
+            if (Element == Element.None || Element == Element.Lightning) {
+                SetElement(Element.Fire);
+            } else if (Element == Element.Fire) {
+                SetElement(Element.Water);
+            } else if (Element == Element.Water) {
+                SetElement(Element.Lightning);
+            }
+        }
+
+        public void SetElement(Element elem) {
+            if (elem == Element.None || elem == Element.Fire) {
+                Element = Element.Fire;
+                playerIdle = fireIdle;
+                walkAnimation = fireWalkAnimation;
+            } else if (elem == Element.Water) {
+                Element = Element.Water;
+                playerIdle = waterIdle;
+                walkAnimation = waterWalkAnimation;
+            } else if (elem == Element.Lightning) {
+                Element = Element.Lightning;
+                playerIdle = lightningIdle;
+                walkAnimation = lightningWalkAnimation;
+            }
         }
     }
 }

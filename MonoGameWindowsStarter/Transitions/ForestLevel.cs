@@ -50,14 +50,14 @@ namespace Elemancy.Transitions
             for (int i = 0; i < 10; i++)
             {
 
-                BasicEnemy forestEnemy = new BasicEnemy(game, GameState.Forest, new Vector2(300 + offset, 600));
+                BasicEnemy forestEnemy = new BasicEnemy(game, GameState.Forest, new Vector2(300 + offset, 500));
                 forestEnemy.LoadContent(content);
                 forestLayer.Sprites.Add(forestEnemy);
                 forestEnemies.Add(forestEnemy);
                 offset += random.Next(200, 300);
             }
 
-            forestBoss = new EnemyBoss(game, GameState.Forest, new Vector2(3500, 600));
+            forestBoss = new EnemyBoss(game, GameState.Forest, new Vector2(3500, 500));
             forestBoss.LoadContent(content);
             forestLayer.Sprites.Add(forestBoss);
             forestEnemies.Add(forestBoss);
