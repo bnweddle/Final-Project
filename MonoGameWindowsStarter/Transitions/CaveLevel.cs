@@ -43,7 +43,7 @@ namespace Elemancy.Transitions
             for (int i = 0; i < 10; i++)
             {
 
-                BasicEnemy caveEnemy = new BasicEnemy(game, GameState.Cave, new Vector2(4500 + offset, 600));
+                BasicEnemy caveEnemy = new BasicEnemy(game, GameState.Cave, new Vector2(4500 + offset, 500));
                 caveEnemy.LoadContent(content);
                 caveLayer.Sprites.Add(caveEnemy);
                 caveEnemies.Add(caveEnemy);

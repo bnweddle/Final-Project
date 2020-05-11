@@ -255,7 +255,7 @@ namespace Elemancy
 
                     if (player.Element == Element.None)
                     {
-                        player.Element = menu.selectedElement;
+                        player.SetElement(menu.selectedElement);
                     }
 
                     if (TransitionCave)

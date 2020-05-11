@@ -81,6 +81,15 @@ namespace Elemancy
         Animation walkAnimation;
         Texture2D playerIdle;
 
+        Animation fireWalkAnimation;
+        Animation waterWalkAnimation;
+        Animation lightningWalkAnimation;
+
+        Texture2D fireIdle;
+        Texture2D waterIdle;
+        Texture2D lightningIdle;
+
+
         // Old keyboard state for in Update
         KeyboardState oldState;
 
@@ -158,12 +167,24 @@ namespace Elemancy
 
         public void LoadContent(ContentManager content)
         { 
-            playerIdle = content.Load<Texture2D>("Sprites/Player/Player-Idle");
-            Texture2D[] walk = new Texture2D[8];
+            fireIdle = content.Load<Texture2D>("Sprites/Player/Player-Idle-Fire");
+            waterIdle = content.Load<Texture2D>("Sprites/Player/Player-Idle-Water");
+            lightningIdle = content.Load<Texture2D>("Sprites/Player/Player-Idle-Lightning");
+            Texture2D[] fireWalk = new Texture2D[8];
+            Texture2D[] waterWalk = new Texture2D[8];
+            Texture2D[] lightningWalk = new Texture2D[8];
             for (int i = 0; i < 8; i++) {
-                walk[i] = content.Load<Texture2D>("Sprites/Player/Player-Run-000" + i);
+                fireWalk[i] = content.Load<Texture2D>("Sprites/Player/Player-Run-Fire-000" + i);
+                waterWalk[i] = content.Load<Texture2D>("Sprites/Player/Player-Run-Water-000" + i);
+                lightningWalk[i] = content.Load<Texture2D>("Sprites/Player/Player-Run-Lightning-000" + i);
             }
-            walkAnimation = new Animation(walk, 8);
+            fireWalkAnimation = new Animation(fireWalk, 8);
+            waterWalkAnimation = new Animation(waterWalk, 8);
+            lightningWalkAnimation = new Animation(lightningWalk, 8);
+
+            playerIdle = fireIdle;
+            walkAnimation = fireWalkAnimation;
+
             elementalOrb.LoadContent(content);
         }
 
@@ -318,6 +339,7 @@ namespace Elemancy
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
+            
             if (direction == Direction.Idle) {
                 spriteBatch.Draw(playerIdle, Position, Color * multiple);
             } 
@@ -373,10 +395,29 @@ namespace Elemancy
         /// </summary>
         public void CycleElement()
         {
-            if (Element == Element.None) Element = Element.Fire;
-            else if (Element == Element.Fire) Element = Element.Water;
-            else if (Element == Element.Water) Element = Element.Lightning;
-            else if (Element == Element.Lightning) Element = Element.Fire;
+            if (Element == Element.None || Element == Element.Lightning) {
+                SetElement(Element.Fire);
+            } else if (Element == Element.Fire) {
+                SetElement(Element.Water);
+            } else if (Element == Element.Water) {
+                SetElement(Element.Lightning);
+            }
+        }
+
+        public void SetElement(Element elem) {
+            if (elem == Element.None || elem == Element.Fire) {
+                Element = Element.Fire;
+                playerIdle = fireIdle;
+                walkAnimation = fireWalkAnimation;
+            } else if (elem == Element.Water) {
+                Element = Element.Water;
+                playerIdle = waterIdle;
+                walkAnimation = waterWalkAnimation;
+            } else if (elem == Element.Lightning) {
+                Element = Element.Lightning;
+                playerIdle = lightningIdle;
+                walkAnimation = lightningWalkAnimation;
+            }
         }
     }
 }
