@@ -13,7 +13,7 @@ namespace Elemancy.Transitions
 
         private Messages message;
 
-        private List<IEnemy> dungeonEnemies = new List<IEnemy>();
+        public List<IEnemy> dungeonEnemies = new List<IEnemy>();
         private EnemyBoss dungeonBoss;
         public IEnemy ActiveEnemy;
 
@@ -62,6 +62,14 @@ namespace Elemancy.Transitions
             dungeonLayer.DrawOrder = 2;
 
             dungeonLayer.ScrollController = new TrackingPlayer(game.player, 1.0f);
+        }
+
+        public void RespawnBoss()
+        {
+            dungeonBoss.IsActive = true;
+            dungeonBoss.RestoreHealth(1);
+            dungeonBoss.Dead = false;
+            enemyGauge.RestartHealth();
         }
 
         public void Update(GameTime gameTime)

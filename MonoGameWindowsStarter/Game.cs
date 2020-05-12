@@ -325,13 +325,12 @@ namespace Elemancy
                             menu.Update(gameTime);
                             music.IsPLaying = false;
 
-
-                        //    if (menu.Start)
-                        ///    {
-                               if(forestLevel.forestEnemies.Count <= 1)
-                                    forestLevel.Restart();
-                           //    Restart = false;
-                        //    }
+                            if(forestLevel.forestEnemies.Count <= 1)
+                                forestLevel.RespawnBoss();
+                            if (caveLevel.caveEnemies.Count <= 1)
+                                caveLevel.RespawnBoss();
+                            if (dungeonLevel.dungeonEnemies.Count <= 1)
+                                dungeonLevel.RespawnBoss();
                         }
                     }                  
                     break;

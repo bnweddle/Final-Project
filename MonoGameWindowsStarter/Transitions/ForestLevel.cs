@@ -35,7 +35,7 @@ namespace Elemancy.Transitions
             enemyGauge = new HealthBar(game, new Vector2(822, 0), Color.Red);
         }
 
-        public void Restart()
+        public void RespawnBoss()
         {
             forestBoss.IsActive = true;
             forestBoss.RestoreHealth(1);

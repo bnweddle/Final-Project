@@ -13,7 +13,7 @@ namespace Elemancy.Transitions
 
         private Messages message;
 
-        private List<IEnemy> caveEnemies = new List<IEnemy>();
+        public List<IEnemy> caveEnemies = new List<IEnemy>();
         public EnemyBoss caveBoss;
         public IEnemy ActiveEnemy;
 
@@ -64,7 +64,7 @@ namespace Elemancy.Transitions
             caveLayer.ScrollController = new TrackingPlayer(game.player, 1.0f);
         }
 
-        public void Restart()
+        public void RespawnBoss()
         {
             caveBoss.IsActive = true;
             caveBoss.RestoreHealth(1);
