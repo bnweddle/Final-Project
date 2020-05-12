@@ -65,6 +65,11 @@ namespace Elemancy.Transitions
             ActiveEnemy = forestEnemies[0];
             ActiveEnemy.IsActive = true;
 
+            foreach (IEnemy e in forestEnemies)
+            {
+                System.Diagnostics.Debug.WriteLine($"{e.IsActive} activity");
+            }
+
             game.Components.Add(forestLayer);
             forestLayer.DrawOrder = 2;
             forestT = new TrackingPlayer(game.player, 1.0f);
@@ -120,7 +125,7 @@ namespace Elemancy.Transitions
 
             if (forestBoss.Dead)
             {
-                message.SetMessage(1, out game.player.Position.X);
+                message.SetMessage(1, out game.player.Position.X); // Round 1
                 message.Update(gameTime);
                 if (message.Continue == false)
                 {
@@ -134,7 +139,7 @@ namespace Elemancy.Transitions
             }
             else if (game.player.IsDead)
             {
-                message.SetMessage(-1, out game.player.Position.X);
+                message.SetMessage(-1, out game.player.Position.X); // you lose
                 message.Update(gameTime);
                 if (!message.BackMenu)
                 {

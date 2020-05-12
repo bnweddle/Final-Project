@@ -142,10 +142,18 @@ namespace Elemancy
         public void Attack(Vector2 position, Vector2 velocity, Element element)
         {
             Bounds.Radius = 20;
-            Bounds.X = position.X + Bounds.Radius + 50;
-            Bounds.Y = position.Y + Bounds.Radius + 30;
-            Position = new Vector2(Bounds.X, Bounds.Y);
             Velocity = velocity;
+            if (Velocity.X == -1)
+            {
+                Bounds.X = position.X + Bounds.Radius + 50;
+                Bounds.Y = position.Y + Bounds.Radius + 50;
+            }
+            else
+            {
+                Bounds.X = position.X + Bounds.Radius + 120;
+                Bounds.Y = position.Y + Bounds.Radius + 50;
+            }
+            Position = new Vector2(Bounds.X, Bounds.Y);
             curElement = element;
             switch (curElement)
             {
@@ -206,6 +214,14 @@ namespace Elemancy
             result.X = MathHelper.Lerp(Bounds.X - radius, Bounds.X, (float)random.NextDouble());
             result.Y = MathHelper.Lerp(Bounds.Y - 1.1f * radius, Bounds.Y + 0.7f * radius, (float)random.NextDouble());
             return result;
+        }
+
+        public void Kill()
+        {
+            State = ActiveState.Idle;
+            Position = Vector2.Zero;
+            Bounds.X = Position.X;
+            Bounds.Y = Position.Y;
         }
     }
 }

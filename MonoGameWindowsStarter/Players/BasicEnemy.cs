@@ -117,8 +117,8 @@ namespace Elemancy
             Dead = false;
 
 
-            //flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 0.0f, 1.0f);
-            //fade = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
+            flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 0.0f, 1.0f);
+            fade = new InterpolationTimer(TimeSpan.FromSeconds(2), 1.0f, 0.0f);
 
             SetUpEnemy(state);
         }
@@ -150,11 +150,11 @@ namespace Elemancy
             
             if(Bounds.CollidesWith(player.elementalOrb.Bounds))
             {
-                player.elementalOrb.Attack(Vector2.Zero, Vector2.Zero, Element.None);
+                player.elementalOrb.Kill();
                 Hit = true;
             }
 
-          /*  if (Hit)
+            /*if (Hit)
             {
 
                 if (flicker.TimeElapsed.TotalSeconds >= 0.20)
@@ -216,7 +216,16 @@ namespace Elemancy
             {
                 if(IsActive == true) // Only draw the active enemy
                 {
-                    spriteBatch.Draw(enemyTexture, Position, Color.White);
+                  
+                    if (game.GameState == GameState.Cave)
+                    {
+                        spriteBatch.Draw(enemyTexture, Position, Color.DarkSlateGray * multiple);
+                    }
+                    else
+                    {
+                        spriteBatch.Draw(enemyTexture, Position, Color.White * multiple);
+                    }
+                    
                 }
             }
 

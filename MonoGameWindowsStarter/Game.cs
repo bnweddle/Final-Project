@@ -10,21 +10,20 @@ namespace Elemancy
 {
     /// <summary>
     /// Team left to do:
-    ///  1. Adjust enemies and collision for player/enemy    -> PARTIAL
+    ///  1. Adjust enemies and collision for player/enemy    -> COMPLETE!
     ///     being hit and dying
-    ///     > Create images for types of enemies             -> STARTED
-    ///  2. Include narrator when wanting to play it         -> STARTED
+    ///     > Create images for types of enemies             -> PARTIAL
+    ///  2. Include narrator when wanting to play it         -> PARTIAL
     ///     > figure out when to play the wav                 
     ///  3. Adjust particles to follow ball                  -> COMPLETE!
     ///  4. Adjust the player's health and enemies health 
     ///     to fit with health bar
-    ///  5. Code for when Boss of specific level dies to     -> PARTIAL
+    ///  5. Code for when Boss of specific level dies to     -> COMPLETE!
     ///     show Transition
-    ///  6. Include created drawn players                    -> STARTED
-    ///  7. Test to make sure transitions happen smoothly    -> UNTESTED
-    ///  8. Implement restarting the game if the user goes   -> UNTESTED
+    ///  6. Include created drawn players                    -> COMPLETE!
+    ///  7. Test to make sure transitions happen smoothly    -> MOSTLY
+    ///  8. Implement restarting the game if the user goes   -> TESTING
     ///     back to the Menu
-    ///  9. Restrict Player's movement to the level, maybe?  -> POTENTIAL?
     /// </summary>
 
     /// <summary>
@@ -42,9 +41,6 @@ namespace Elemancy
         public bool TransitionCave = false;
         public bool TransitionDungeon = false;
         public bool Restart = false;
-
-        // the enemy's health bar
-        HealthBar enemyHealth, enemyGauge;
 
         public Player player;
 
@@ -97,9 +93,6 @@ namespace Elemancy
             Content.RootDirectory = "Content";
 
             menu = new Menu(this);
-
-            enemyHealth = new HealthBar(this, new Vector2(822, 0), Color.Gray);  //Top right corner
-            enemyGauge = new HealthBar(this, new Vector2(822, 0), Color.Red);
 
             // Creating and Positioning Healthbars
             wizardHealth = new HealthBar(this, new Vector2(20, 0), Color.Gray);  //Top left corner
@@ -157,9 +150,6 @@ namespace Elemancy
             dungeonLevel.LoadContent(Content);
             caveLevel.LoadContent(Content);
             forestLevel.LoadContent(Content);
-
-            enemyHealth.LoadContent(Content);
-            enemyGauge.LoadContent(Content);
 
             levelsLayer = new ParallaxLayer(this);
             // Levels Layer - Can just add to to them for other levels
@@ -281,8 +271,8 @@ namespace Elemancy
                     }                      
 
                     scroll = music.GetScrollStop(gameState);
-                    System.Diagnostics.Debug.WriteLine($"{scroll } scrolling stop");
-                    System.Diagnostics.Debug.WriteLine($"{player.Position.X } player position");
+                    //System.Diagnostics.Debug.WriteLine($"{scroll } scrolling stop");
+                    //System.Diagnostics.Debug.WriteLine($"{player.Position.X } player position");
 
                     if (player.Position.X >= scroll)
                     {
@@ -294,6 +284,12 @@ namespace Elemancy
                     {
                         levelsT.ScrollRatio = 1.0f;
                         playerT.ScrollRatio = 1.0f;
+                    }
+
+                    // Kill button to kill the player quickly
+                    if(current.IsKeyDown(Keys.K))
+                    {
+                        player.UpdateHealth(player.Health);
                     }
 
                     break; // END OF DEFAULT
@@ -329,6 +325,7 @@ namespace Elemancy
 
                         if (Restart == true)
                         {
+                            // Restart Layers Parallax
                             wizardGauge.RestartHealth();
                             player.Initialize();
                             scroll = 3117;
