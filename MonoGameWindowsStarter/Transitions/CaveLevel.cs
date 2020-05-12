@@ -14,7 +14,7 @@ namespace Elemancy.Transitions
         private Messages message;
 
         private List<IEnemy> caveEnemies = new List<IEnemy>();
-        private EnemyBoss caveBoss;
+        public EnemyBoss caveBoss;
         public IEnemy ActiveEnemy;
 
         // the enemy's health bar
@@ -62,6 +62,14 @@ namespace Elemancy.Transitions
             caveLayer.DrawOrder = 2;
 
             caveLayer.ScrollController = new TrackingPlayer(game.player, 1.0f);
+        }
+
+        public void Restart()
+        {
+            caveBoss.IsActive = true;
+            caveBoss.RestoreHealth(1);
+            caveBoss.Dead = false;
+            enemyGauge.RestartHealth();
         }
 
         public void Update(GameTime gameTime)

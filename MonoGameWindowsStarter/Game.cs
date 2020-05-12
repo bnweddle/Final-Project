@@ -225,7 +225,6 @@ namespace Elemancy
                 case GameState.MainMenu:
                     menu.Update(gameTime);
 
-
                     break;
                 default:
 
@@ -286,12 +285,6 @@ namespace Elemancy
                         playerT.ScrollRatio = 1.0f;
                     }
 
-                    // Kill button to kill the player quickly
-                    if(current.IsKeyDown(Keys.K))
-                    {
-                        player.UpdateHealth(player.Health);
-                    }
-
                     break; // END OF DEFAULT
             }
 
@@ -330,11 +323,15 @@ namespace Elemancy
                             player.Initialize();
                             scroll = 3117;
                             menu.Update(gameTime);
+                            music.IsPLaying = false;
 
-                            if (menu.Start)
-                            {
-                                Restart = false;
-                            }
+
+                        //    if (menu.Start)
+                        ///    {
+                               if(forestLevel.forestEnemies.Count <= 1)
+                                    forestLevel.Restart();
+                           //    Restart = false;
+                        //    }
                         }
                     }                  
                     break;

@@ -2,12 +2,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Elemancy.Transitions
 {
@@ -17,8 +13,9 @@ namespace Elemancy.Transitions
 
         private Messages message;
 
-        private List<IEnemy> forestEnemies = new List<IEnemy>();
-        private EnemyBoss forestBoss;
+        public List<IEnemy> forestEnemies = new List<IEnemy>();
+        public List<IEnemy> respawned = new List<IEnemy>();
+        public EnemyBoss forestBoss;
         public IEnemy ActiveEnemy;
 
         // the enemy's health bar
@@ -37,6 +34,15 @@ namespace Elemancy.Transitions
             enemyHealth = new HealthBar(game, new Vector2(822, 0), Color.Gray);  //Top right corner
             enemyGauge = new HealthBar(game, new Vector2(822, 0), Color.Red);
         }
+
+        public void Restart()
+        {
+            forestBoss.IsActive = true;
+            forestBoss.RestoreHealth(1);
+            forestBoss.Dead = false;
+            enemyGauge.RestartHealth();
+        }
+
 
         public void LoadContent(ContentManager content)
         {
@@ -92,6 +98,7 @@ namespace Elemancy.Transitions
                 forestEnemies[0].IsActive = false; // Don't draw the old one
                 if (forestEnemies.Count > 1)
                 {
+                    respawned.Add(forestEnemies[0]);
                     forestEnemies.RemoveAt(0);
                     if (forestEnemies.Count == 0)
                     {

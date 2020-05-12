@@ -24,6 +24,8 @@ namespace Elemancy
 
         void UpdateHealth(int damage);
 
+        void RestoreHealth(int enemy);
+
         bool Dead { get; set; }
 
         bool Hit { get; set; }

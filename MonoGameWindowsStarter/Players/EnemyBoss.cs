@@ -206,6 +206,13 @@ namespace Elemancy
             }
         }
 
+        public void RestoreHealth(int enemy)
+        {
+            if (enemy == 1) Health = 100;
+            if (enemy == 2) Health = 150;
+            if (enemy == 3) Health = 200;
+        }
+
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             if (enemyTexture != null)
