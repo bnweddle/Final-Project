@@ -50,7 +50,7 @@ namespace Elemancy.Transitions
                 offset += random.Next(200, 300);
             }
 
-            dungeonBoss = new EnemyBoss(game, GameState.Dungeon, new Vector2(11200, 600));
+            dungeonBoss = new EnemyBoss(game, GameState.Dungeon, new Vector2(11200, 400));
             dungeonBoss.LoadContent(content);
             dungeonLayer.Sprites.Add(dungeonBoss);
             dungeonEnemies.Add(dungeonBoss);

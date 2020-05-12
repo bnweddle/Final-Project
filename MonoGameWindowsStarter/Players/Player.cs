@@ -250,6 +250,7 @@ namespace Elemancy
                     flicker.Stop();
                     flicker = new InterpolationTimer(TimeSpan.FromSeconds(0.25), 0.0f, 1.0f);
                     IsHit = false;
+                    multiple = 1.0f;
                 }
                 else
                 {
