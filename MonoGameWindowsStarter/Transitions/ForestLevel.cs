@@ -25,6 +25,8 @@ namespace Elemancy.Transitions
 
         private Random random = new Random();
 
+        ParallaxLayer forestLayer;
+
         public ForestLevel(Game game)
         {
             this.game = game;
@@ -35,22 +37,13 @@ namespace Elemancy.Transitions
             enemyGauge = new HealthBar(game, new Vector2(822, 0), Color.Red);
         }
 
-        public void RespawnBoss()
-        {
-            forestBoss.IsActive = true;
-            forestBoss.RestoreHealth(1);
-            forestBoss.Dead = false;
-            enemyGauge.RestartHealth();
-        }
-
-
         public void LoadContent(ContentManager content)
         {
             message.LoadContent(content);
             enemyHealth.LoadContent(content);
             enemyGauge.LoadContent(content);
 
-            var forestLayer = new ParallaxLayer(game);
+            forestLayer = new ParallaxLayer(game);
 
             float offset = 200;
             for (int i = 0; i < 10; i++)
@@ -83,6 +76,10 @@ namespace Elemancy.Transitions
             forestLayer.ScrollController = forestT;
         }
 
+        /// <summary>
+        /// Update enemies for this level.
+        /// </summary>
+        /// <param name="gameTime">The Game's gameTime</param>
         public void Update(GameTime gameTime)
         {
            
@@ -171,6 +168,36 @@ namespace Elemancy.Transitions
                 }
                 
             }
+        }
+
+        /// <summary>
+        /// Reloads all basic enemies and boss enemies for the level.
+        /// </summary>
+        public void Reload()
+        {
+            while (forestLayer.Sprites.Count > 0)
+            {
+                forestLayer.Sprites.RemoveAt(0);
+            }
+            forestEnemies = new List<IEnemy>();
+            float offset = 200;
+            for (int i = 0; i < 10; i++)
+            {
+
+                BasicEnemy caveEnemy = new BasicEnemy(game, GameState.Forest, new Vector2(300 + offset, 500));
+                caveEnemy.LoadContent(game.Content);
+                forestLayer.Sprites.Add(caveEnemy);
+                forestEnemies.Add(caveEnemy);
+                offset += random.Next(200, 300);
+            }
+
+            forestBoss = new EnemyBoss(game, GameState.Forest, new Vector2(3500, 400));
+            forestBoss.LoadContent(game.Content);
+            forestLayer.Sprites.Add(forestBoss);
+            forestEnemies.Add(forestBoss);
+
+            ActiveEnemy = forestEnemies[0];
+            ActiveEnemy.IsActive = true;
         }
 
     }
