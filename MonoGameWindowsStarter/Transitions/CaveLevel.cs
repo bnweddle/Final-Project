@@ -127,6 +127,7 @@ namespace Elemancy.Transitions
                 else if (message.Continue == true)
                 {
                     game.TransitionDungeon = true;
+                    message.Continue = false;
                 }
             }
             else if (game.player.IsDead)
@@ -142,7 +143,7 @@ namespace Elemancy.Transitions
                     game.menu.Start = false;
                     game.music.SetGameState(game.player, false);
                     game.GameState = GameState.MainMenu;
-                    game.Restart = true;
+                    game.Restart = true;                
                 }
                 else
                 {
@@ -185,6 +186,7 @@ namespace Elemancy.Transitions
 
             ActiveEnemy = caveEnemies[0];
             ActiveEnemy.IsActive = true;
+            enemyGauge.RestartHealth();
         }
 
     }

@@ -204,6 +204,7 @@ namespace Elemancy.Transitions
 
             dungeonEnemies[0].IsActive = true;
             ActiveEnemy = dungeonEnemies[0];
+            enemyGauge.RestartHealth();
         }
 
     }

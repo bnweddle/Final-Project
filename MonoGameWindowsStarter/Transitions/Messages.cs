@@ -28,7 +28,7 @@ namespace Elemancy.Transitions
 
         public bool BackMenu { get; set; } = false;
 
-        public bool Continue { get; protected set; } = false;
+        public bool Continue { get; set; } = false;
 
         public bool Exit { get; protected set; } = false;
 

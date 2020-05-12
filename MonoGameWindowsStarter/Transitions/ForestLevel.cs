@@ -138,7 +138,8 @@ namespace Elemancy.Transitions
                 }
                 else if(message.Continue == true)
                 {
-                    game.TransitionCave = true;                 
+                    game.TransitionCave = true;
+                    message.Continue = false;
                 }
             }
             else if (game.player.IsDead)
@@ -198,6 +199,7 @@ namespace Elemancy.Transitions
 
             ActiveEnemy = forestEnemies[0];
             ActiveEnemy.IsActive = true;
+            enemyGauge.RestartHealth();
         }
 
     }
