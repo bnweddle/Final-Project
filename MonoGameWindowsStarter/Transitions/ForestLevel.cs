@@ -63,7 +63,7 @@ namespace Elemancy.Transitions
                 offset += random.Next(200, 300);
             }
 
-            forestBoss = new EnemyBoss(game, GameState.Forest, new Vector2(3500, 400));
+            forestBoss = new EnemyBoss(game, GameState.Forest, new Vector2(3500, 420));
             forestBoss.LoadContent(content);
             forestLayer.Sprites.Add(forestBoss);
             forestEnemies.Add(forestBoss);

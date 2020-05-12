@@ -397,6 +397,30 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/Enemies/Drone/Drone-Idle.png
 
+#begin Sprites/Enemies/Dryad/Dryad-Idle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Enemies/Dryad/Dryad-Idle.png
+
+#begin Sprites/Enemies/Dungeon Core/Dungeon Core-Idle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Enemies/Dungeon Core/Dungeon Core-Idle.png
+
 #begin Sprites/Enemies/Fairy/Fairy-Attack.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -420,6 +444,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/Enemies/Fairy/Fairy-Idle.png
+
+#begin Sprites/Enemies/Phoenix/Phoenix-Idle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Enemies/Phoenix/Phoenix-Idle.png
 
 #begin Sprites/Enemies/Roomba/Roomba-Idle.png
 /importer:TextureImporter
