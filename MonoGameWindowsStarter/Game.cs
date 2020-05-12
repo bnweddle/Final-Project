@@ -31,19 +31,33 @@ namespace Elemancy
     /// </summary>
     public class Game : Microsoft.Xna.Framework.Game
     {
+        /// <summary>
+        /// Used for keeping track of the current Active Enemy.
+        /// </summary>
         public IEnemy ActiveEnemy;  
+
         /// <summary>
         /// The levels with the enemy logic
         /// </summary>
         ForestLevel forestLevel;
         CaveLevel caveLevel;
         DungeonLevel dungeonLevel;
+
+        /// <summary>
+        /// Used for transitioning music and restarting the level.
+        /// </summary>
         public bool TransitionCave = false;
         public bool TransitionDungeon = false;
         public bool Restart = false;
 
+        /// <summary>
+        /// The player.
+        /// </summary>
         public Player player;
 
+        /// <summary>
+        /// This game's GraphicsDeviceManager.
+        /// </summary>
         public GraphicsDeviceManager graphics;
 
         /// <summary>
@@ -62,6 +76,9 @@ namespace Elemancy
 
         KeyboardState oldState;
 
+        /// <summary>
+        /// Parallax Layers and tracking for layer scrolling.
+        /// </summary>
         ParallaxLayer playerLayer, levelsLayer;
         public TrackingPlayer playerT, levelsT;
 
@@ -71,10 +88,16 @@ namespace Elemancy
         /// </summary>
         HealthBar wizardHealth, wizardGauge;
 
-
+        /// <summary>
+        /// The narrator.
+        /// </summary>
         public Narrator narrator;
 
+        /// <summary>
+        /// used for determining the game's state, which can be one of the 3 levels or the Main Menu.
+        /// </summary>
         private GameState gameState;
+
         int scroll; // first level
 
         public GameState GameState 
@@ -319,18 +342,15 @@ namespace Elemancy
                         if (Restart == true)
                         {
                             // Restart Layers Parallax
+                            forestLevel.Reload();
+                            caveLevel.Reload();
+                            dungeonLevel.Reload();
+
                             wizardGauge.RestartHealth();
                             player.Initialize();
                             scroll = 3117;
                             menu.Update(gameTime);
                             music.IsPLaying = false;
-
-                            if(forestLevel.forestEnemies.Count <= 1)
-                                forestLevel.RespawnBoss();
-                            if (caveLevel.caveEnemies.Count <= 1)
-                                caveLevel.RespawnBoss();
-                            if (dungeonLevel.dungeonEnemies.Count <= 1)
-                                dungeonLevel.RespawnBoss();
                         }
                     }                  
                     break;

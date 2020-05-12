@@ -19,6 +19,8 @@ namespace Elemancy.Transitions
 
         private Random random = new Random();
 
+        ParallaxLayer dungeonLayer;
+
         // the enemy's health bar
         HealthBar enemyHealth, enemyGauge;
 
@@ -37,7 +39,7 @@ namespace Elemancy.Transitions
             enemyHealth.LoadContent(content);
             enemyGauge.LoadContent(content);
 
-            var dungeonLayer = new ParallaxLayer(game);
+            dungeonLayer = new ParallaxLayer(game);
 
             float offset = 200;
             for (int i = 0; i < 10; i++)
@@ -64,14 +66,10 @@ namespace Elemancy.Transitions
             dungeonLayer.ScrollController = new TrackingPlayer(game.player, 1.0f);
         }
 
-        public void RespawnBoss()
-        {
-            dungeonBoss.IsActive = true;
-            dungeonBoss.RestoreHealth(1);
-            dungeonBoss.Dead = false;
-            enemyGauge.RestartHealth();
-        }
-
+        /// <summary>
+        /// Update enemies for this level.
+        /// </summary>
+        /// <param name="gameTime">The Game's gameTime</param>
         public void Update(GameTime gameTime)
         {
 
@@ -176,6 +174,36 @@ namespace Elemancy.Transitions
                     message.BackMenu = false;
                 }
             }
+        }
+
+        /// <summary>
+        /// Reloads all basic enemies and boss enemies for the level.
+        /// </summary>
+        public void Reload()
+        {
+            while (dungeonLayer.Sprites.Count > 0)
+            {
+                dungeonLayer.Sprites.RemoveAt(0);
+            }
+            dungeonEnemies = new List<IEnemy>();
+            float offset = 200;
+            for (int i = 0; i < 10; i++)
+            {
+
+                BasicEnemy dungeonEnemy = new BasicEnemy(game, GameState.Dungeon, new Vector2(8500 + offset, 500));
+                dungeonEnemy.LoadContent(game.Content);
+                dungeonLayer.Sprites.Add(dungeonEnemy);
+                dungeonEnemies.Add(dungeonEnemy);
+                offset += random.Next(200, 300);
+            }
+
+            dungeonBoss = new EnemyBoss(game, GameState.Dungeon, new Vector2(11200, 400));
+            dungeonBoss.LoadContent(game.Content);
+            dungeonLayer.Sprites.Add(dungeonBoss);
+            dungeonEnemies.Add(dungeonBoss);
+
+            dungeonEnemies[0].IsActive = true;
+            ActiveEnemy = dungeonEnemies[0];
         }
 
     }

@@ -22,6 +22,7 @@ namespace Elemancy.Transitions
 
         private Random random = new Random();
 
+        ParallaxLayer caveLayer;
         public CaveLevel(Game game)
         {
             this.game = game;
@@ -37,7 +38,7 @@ namespace Elemancy.Transitions
             enemyHealth.LoadContent(content);
             enemyGauge.LoadContent(content);
 
-            var caveLayer = new ParallaxLayer(game);
+            caveLayer = new ParallaxLayer(game);
 
             float offset = 200;
             for (int i = 0; i < 10; i++)
@@ -64,14 +65,10 @@ namespace Elemancy.Transitions
             caveLayer.ScrollController = new TrackingPlayer(game.player, 1.0f);
         }
 
-        public void RespawnBoss()
-        {
-            caveBoss.IsActive = true;
-            caveBoss.RestoreHealth(1);
-            caveBoss.Dead = false;
-            enemyGauge.RestartHealth();
-        }
-
+        /// <summary>
+        /// Update enemies for this level.
+        /// </summary>
+        /// <param name="gameTime">The Game's gameTime</param>
         public void Update(GameTime gameTime)
         {
 
@@ -158,6 +155,36 @@ namespace Elemancy.Transitions
                     message.BackMenu = false;
                 }
             }
+        }
+
+        /// <summary>
+        /// Reloads all basic enemies and boss enemies for the level.
+        /// </summary>
+        public void Reload()
+        {
+            while (caveLayer.Sprites.Count > 0)
+            {
+                caveLayer.Sprites.RemoveAt(0);
+            }
+            caveEnemies = new List<IEnemy>();
+            float offset = 200;
+            for (int i = 0; i < 10; i++)
+            {
+
+                BasicEnemy caveEnemy = new BasicEnemy(game, GameState.Cave, new Vector2(4500 + offset, 500));
+                caveEnemy.LoadContent(game.Content);
+                caveLayer.Sprites.Add(caveEnemy);
+                caveEnemies.Add(caveEnemy);
+                offset += random.Next(200, 300);
+            }
+
+            caveBoss = new EnemyBoss(game, GameState.Cave, new Vector2(7500, 400));
+            caveBoss.LoadContent(game.Content);
+            caveLayer.Sprites.Add(caveBoss);
+            caveEnemies.Add(caveBoss);
+
+            ActiveEnemy = caveEnemies[0];
+            ActiveEnemy.IsActive = true;
         }
 
     }
