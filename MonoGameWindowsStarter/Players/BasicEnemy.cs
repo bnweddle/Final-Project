@@ -95,7 +95,7 @@ namespace Elemancy
             }
             else if(level == GameState.Dungeon)
             {
-                enemyImage = "tempEnemy"; // change for the skeletons
+                enemyImage = "Sprites/Enemies/Drone/Drone-Idle"; // change for the skeletons
                 Health = 150;
                 Weakness = "Lightning"; //Do a little extra damage if player is using lightning
             }

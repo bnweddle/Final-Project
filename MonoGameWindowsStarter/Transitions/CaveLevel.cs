@@ -50,7 +50,7 @@ namespace Elemancy.Transitions
                 offset += random.Next(200, 300);
             }
 
-            caveBoss = new EnemyBoss(game, GameState.Cave, new Vector2(7500, 500));
+            caveBoss = new EnemyBoss(game, GameState.Cave, new Vector2(7500, 400));
             caveBoss.LoadContent(content);
             caveLayer.Sprites.Add(caveBoss);
             caveEnemies.Add(caveBoss);

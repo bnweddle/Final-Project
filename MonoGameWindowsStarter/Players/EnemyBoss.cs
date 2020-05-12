@@ -84,19 +84,19 @@ namespace Elemancy
         {
             if (level == GameState.Forest)
             {
-                enemyImage = "treeBoss"; // change for the Sprite
+                enemyImage = "Sprites/Enemies/Fairy/Fairy-Idle"; // change for the Sprite
                 Health = 100;
                 Weakness = "Fire"; // Do a little extra damage if Player is using fire
             }
             else if (level == GameState.Cave)
             {
-                enemyImage = "trollBoss"; // Change for the Giant Troll
+                enemyImage = "Sprites/Enemies/Bat/Bat-Idle-0005"; // Change for the Giant Troll
                 Health = 150;
                 Weakness = "Water"; // Do a little extra damage if player is using water 
             }
             else if (level == GameState.Dungeon)
             {
-                enemyImage = "dragonBoss"; // Change for the dragon
+                enemyImage = "Sprites/Enemies/Drone/Drone-Idle"; // Change for the dragon
                 Health = 200;
                 Weakness = "Lightning"; //Do a little extra damage if player is using lightning
             }
@@ -212,7 +212,12 @@ namespace Elemancy
             {
                 if (IsActive == true) // Only draw the active enemy
                 {
-                    spriteBatch.Draw(enemyTexture, Position, Bounds, Color.White);
+                    if (game.GameState == GameState.Cave) {
+                        spriteBatch.Draw(enemyTexture, Position, null, Color.DarkSlateGray, 0.0f, new Vector2(0, 0), new Vector2(2f, 2f), SpriteEffects.None, 0.0f);
+                    } else {
+                        spriteBatch.Draw(enemyTexture, Position, null, Color.White, 0.0f, new Vector2(0, 0), new Vector2(2f, 2f), SpriteEffects.None, 0.0f);
+                    }
+                   
                 }
             }
         }
